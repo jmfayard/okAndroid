@@ -12,15 +12,15 @@ class RegisterScreen : Screen<RegisterView>() {
     override fun getTitle(context: Context?): String
             = context!!.getString(R.string.register_phone)
 
-    fun enterVerification() {
+    fun enterVerification(country: String, phoneNumber: String) {
         navigator.goTo(VerificationScreen())
     }
 
-    override fun onPause(context: Context?) {
+    override fun onResume(context: Context?) {
         view.registerClicks()
     }
-
-    override fun onResume(context: Context?) {
+    override fun onPause(context: Context?) {
         view.removeClicks()
     }
+
 }

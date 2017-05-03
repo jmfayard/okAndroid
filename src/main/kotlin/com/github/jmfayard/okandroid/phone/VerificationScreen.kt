@@ -14,11 +14,11 @@ class VerificationScreen : Screen<VerificationView>() {
         return VerificationView(context)
     }
 
-    override fun onPause(context: Context?) {
+    override fun onResume(context: Context?) {
         view.setupClicks()
     }
 
-    override fun onResume(context: Context?) {
+    override fun onPause(context: Context?) {
         view.removeClicks()
     }
 
