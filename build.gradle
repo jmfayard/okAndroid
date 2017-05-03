@@ -20,7 +20,7 @@ def version = [
 
 ]
 buildscript {
-    ext.kotlin_version = "1.1.1"
+    ext.kotlin_version = "1.1.2-2"
 
     repositories {
         jcenter()
@@ -40,6 +40,8 @@ repositories {
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+
 
 android {
 
@@ -180,9 +182,7 @@ dependencies {
 
 }
 
-kapt {
-    generateStubs = true
-}
+
 
 if (FAST) {
     tasks.whenTaskAdded { task ->
