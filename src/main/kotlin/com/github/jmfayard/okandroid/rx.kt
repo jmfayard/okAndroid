@@ -48,6 +48,7 @@ class RxView(context: Context) : BaseScreenView<RxScreen>(context) {
 
 
     fun uxEvents() : Observable<out UxEvent> {
+
         return Observable.merge(listOf(
                 binding.rxButton.clicks().map { ClickWait },
                 binding.rxCheckbox.clicks().map {

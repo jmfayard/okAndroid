@@ -20,7 +20,7 @@ def version = [
 
 ]
 buildscript {
-    ext.kotlin_version = "1.1.2-2"
+    ext.kotlin_version = "1.1.2-3"
 
     repositories {
         jcenter()
@@ -28,7 +28,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.1'
+        classpath 'com.android.tools.build:gradle:2.4.0-alpha7'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -177,6 +177,10 @@ dependencies {
     compile 'com.wealthfront:magellan:' + magellanVersion
     compile 'com.wealthfront:magellan-support:' + magellanVersion
     compile 'com.wealthfront:magellan-rx:' + magellanVersion
+
+
+    // https://github.com/pawegio/KAndroid
+//    compile 'com.pawegio.kandroid:kandroid:0.8.0'
 
     kapt "com.android.databinding:compiler:2.3.0"
 

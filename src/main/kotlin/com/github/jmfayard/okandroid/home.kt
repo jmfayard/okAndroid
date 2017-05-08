@@ -46,6 +46,10 @@ class HomeScreen : Screen<HomeView>() {
     fun showRxPlayground() {
         navigator.goTo(RxScreen())
     }
+
+    fun showAndroidFeatures() {
+        navigator.goTo(AndroidFeaturesScreen())
+    }
 }
 
 class HomeView (context: Context) : BaseScreenView<HomeScreen>(context) {
@@ -61,6 +65,8 @@ class HomeView (context: Context) : BaseScreenView<HomeScreen>(context) {
         binding.showNowTransitionButton.setOnClickListener { screen.showNowTransitionButtonClicked() }
         binding.actionAirbnb.setOnClickListener { screen.showAirbnbViews() }
         binding.rxBinding.setOnClickListener { screen.showRxPlayground() }
+        binding.androidFeatures.setOnClickListener { screen.showAndroidFeatures() }
+
 
     }
 
