@@ -1,6 +1,8 @@
 package com.github.jmfayard.okandroid;
 
 import android.os.Bundle;
+
+import com.github.jmfayard.okandroid.screens.HomeScreen;
 import com.wealthfront.magellan.Navigator;
 import com.wealthfront.magellan.support.SingleActivity;
 

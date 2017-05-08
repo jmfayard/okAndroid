@@ -1,21 +1,14 @@
-package com.github.jmfayard.okandroid
+package com.github.jmfayard.okandroid.screens
 
-import android.content.Context
-import android.view.LayoutInflater
-import android.view.View
 import com.github.jmfayard.okandroid.databinding.HomeBinding
-import com.github.jmfayard.okandroid.phone.RegisterScreen
-import com.wealthfront.magellan.BaseScreenView
-import com.wealthfront.magellan.Screen
-import com.wealthfront.magellan.transitions.CircularRevealTransition
 
-class HomeScreen : Screen<HomeView>() {
+class HomeScreen : com.wealthfront.magellan.Screen<HomeView>() {
 
-    override fun createView(context: Context): HomeView {
+    override fun createView(context: android.content.Context): HomeView {
         return HomeView(context)
     }
 
-    override fun getTitle(context: Context?): String {
+    override fun getTitle(context: android.content.Context?): String {
         return "Home Screen"
     }
 
@@ -23,8 +16,8 @@ class HomeScreen : Screen<HomeView>() {
         navigator.goTo(DetailScreen())
     }
 
-    fun circularRevealTransitionButtonClicked(clickedView: View) {
-        navigator.overrideTransition(CircularRevealTransition(clickedView)).goTo(DetailScreen())
+    fun circularRevealTransitionButtonClicked(clickedView: android.view.View) {
+        navigator.overrideTransition(com.wealthfront.magellan.transitions.CircularRevealTransition(clickedView)).goTo(DetailScreen())
     }
 
     fun showTransitionButtonClicked() {
@@ -48,13 +41,13 @@ class HomeScreen : Screen<HomeView>() {
     }
 
     fun showAndroidFeatures() {
-        navigator.goTo(AndroidFeaturesScreen())
+        navigator.goTo(TagsScreen())
     }
 }
 
-class HomeView (context: Context) : BaseScreenView<HomeScreen>(context) {
+class HomeView (context: android.content.Context) : com.wealthfront.magellan.BaseScreenView<HomeScreen>(context) {
 
-    val binding = HomeBinding.inflate(LayoutInflater.from(context), this, true)
+    val binding = HomeBinding.inflate(android.view.LayoutInflater.from(context), this, true)
 
     init {
 

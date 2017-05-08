@@ -1,18 +1,16 @@
-package com.github.jmfayard.okandroid
+package com.github.jmfayard.okandroid.screens
 
 import android.content.Context
-import android.content.Intent
-import android.graphics.Color
-import android.os.Bundle
 import android.support.v4.content.ContextCompat.startActivity
+import com.github.jmfayard.okandroid.*
 import com.github.jmfayard.okandroid.databinding.AndroidFeaturesBinding
+import com.github.jmfayard.okandroid.utils.*
 import com.wealthfront.magellan.BaseScreenView
 import com.wealthfront.magellan.Screen
-import com.github.jmfayard.okandroid.utils.PatternEditableBuilder
-import java.util.regex.Pattern
+import java.util.regex.Pattern.*
 
 
-class AndroidFeaturesScreen : Screen<AndroidFeaturesView>() {
+class TagsScreen : Screen<TagsView>() {
 
     val text = """
 With Intents, we can open an #url or send an #email or open the #playstore or #share content, take a #photo
@@ -24,7 +22,7 @@ They are also used inside a #notification
 You can #clear history
 """
 
-    override fun createView(context: Context) = AndroidFeaturesView(context)
+    override fun createView(context: Context) = TagsView(context)
 
     override fun getTitle(context: Context?): String = "Android Features"
 
@@ -44,7 +42,7 @@ You can #clear history
 }
 
 
-class AndroidFeaturesView(context: Context) : BaseScreenView<AndroidFeaturesScreen>(context) {
+class TagsView(context: Context) : BaseScreenView<TagsScreen>(context) {
 
     val binding = AndroidFeaturesBinding.inflate(inflater, this, true)
 
@@ -53,14 +51,14 @@ class AndroidFeaturesView(context: Context) : BaseScreenView<AndroidFeaturesScre
         binding.htmlContent.text = screen.text
 
         PatternEditableBuilder()
-                .addPattern(Pattern.compile("\\@(\\w+)"))
-                .addPattern(Pattern.compile("#(\\w+)"), Color.BLUE) { hashtag ->
+                .addPattern(compile("\\@(\\w+)"))
+                .addPattern(compile("#(\\w+)"), android.graphics.Color.BLUE) { hashtag ->
                     screen.clickedOn(hashtag)
                 }
                 .into(binding.htmlContent)
     }
 
-    fun createIntent(hashtag: String): Intent = when (hashtag) {
+    fun createIntent(hashtag: String): android.content.Intent = when (hashtag) {
         "#email" -> Intents.sendEmail(email = "katogarabato1@gmail.com", text = "Que tal?", subject = "hola")
         "#playstore" -> Intents.openPlaystore("com.whatsapp")
         "#share" -> Intents.shareText(screen.text)
@@ -69,7 +67,7 @@ class AndroidFeaturesView(context: Context) : BaseScreenView<AndroidFeaturesScre
             scheme("https")
             host("google.com")
         }
-        else -> Intent()
+        else -> android.content.Intent()
     }
 
 
@@ -84,24 +82,24 @@ class AndroidFeaturesView(context: Context) : BaseScreenView<AndroidFeaturesScre
 
     fun createNotification(another: Boolean) {
         context.sendNotification(id = 42) {
-            setSmallIcon(R.drawable.ic_okandroid)
+            setSmallIcon(com.github.jmfayard.okandroid.R.drawable.ic_okandroid)
             setContentTitle("My notification")
             setContentText("Hello World!")
             setAutoCancel(true)
 
             val urlIntent = context.pendingIntent(createIntent("#url"))
             setContentIntent(urlIntent)
-            addAction(R.drawable.ic_http_black_24dp, "google", urlIntent)
+            addAction(com.github.jmfayard.okandroid.R.drawable.ic_http_black_24dp, "google", urlIntent)
 
             if (another) {
 //                addAction(R.drawable.ic_playstore, "playstore",
 //                        context.pendingIntent(createIntent("#playstore")))
-                addAction(R.drawable.ic_visibility_black_24dp, "photo",
+                addAction(com.github.jmfayard.okandroid.R.drawable.ic_visibility_black_24dp, "photo",
                         context.pendingIntent(createIntent("#photo")))
             } else {
-                addAction(R.drawable.ic_email_black_24dp, "email",
+                addAction(com.github.jmfayard.okandroid.R.drawable.ic_email_black_24dp, "email",
                         context.pendingIntent(createIntent("#email")))
-                addAction(R.drawable.ic_share_black_24dp, "share",
+                addAction(com.github.jmfayard.okandroid.R.drawable.ic_share_black_24dp, "share",
                         context.pendingIntent(createIntent("#share")))
 
             }
@@ -109,9 +107,9 @@ class AndroidFeaturesView(context: Context) : BaseScreenView<AndroidFeaturesScre
         }
     }
 
-    fun launchIntent(intent: Intent) {
+    fun launchIntent(intent: android.content.Intent) {
         if (intent.resolveActivity(context.packageManager) != null) {
-            startActivity(context, intent, Bundle())
+            startActivity(context, intent, android.os.Bundle())
         } else {
             toast("Can not handle this intent")
         }

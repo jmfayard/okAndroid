@@ -1,4 +1,4 @@
-package com.github.jmfayard.okandroid
+package com.github.jmfayard.okandroid.screens
 
 import android.content.Context
 import android.view.LayoutInflater

@@ -1,4 +1,4 @@
-package com.github.jmfayard.okandroid
+package com.github.jmfayard.okandroid.screens
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -12,10 +12,10 @@ class AirbnbScreen : Screen<AirbnbView>() {
 }
 
 
-class AirbnbView(context: Context) : BaseScreenView<AirbnbScreen>(context) {
+class AirbnbView(context: Context) : com.wealthfront.magellan.BaseScreenView<AirbnbScreen>(context) {
 
     init {
-        LayoutInflater.from(context).inflate(R.layout.airbnb_login, this, true)
+        android.view.LayoutInflater.from(context).inflate(com.github.jmfayard.okandroid.R.layout.airbnb_login, this, true)
     }
 
 }

@@ -21,6 +21,7 @@ val BaseScreenView<*>.inflater: LayoutInflater
     get() = LayoutInflater.from(context)
 
 fun BaseScreenView<*>.toast(s: String) = Toast.makeText(context, s, Toast.LENGTH_SHORT).show()
+
 fun BaseScreenView<*>.longToast(s: String) = Toast.makeText(context, s, Toast.LENGTH_LONG).show()
 
 
