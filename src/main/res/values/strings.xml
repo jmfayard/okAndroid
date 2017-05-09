@@ -13,4 +13,5 @@
   <string name="register_phone">Enter your phone number</string>
   <string name="verfiy_tryagain">Not received? You can try again</string>
   <string name="verify_pin">Enter the PIN</string>
+  <string name="shortcut_android">#android</string>
 </resources>
