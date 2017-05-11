@@ -12,18 +12,29 @@ import com.github.jmfayard.okandroid.inflater
 import com.github.jmfayard.okandroid.toast
 import com.wealthfront.magellan.Screen
 
-data class HomeItem(val title: String, val description: String, val screen: Screen<*>)
+class HomeScreen : com.wealthfront.magellan.Screen<HomeView>() {
 
-
-class HomeHolder(val binding: ItemHomeBinding) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(item: HomeItem, onClick: (HomeItem) -> Unit) {
-        binding.homeItemTitle.text = item.title
-        binding.homeItemDescription.text = item.description
-        binding.cardView.setOnClickListener { onClick(item) }
-        binding.executePendingBindings()
+    override fun createView(context: android.content.Context): HomeView {
+        return HomeView(context)
     }
 
+    override fun getTitle(context: android.content.Context?): String {
+        return "Ok Android"
+    }
+
+    fun onItemClicked(item: HomeItem) {
+        navigator.goTo(item.screen)
+    }
 }
+
+val ITEMS = listOf(
+        HomeItem("TagsScreen", "Try #android #features", TagsScreen()),
+        HomeItem("RegisterScreen", "Registration by SMS flow", RegisterScreen()),
+        HomeItem("RxScreen", "RxJava / RxBinding", RxScreen())
+)
+
+data class HomeItem(val title: String, val description: String, val screen: Screen<*>)
+
 class HomeAdapter(val context: Context, val items: List<HomeItem>, val onClick: (HomeItem)->Unit) : RecyclerView.Adapter<HomeHolder>() {
 
     val inflater = LayoutInflater.from(context)
@@ -40,30 +51,19 @@ class HomeAdapter(val context: Context, val items: List<HomeItem>, val onClick: 
     override fun getItemCount(): Int = items.size
 }
 
-
-class HomeScreen : com.wealthfront.magellan.Screen<HomeView>() {
-
-    override fun createView(context: android.content.Context): HomeView {
-        return HomeView(context)
+class HomeHolder(val binding: ItemHomeBinding) : RecyclerView.ViewHolder(binding.root) {
+    fun bind(item: HomeItem, onClick: (HomeItem) -> Unit) {
+        binding.homeItemTitle.text = item.title
+        binding.homeItemDescription.text = item.description
+        binding.cardView.setOnClickListener { onClick(item) }
+        binding.executePendingBindings()
     }
 
-    override fun getTitle(context: android.content.Context?): String {
-        return "Home Screen"
-    }
-
-    fun onItemClicked(item: HomeItem) {
-        navigator.goTo(item.screen)
-    }
 }
 
-class HomeView (context: android.content.Context) : com.wealthfront.magellan.BaseScreenView<HomeScreen>(context) {
 
-    val ITEMS = listOf(
-            HomeItem("TagsScreen", "Try #android #features", TagsScreen()),
-            HomeItem("RegisterScreen", "Registration by SMS flow", RegisterScreen()),
-            HomeItem("RxScreen", "RxJava / RxBinding", RxScreen()),
-//            HomeItem("DetailScreen", "Animation with circular transation", DetailScreen())
-    )
+
+class HomeView (context: android.content.Context) : com.wealthfront.magellan.BaseScreenView<HomeScreen>(context) {
 
     val binding : ActivityStartBinding = inflate(inflater, this, true)
 
