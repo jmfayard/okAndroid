@@ -3,7 +3,12 @@ package com.github.jmfayard.okandroid.screens
 import android.content.Context
 import android.view.LayoutInflater
 import android.widget.Toast
+import com.github.jmfayard.okandroid.R
+import com.github.jmfayard.okandroid.attach
 import com.github.jmfayard.okandroid.databinding.RxplaygroundBinding
+import com.github.jmfayard.okandroid.databinding.RxplaygroundBinding.inflate
+import com.github.jmfayard.okandroid.inflater
+import com.github.jmfayard.okandroid.utils.See
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.*
 import com.wealthfront.magellan.BaseScreenView
@@ -14,6 +19,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
 import java.util.concurrent.TimeUnit
 
+@See(layout = R.layout.rxplayground, java = UxEvent::class)
 class RxScreen : Screen<RxView>() {
     override fun createView(context: Context) = RxView(context)
 
@@ -44,7 +50,7 @@ class RxScreen : Screen<RxView>() {
 
 class RxView(context: Context) : BaseScreenView<RxScreen>(context) {
 
-    val binding = RxplaygroundBinding.inflate(LayoutInflater.from(context), this, true)!!
+    val binding : RxplaygroundBinding = inflate(inflater, this, attach)
 
 
     fun uxEvents() : Observable<out UxEvent> {

@@ -5,13 +5,16 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import com.github.jmfayard.okandroid.R
 import com.github.jmfayard.okandroid.databinding.ActivityStartBinding
 import com.github.jmfayard.okandroid.databinding.ActivityStartBinding.inflate
 import com.github.jmfayard.okandroid.databinding.ItemHomeBinding
 import com.github.jmfayard.okandroid.inflater
 import com.github.jmfayard.okandroid.toast
+import com.github.jmfayard.okandroid.utils.See
 import com.wealthfront.magellan.Screen
 
+@See(layout = R.layout.item_home)
 class HomeScreen : com.wealthfront.magellan.Screen<HomeView>() {
 
     override fun createView(context: android.content.Context): HomeView {

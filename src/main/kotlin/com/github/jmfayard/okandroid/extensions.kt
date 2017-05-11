@@ -16,6 +16,12 @@ import android.util.Log
 import java.io.File
 
 
+val BaseScreenView<*>.attach: Boolean
+    get() = true
+
+val BaseScreenView<*>.dontAttach: Boolean
+    get() = false
+
 
 val BaseScreenView<*>.inflater: LayoutInflater
     get() = LayoutInflater.from(context)
@@ -28,7 +34,7 @@ fun BaseScreenView<*>.longToast(s: String) = Toast.makeText(context, s, Toast.LE
 inline fun Context.buildNotification(operation: NotificationCompat.Builder.() -> Unit): Notification =
         NotificationCompat.Builder(this).apply { operation() }.build()
 
-inline fun Context.sendNotification(id: Int, notificationBuilder: NotificationCompat.Builder.() -> Unit) : Notification =
+inline fun Context.sendNotification(id: Int, notificationBuilder: NotificationCompat.Builder.() -> Unit): Notification =
         buildNotification(notificationBuilder).also { notification -> notificationManager.notify(id, notification) }
 
 val Context.notificationManager: NotificationManager
@@ -36,15 +42,15 @@ val Context.notificationManager: NotificationManager
 
 fun Context.pendingIntent(
         intent: Intent,
-        requestCode : Int = System.currentTimeMillis().toInt(),
-        flag : Int = PendingIntent.FLAG_UPDATE_CURRENT,
+        requestCode: Int = System.currentTimeMillis().toInt(),
+        flag: Int = PendingIntent.FLAG_UPDATE_CURRENT,
         options: Bundle = Bundle()
 ): PendingIntent =
         PendingIntent.getActivity(this, requestCode, intent, flag, options)
 
 
-fun Context.contentFile(directory: String, filename: String) : Uri {
-    val file = File(getFilesDir(), directory).resolve(filename)
+fun Context.contentFile(directory: String, filename: String): Uri {
+    val file = File(filesDir, directory).resolve(filename)
     val contentUri = getUriForFile(this, packageName, file)
     Log.i("File", contentUri.toString())
     return contentUri

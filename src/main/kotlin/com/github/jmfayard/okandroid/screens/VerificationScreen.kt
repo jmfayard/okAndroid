@@ -2,9 +2,13 @@ package com.github.jmfayard.okandroid.screens
 
 import android.content.Context
 import com.github.jmfayard.okandroid.databinding.VerifyBinding
+import com.github.jmfayard.okandroid.databinding.VerifyBinding.inflate
+import com.github.jmfayard.okandroid.inflater
+import com.github.jmfayard.okandroid.toast
 import com.wealthfront.magellan.BaseScreenView
+import com.wealthfront.magellan.Screen
 
-class VerificationScreen : com.wealthfront.magellan.Screen<VerificationView>() {
+class VerificationScreen : Screen<VerificationView>() {
 
     override fun getTitle(context: Context?): String {
         return "Verify your phone number"
@@ -37,14 +41,10 @@ class VerificationScreen : com.wealthfront.magellan.Screen<VerificationView>() {
 }
 
 class VerificationView(context: Context) : BaseScreenView<VerificationScreen>(context) {
-    val binding: VerifyBinding = VerifyBinding.inflate(android.view.LayoutInflater.from(context), this, true)
+    val binding: VerifyBinding = inflate(inflater, this, true)
 
 
     fun pin(): String = binding.pin.text.toString()
-
-    fun toast(s: String) {
-        android.widget.Toast.makeText(context, s, android.widget.Toast.LENGTH_LONG).show()
-    }
 
     fun setupClicks() {
         binding.verifyResendSMS.setOnClickListener { screen.verifyResendSMS() }

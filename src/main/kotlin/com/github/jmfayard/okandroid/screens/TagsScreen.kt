@@ -5,6 +5,7 @@ import android.content.Context
 import android.support.v4.content.ContextCompat.startActivity
 import com.github.jmfayard.okandroid.*
 import com.github.jmfayard.okandroid.databinding.AndroidFeaturesBinding
+import com.github.jmfayard.okandroid.databinding.AndroidFeaturesBinding.inflate
 import com.github.jmfayard.okandroid.utils.*
 import com.wealthfront.magellan.BaseScreenView
 import com.wealthfront.magellan.DialogCreator
@@ -12,7 +13,7 @@ import com.wealthfront.magellan.Screen
 import java.util.regex.Pattern.*
 
 
-
+@See(layout = R.layout.android_features, java = PatternEditableBuilder::class)
 class TagsScreen : Screen<TagsView>() {
 
     val text = """
@@ -39,7 +40,7 @@ You can #clear history
         view.log("Clicked on $hashtag")
         when (hashtag) {
             "#clear" -> view.clearHistory()
-            "#notification" -> view.createNotification(another = false)
+            "#notification" -> view.createNotification()
             "#dialogs" -> createMagellanDialog()
             in intentHashtags -> view.launchIntent(view.createIntent(hashtag))
             else -> view.toast("Hashtag $hashtag not handled")
@@ -47,22 +48,26 @@ You can #clear history
     }
 
     private fun createMagellanDialog() = buildDialog {
+        fun show(message: String) {
+            view.toast(message)
+            view.log("Dialog Result: $message")
+        }
         setTitle("This is a magellan Dialog")
         setMessage("You can either approve or dismiss it")
         setNeutralButton("Neither") { _, _ ->
-            view.toast("Whatever")
+            show("Whatever")
         }
         setNegativeButton("Dismiss") { _, _ ->
-            view.toast("Dismissed!")
+            show("Dismissed!")
         }
         setPositiveButton("Approve") { _, _ ->
-            view.toast("Approved!")
+            show("Approved!")
         }
     }
 
 
     // TODO: should be added to a base class
-    fun buildDialog(builder : AlertDialog.Builder.() -> Unit) {
+    fun buildDialog(builder: AlertDialog.Builder.() -> Unit) {
         showDialog { activity ->
             AlertDialog.Builder(activity).apply { builder() }.show()
         }
@@ -70,12 +75,9 @@ You can #clear history
 }
 
 
-
-
-
 class TagsView(context: Context) : BaseScreenView<TagsScreen>(context) {
 
-    val binding = AndroidFeaturesBinding.inflate(inflater, this, true)
+    val binding: AndroidFeaturesBinding = inflate(inflater, this, attach)
 
     fun setupWidgets() {
         binding.htmlContent.text = screen.text
@@ -110,7 +112,7 @@ class TagsView(context: Context) : BaseScreenView<TagsScreen>(context) {
 
     }
 
-    fun createNotification(another: Boolean) {
+    fun createNotification() {
         context.sendNotification(id = 42) {
             setSmallIcon(com.github.jmfayard.okandroid.R.drawable.ic_okandroid)
             setContentTitle("My notification")
@@ -119,20 +121,14 @@ class TagsView(context: Context) : BaseScreenView<TagsScreen>(context) {
 
             val urlIntent = context.pendingIntent(createIntent("#url"))
             setContentIntent(urlIntent)
+
             addAction(com.github.jmfayard.okandroid.R.drawable.ic_http_black_24dp, "google", urlIntent)
 
-            if (another) {
-//                addAction(R.drawable.ic_playstore, "playstore",
-//                        context.pendingIntent(createIntent("#playstore")))
-                addAction(com.github.jmfayard.okandroid.R.drawable.ic_visibility_black_24dp, "photo",
-                        context.pendingIntent(createIntent("#photo")))
-            } else {
-                addAction(com.github.jmfayard.okandroid.R.drawable.ic_email_black_24dp, "email",
-                        context.pendingIntent(createIntent("#email")))
-                addAction(com.github.jmfayard.okandroid.R.drawable.ic_share_black_24dp, "share",
-                        context.pendingIntent(createIntent("#share")))
+            addAction(com.github.jmfayard.okandroid.R.drawable.ic_email_black_24dp, "email",
+                    context.pendingIntent(createIntent("#email")))
+            addAction(com.github.jmfayard.okandroid.R.drawable.ic_share_black_24dp, "share",
+                    context.pendingIntent(createIntent("#share")))
 
-            }
 
         }
     }
