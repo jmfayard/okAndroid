@@ -1,6 +1,45 @@
 package com.github.jmfayard.okandroid.screens
 
-import com.github.jmfayard.okandroid.databinding.HomeBinding
+import android.content.Context
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import com.github.jmfayard.okandroid.databinding.ActivityStartBinding
+import com.github.jmfayard.okandroid.databinding.ActivityStartBinding.inflate
+import com.github.jmfayard.okandroid.databinding.ItemHomeBinding
+import com.github.jmfayard.okandroid.inflater
+import com.github.jmfayard.okandroid.toast
+import com.wealthfront.magellan.Screen
+
+data class HomeItem(val title: String, val description: String, val screen: Screen<*>)
+
+
+class HomeHolder(val binding: ItemHomeBinding) : RecyclerView.ViewHolder(binding.root) {
+    fun bind(item: HomeItem, onClick: (HomeItem) -> Unit) {
+        binding.homeItemTitle.text = item.title
+        binding.homeItemDescription.text = item.description
+        binding.cardView.setOnClickListener { onClick(item) }
+        binding.executePendingBindings()
+    }
+
+}
+class HomeAdapter(val context: Context, val items: List<HomeItem>, val onClick: (HomeItem)->Unit) : RecyclerView.Adapter<HomeHolder>() {
+
+    val inflater = LayoutInflater.from(context)
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeHolder {
+        val binding : ItemHomeBinding = ItemHomeBinding.inflate(inflater, parent, false)
+        return HomeHolder(binding)
+    }
+
+    override fun onBindViewHolder(holder: HomeHolder, position: Int) {
+        holder.bind(items[position], onClick)
+    }
+
+    override fun getItemCount(): Int = items.size
+}
+
 
 class HomeScreen : com.wealthfront.magellan.Screen<HomeView>() {
 
@@ -12,55 +51,31 @@ class HomeScreen : com.wealthfront.magellan.Screen<HomeView>() {
         return "Home Screen"
     }
 
-    fun defaultTransitionButtonClicked() {
-        navigator.goTo(DetailScreen())
-    }
-
-    fun circularRevealTransitionButtonClicked(clickedView: android.view.View) {
-        navigator.overrideTransition(com.wealthfront.magellan.transitions.CircularRevealTransition(clickedView)).goTo(DetailScreen())
-    }
-
-    fun showTransitionButtonClicked() {
-        navigator.show(DetailScreen())
-    }
-
-    fun showNowTransitionButtonClicked() {
-        navigator.showNow(DetailScreen())
-    }
-
-    fun openRegisterScreen() {
-        navigator.goTo(RegisterScreen())
-    }
-
-    fun showAirbnbViews() {
-        navigator.goTo(AirbnbScreen())
-    }
-
-    fun showRxPlayground() {
-        navigator.goTo(RxScreen())
-    }
-
-    fun showAndroidFeatures() {
-        navigator.goTo(TagsScreen())
+    fun onItemClicked(item: HomeItem) {
+        navigator.goTo(item.screen)
     }
 }
 
 class HomeView (context: android.content.Context) : com.wealthfront.magellan.BaseScreenView<HomeScreen>(context) {
 
-    val binding = HomeBinding.inflate(android.view.LayoutInflater.from(context), this, true)
+    val ITEMS = listOf(
+            HomeItem("TagsScreen", "Try #android #features", TagsScreen()),
+            HomeItem("RegisterScreen", "Registration by SMS flow", RegisterScreen()),
+            HomeItem("RxScreen", "RxJava / RxBinding", RxScreen()),
+//            HomeItem("DetailScreen", "Animation with circular transation", DetailScreen())
+    )
+
+    val binding : ActivityStartBinding = inflate(inflater, this, true)
 
     init {
 
-        binding.actionRegister.setOnClickListener { screen.openRegisterScreen() }
-        binding.defaultTransitionButton.setOnClickListener { screen.defaultTransitionButtonClicked() }
-        binding.circularRevealTransitionButton.setOnClickListener { screen.circularRevealTransitionButtonClicked(binding.circularRevealTransitionButton) }
-        binding.showTransitionButton.setOnClickListener { screen.showTransitionButtonClicked() }
-        binding.showNowTransitionButton.setOnClickListener { screen.showNowTransitionButtonClicked() }
-        binding.actionAirbnb.setOnClickListener { screen.showAirbnbViews() }
-        binding.rxBinding.setOnClickListener { screen.showRxPlayground() }
-        binding.androidFeatures.setOnClickListener { screen.showAndroidFeatures() }
-
-
+        with (binding.recycler) {
+            layoutManager = LinearLayoutManager(context)
+            adapter = HomeAdapter(context, ITEMS) { item  : HomeItem ->
+                toast("Clicked on ${item}")
+                screen.onItemClicked(item)
+            }
+        }
     }
 
 }
