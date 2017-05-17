@@ -3,7 +3,6 @@
           package="com.github.jmfayard.okandroid">
     <application
         android:name="com.github.jmfayard.okandroid.App"
-        android:allowBackup="false"
         android:icon="@drawable/ic_okandroid"
         android:label="@string/app_name"
         android:supportsRtl="true"
