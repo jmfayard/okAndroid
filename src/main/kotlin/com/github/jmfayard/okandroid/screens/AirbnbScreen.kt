@@ -1,9 +1,12 @@
 package com.github.jmfayard.okandroid.screens
 
 import android.content.Context
+import android.support.annotation.LayoutRes
 import android.view.LayoutInflater
+import android.view.View
 import com.github.jmfayard.okandroid.R
 import com.github.jmfayard.okandroid.attach
+import com.github.jmfayard.okandroid.inflateViewFrom
 import com.github.jmfayard.okandroid.inflater
 import com.github.jmfayard.okandroid.utils.See
 import com.wealthfront.magellan.BaseScreenView
@@ -17,10 +20,10 @@ class AirbnbScreen : Screen<AirbnbView>() {
 }
 
 
-class AirbnbView(context: Context) : com.wealthfront.magellan.BaseScreenView<AirbnbScreen>(context) {
+class AirbnbView(context: Context) : BaseScreenView<AirbnbScreen>(context) {
 
     init {
-        inflater.inflate(R.layout.airbnb_login, this, attach)
+        inflateViewFrom(R.layout.airbnb_login)
     }
 
 }

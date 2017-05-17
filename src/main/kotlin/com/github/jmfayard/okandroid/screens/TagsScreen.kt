@@ -7,8 +7,8 @@ import com.github.jmfayard.okandroid.*
 import com.github.jmfayard.okandroid.databinding.AndroidFeaturesBinding
 import com.github.jmfayard.okandroid.databinding.AndroidFeaturesBinding.inflate
 import com.github.jmfayard.okandroid.utils.*
+import com.marcinmoskala.kotlinandroidviewbindings.bindToText
 import com.wealthfront.magellan.BaseScreenView
-import com.wealthfront.magellan.DialogCreator
 import com.wealthfront.magellan.Screen
 import java.util.regex.Pattern.*
 
@@ -32,14 +32,15 @@ You can #clear history
     override fun getTitle(context: Context?): String = "Android Features"
 
     override fun onResume(context: Context?) {
-        view.setupWidgets()
+        view.htmlContent = text
+        view.setupTags()
     }
 
 
     fun clickedOn(hashtag: String) {
-        view.log("Clicked on $hashtag")
+        log("Clicked on $hashtag")
         when (hashtag) {
-            "#clear" -> view.clearHistory()
+            "#clear" -> view.history = ""
             "#notification" -> view.createNotification()
             "#dialogs" -> createMagellanDialog()
             in intentHashtags -> view.launchIntent(view.createIntent(hashtag))
@@ -47,10 +48,14 @@ You can #clear history
         }
     }
 
+    private fun log(line: String) {
+        view.history += "\n" + line
+    }
+
     private fun createMagellanDialog() = buildDialog {
         fun show(message: String) {
+            log("Dialog Result: $message")
             view.toast(message)
-            view.log("Dialog Result: $message")
         }
         setTitle("This is a magellan Dialog")
         setMessage("You can either approve or dismiss it")
@@ -77,11 +82,12 @@ You can #clear history
 
 class TagsView(context: Context) : BaseScreenView<TagsScreen>(context) {
 
+
     val binding: AndroidFeaturesBinding = inflate(inflater, this, attach)
+    var htmlContent by binding.htmlContent.bindToText()
+    var history by binding.actionResult.bindToText()
 
-    fun setupWidgets() {
-        binding.htmlContent.text = screen.text
-
+    fun setupTags() {
         PatternEditableBuilder()
                 .addPattern(compile("\\@(\\w+)"))
                 .addPattern(compile("#(\\w+)"), android.graphics.Color.BLUE) { hashtag ->
@@ -100,16 +106,6 @@ class TagsView(context: Context) : BaseScreenView<TagsScreen>(context) {
             host("google.com")
         }
         else -> android.content.Intent()
-    }
-
-
-    fun clearHistory() {
-        binding.actionResult.text = ""
-    }
-
-    fun log(message: String) {
-        binding.actionResult.text = "$message\n${binding.actionResult.text}"
-
     }
 
     fun createNotification() {

@@ -5,6 +5,9 @@ import com.github.jmfayard.okandroid.databinding.VerifyBinding
 import com.github.jmfayard.okandroid.databinding.VerifyBinding.inflate
 import com.github.jmfayard.okandroid.inflater
 import com.github.jmfayard.okandroid.toast
+import com.marcinmoskala.kotlinandroidviewbindings.bindToClick
+import com.marcinmoskala.kotlinandroidviewbindings.bindToEditText
+import com.marcinmoskala.kotlinandroidviewbindings.bindToText
 import com.wealthfront.magellan.BaseScreenView
 import com.wealthfront.magellan.Screen
 
@@ -19,12 +22,10 @@ class VerificationScreen : Screen<VerificationView>() {
     }
 
     override fun onResume(context: Context?) {
-        view.setupClicks()
+        view.onSendSms = { verifyResendSMS() }
+        view.onVerifyPin = { verify(view.pin) }
     }
 
-    override fun onPause(context: Context?) {
-        view.removeClicks()
-    }
 
     fun verify(pin: String) {
         if ("123" == pin) {
@@ -42,18 +43,7 @@ class VerificationScreen : Screen<VerificationView>() {
 
 class VerificationView(context: Context) : BaseScreenView<VerificationScreen>(context) {
     val binding: VerifyBinding = inflate(inflater, this, true)
-
-
-    fun pin(): String = binding.pin.text.toString()
-
-    fun setupClicks() {
-        binding.verifyResendSMS.setOnClickListener { screen.verifyResendSMS() }
-        binding.verfiyPin.setOnClickListener { screen.verify(pin()) }
-    }
-
-    fun removeClicks() {
-        listOf(binding.verfiyPin, binding.verifyResendSMS).forEach { view ->
-            view.setOnClickListener(null)
-        }
-    }
+    var pin by binding.pin.bindToEditText()
+    var onSendSms by binding.verifyResendSMS.bindToClick()
+    var onVerifyPin by binding.verfiyPin.bindToClick()
 }

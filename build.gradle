@@ -36,6 +36,7 @@ buildscript {
 repositories {
     jcenter()
     mavenCentral()
+    maven { url 'https://jitpack.io' }
 }
 
 apply plugin: 'com.android.application'
@@ -192,6 +193,9 @@ dependencies {
     // https://github.com/pawegio/KAndroid
 //    compile 'com.pawegio.kandroid:kandroid:0.8.1@aar'
 
+
+    // http://marcinmoskala.com/android/kotlin/2017/05/05/still-mvp-or-already-mvvm.html
+    compile 'com.github.MarcinMoskala:KotlinAndroidViewBindings:0.06'
 
 
 }

@@ -9,62 +9,45 @@ import com.github.jmfayard.okandroid.attach
 import com.github.jmfayard.okandroid.databinding.RegisterBinding
 import com.github.jmfayard.okandroid.databinding.RegisterBinding.inflate
 import com.github.jmfayard.okandroid.inflater
+import com.github.jmfayard.okandroid.toast
 import com.github.jmfayard.okandroid.utils.See
+import com.marcinmoskala.kotlinandroidviewbindings.bindToClick
+import com.marcinmoskala.kotlinandroidviewbindings.bindToEditText
 import com.wealthfront.magellan.BaseScreenView
 import com.wealthfront.magellan.Screen
+import kotterknife.bindToItemSelected
 
 @See(layout = R.layout.register)
 class RegisterScreen : Screen<RegisterView>() {
 
     override fun createView(context: Context)
-            = com.github.jmfayard.okandroid.screens.RegisterView(context)
+            = RegisterView(context)
 
-    override fun getTitle(context: Context?): String
-            = context!!.getString(com.github.jmfayard.okandroid.R.string.register_phone)
+    override fun getTitle(context: Context): String
+            = context.getString(R.string.register_phone)
 
     fun enterVerification(country: String, phoneNumber: String) {
         navigator.goTo(VerificationScreen())
     }
 
-    override fun onResume(context: Context?) {
-        view.registerClicks()
+    var country: String = ""
+
+    override fun onShow(context: Context?) {
+        view.onSendSms = {
+            enterVerification(country, view.phoneNumber)
+        }
+        view.onChooseCountry = { position, data ->
+            country = data as String
+            view.toast("Your country : $country")
+        }
     }
 
-    override fun onPause(context: Context?) {
-        view.removeClicks()
-    }
 
 }
 
 class RegisterView(context: Context) : BaseScreenView<RegisterScreen>(context) {
     val binding : RegisterBinding = inflate(inflater, this, attach)
-
-    fun registerClicks() {
-        binding.sendSms.setOnClickListener {
-            screen.enterVerification(country!!, phoneNumber())
-        }
-        binding.chooseCountry.onItemSelectedListener = object : OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                country = null
-            }
-
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                country = binding.chooseCountry.adapter.getItem(position) as String
-            }
-
-        }
-    }
-
-    private fun phoneNumber(): String
-            = binding.phone.text.toString()
-
-
-    var country: String? = null
-
-
-    fun removeClicks() {
-        listOf(binding.sendSms).forEach { view ->
-            view.setOnClickListener(null)
-        }
-    }
+    var phoneNumber by binding.phone.bindToEditText()
+    var onSendSms by binding.sendSms.bindToClick()
+    var onChooseCountry by binding.chooseCountry.bindToItemSelected()
 }
