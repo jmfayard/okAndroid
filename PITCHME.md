@@ -106,9 +106,9 @@ If omitted, the name of the variable is used instead.
 
 Three ways to bind android views in our classes
 
-# Using [ButterKnife for Kotlin](https://github.com/JakeWharton/kotterknife/blob/master/src/main/kotlin/kotterknife/ButterKnife.kt)
-# Using android data-binding - but without the `data` part. Just wrap the layout inside `<layout>`
-# Abstract android views leveraging [Kotlin Delegated Properties](https://kotlinlang.org/docs/reference/delegated-properties.html) as in this [brillantly simple proposal introducing KotlinAndroidViewBindings](http://marcinmoskala.com/android/kotlin/2017/05/05/still-mvp-or-already-mvvm.html)
+1. Using [ButterKnife for Kotlin](https://github.com/JakeWharton/kotterknife/blob/master/src/main/kotlin/kotterknife/ButterKnife.kt)
+2. Using android data-binding - but without the `data` part. Just wrap the layout inside `<layout>`
+3. Abstract android views leveraging [Kotlin Delegated Properties](https://kotlinlang.org/docs/reference/delegated-properties.html) as in this [brillantly simple proposal introducing KotlinAndroidViewBindings](http://marcinmoskala.com/android/kotlin/2017/05/05/still-mvp-or-already-mvvm.html)
 
 The first gives us an easy path of migration for when the project is already using Butterknife
 
