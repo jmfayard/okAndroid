@@ -4,16 +4,18 @@ import android.app.AlertDialog
 import android.content.Context
 import android.support.v4.content.ContextCompat.startActivity
 import com.github.jmfayard.okandroid.*
-import com.github.jmfayard.okandroid.databinding.AndroidFeaturesBinding
-import com.github.jmfayard.okandroid.databinding.AndroidFeaturesBinding.inflate
-import com.github.jmfayard.okandroid.utils.*
+import com.github.jmfayard.okandroid.databinding.TagsScreenBinding
+import com.github.jmfayard.okandroid.databinding.TagsScreenBinding.inflate
+import com.github.jmfayard.okandroid.utils.Intents
+import com.github.jmfayard.okandroid.utils.PatternEditableBuilder
+import com.github.jmfayard.okandroid.utils.See
 import com.marcinmoskala.kotlinandroidviewbindings.bindToText
 import com.wealthfront.magellan.BaseScreenView
 import com.wealthfront.magellan.Screen
-import java.util.regex.Pattern.*
+import java.util.regex.Pattern.compile
 
 
-@See(layout = R.layout.android_features, java = PatternEditableBuilder::class)
+@See(layout = R.layout.tags_screen, java = PatternEditableBuilder::class)
 class TagsScreen : Screen<TagsView>() {
 
     val text = """
@@ -29,7 +31,7 @@ You can #clear history
 
     override fun createView(context: Context) = TagsView(context)
 
-    override fun getTitle(context: Context?): String = "Android Features"
+    override fun getTitle(context: Context): String = context.getString(R.string.rx_screen_title)
 
     override fun onResume(context: Context?) {
         view.htmlContent = text
@@ -83,7 +85,7 @@ You can #clear history
 class TagsView(context: Context) : BaseScreenView<TagsScreen>(context) {
 
 
-    val binding: AndroidFeaturesBinding = inflate(inflater, this, attach)
+    val binding: TagsScreenBinding = inflate(inflater, this, attach)
     var htmlContent by binding.htmlContent.bindToText()
     var history by binding.actionResult.bindToText()
 

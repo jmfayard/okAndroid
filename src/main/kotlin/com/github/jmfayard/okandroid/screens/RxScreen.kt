@@ -1,16 +1,16 @@
 package com.github.jmfayard.okandroid.screens
 
 import android.content.Context
-import android.view.LayoutInflater
 import android.widget.Toast
 import com.github.jmfayard.okandroid.R
 import com.github.jmfayard.okandroid.attach
-import com.github.jmfayard.okandroid.databinding.RxplaygroundBinding
-import com.github.jmfayard.okandroid.databinding.RxplaygroundBinding.inflate
+import com.github.jmfayard.okandroid.databinding.RxScreenBinding
+import com.github.jmfayard.okandroid.databinding.RxScreenBinding.inflate
 import com.github.jmfayard.okandroid.inflater
 import com.github.jmfayard.okandroid.utils.See
 import com.jakewharton.rxbinding2.view.clicks
-import com.jakewharton.rxbinding2.widget.*
+import com.jakewharton.rxbinding2.widget.itemSelections
+import com.jakewharton.rxbinding2.widget.textChanges
 import com.wealthfront.magellan.BaseScreenView
 import com.wealthfront.magellan.Screen
 import io.reactivex.Observable
@@ -19,11 +19,11 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
 import java.util.concurrent.TimeUnit
 
-@See(layout = R.layout.rxplayground, java = UxEvent::class)
+@See(layout = R.layout.rx_screen, java = UxEvent::class)
 class RxScreen : Screen<RxView>() {
     override fun createView(context: Context) = RxView(context)
 
-    override fun getTitle(context: Context?): String = "Rx Playground"
+    override fun getTitle(context: Context): String = context.getString(R.string.rx_title)
 
     private var diposable: Disposable? = null
 
@@ -37,9 +37,9 @@ class RxScreen : Screen<RxView>() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
-                onNext =  { view.toast(it.toString()) },
-                onError = { view.toast("Error : $it")}
-        )
+                        onNext = { view.toast(it.toString()) },
+                        onError = { view.toast("Error : $it") }
+                )
     }
 
     override fun onPause(context: Context?) {
@@ -50,35 +50,37 @@ class RxScreen : Screen<RxView>() {
 
 class RxView(context: Context) : BaseScreenView<RxScreen>(context) {
 
-    val binding : RxplaygroundBinding = inflate(inflater, this, attach)
+    val binding: RxScreenBinding = inflate(inflater, this, attach)
 
 
-    fun uxEvents() : Observable<out UxEvent> {
+    fun uxEvents(): Observable<out UxEvent> {
 
         return Observable.merge(listOf(
-                binding.rxButton.clicks().map { ClickWait },
-                binding.rxCheckbox.clicks().map {
-                    CheckMe(binding.rxCheckbox.isChecked)
+                binding.rxButtonWait.clicks().map { ClickWait },
+                binding.rxCheckboxCheckme.clicks().map {
+                    CheckMe(binding.rxCheckboxCheckme.isChecked)
                 },
-                binding.rxCRash.clicks().map {
-                    if(true) { throw RuntimeException("Please handle errors correctly!!!") }
+                binding.rxButtonCrash.clicks().map {
+                    if (true) {
+                        throw RuntimeException("Please handle errors correctly!!!")
+                    }
                     ErrorThrown("failed")
                 },
-                binding.rxTime.textChanges()
+                binding.rxEditTime.textChanges()
                         .debounce(500, TimeUnit.MILLISECONDS)
                         .map { seq ->
                             UpdateTime(seq.toString())
                         },
-                binding.rxTime.textChanges()
+                binding.rxEditTime.textChanges()
                         .debounce(500, TimeUnit.MILLISECONDS)
                         .map { seq ->
                             UpdateTime(seq.toString())
                         },
-                binding.rxSpinner.itemSelections()
+                binding.rxSpinnerCountries.itemSelections()
                         .skipInitialValue()
                         .skip(1)
                         .map { position: Int ->
-                            val country = binding.rxSpinner.adapter.getItem(position) as String
+                            val country = binding.rxSpinnerCountries.adapter.getItem(position) as String
                             UpdateCountry(country)
                         }
         ))

@@ -6,23 +6,31 @@
       android:layout_height="match_parent">
 
     <TextView
-        android:text="@string/enter_your_phone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" android:id="@+id/textView"/>
-    <Spinner
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" android:id="@+id/chooseCountry"
-        android:entries="@array/countries"
-    />
-    <EditText
+        android:id="@+id/airbnb_label_login"
+        android:text="@string/airbnb_label_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="phone"
-        android:ems="10"
-        android:id="@+id/phone"/>
-    <Button
-        android:text="@string/send_sms"
+        />
+
+    <Spinner
+        android:id="@+id/register_spinner_country"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" android:id="@+id/sendSms"/>
+        android:layout_height="wrap_content"
+        android:entries="@array/rx_spinner_countries"
+        />
+
+    <EditText
+        android:id="@+id/register_edit_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="phone"/>
+
+    <Button
+        android:id="@+id/register_button_sendsms"
+        android:text="@string/register_button_sendsms"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
   </LinearLayout>
 </layout>

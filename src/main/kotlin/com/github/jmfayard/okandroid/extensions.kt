@@ -9,12 +9,12 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.annotation.LayoutRes
 import android.support.v4.app.NotificationCompat
-import android.view.LayoutInflater
-import android.widget.Toast
-import com.wealthfront.magellan.BaseScreenView
 import android.support.v4.content.FileProvider.getUriForFile
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.widget.Toast
+import com.wealthfront.magellan.BaseScreenView
 import java.io.File
 
 
@@ -24,7 +24,7 @@ val BaseScreenView<*>.attach: Boolean
 val BaseScreenView<*>.dontAttach: Boolean
     get() = false
 
-fun BaseScreenView<*>.inflateViewFrom(@LayoutRes layoutRes: Int) : View =
+fun BaseScreenView<*>.inflateViewFrom(@LayoutRes layoutRes: Int): View =
         LayoutInflater.from(context).inflate(layoutRes, this, true)
 
 

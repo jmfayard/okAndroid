@@ -10,13 +10,13 @@ import okhttp3.HttpUrl
 // See https://github.com/jmfayard/codepath/blob/master/Common-Implicit-Intents.md
 
 object Intents {
-    fun viewUrl(url: okhttp3.HttpUrl) : android.content.Intent
+    fun viewUrl(url: okhttp3.HttpUrl): android.content.Intent
             = android.content.Intent(android.content.Intent.ACTION_VIEW, Uri.parse(url.toString()))
 
-    inline fun viewUrl(crossinline url: okhttp3.HttpUrl.Builder.() -> Unit) : android.content.Intent
-        = com.github.jmfayard.okandroid.utils.Intents.viewUrl(HttpUrl.Builder().apply(url).build())
+    inline fun viewUrl(crossinline url: okhttp3.HttpUrl.Builder.() -> Unit): android.content.Intent
+            = com.github.jmfayard.okandroid.utils.Intents.viewUrl(HttpUrl.Builder().apply(url).build())
 
-    fun sendEmail(subject: String? = null, email : String? = null, text: String? = null, type: String = "plain/text") =
+    fun sendEmail(subject: String? = null, email: String? = null, text: String? = null, type: String = "plain/text") =
             android.content.Intent(android.content.Intent.ACTION_SENDTO).apply {
                 val uriText = buildString {
                     append("mailto:")
@@ -31,10 +31,10 @@ object Intents {
                     }
 
                 }
-                setData(android.net.Uri.parse(uriText))
+                data = android.net.Uri.parse(uriText)
             }
 
-    fun openPlaystore(packageName : String) : android.content.Intent
+    fun openPlaystore(packageName: String): android.content.Intent
             = android.content.Intent(android.content.Intent.ACTION_VIEW, Uri.parse("market://details?id=$packageName"))
 
     inline fun shareText(text: String): android.content.Intent = com.github.jmfayard.okandroid.utils.Intents.intentSend("text/plain") {

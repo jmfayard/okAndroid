@@ -2,7 +2,6 @@ package com.github.jmfayard.okandroid.utils;
 
 import android.support.annotation.AnimRes;
 import android.support.annotation.AnimatorRes;
-import android.support.annotation.AnyRes;
 import android.support.annotation.ArrayRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.MenuRes;
@@ -14,13 +13,14 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/** Interface used to document that the class depends on
- *
+/**
+ * Interface used to document that the class depends on
+ * <p>
  * - a layout resource
  * - an xml resource
  * - a menu
  * - an animation
- *
+ * <p>
  * For example @See(layout = R.layout.activity_main) can be added to MainActivity
  * to document that this resource is used via data_binding
  */

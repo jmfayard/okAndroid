@@ -3,7 +3,8 @@ package com.github.jmfayard.okandroid.screens
 import android.content.Context
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import com.github.jmfayard.okandroid.*
+import com.github.jmfayard.okandroid.R
+import com.github.jmfayard.okandroid.inflateViewFrom
 import com.github.jmfayard.okandroid.utils.See
 import com.wealthfront.magellan.BaseScreenView
 import com.wealthfront.magellan.Screen
@@ -12,23 +13,19 @@ import net.idik.lib.slimadapter.SlimAdapter
 
 interface ListItem
 
-@See(layout = R.layout.item_home)
+@See(layout = R.layout.home_item_card)
 data class HomeItem(val title: String, val description: String, val screen: Screen<*>) : ListItem
 
-@See(layout = R.layout.item_setion_header)
+@See(layout = R.layout.home_item_section)
 data class HeaderItem(val title: String) : ListItem
 
 
-@See(layout = R.layout.activity_start)
+@See(layout = R.layout.home_screen)
 class HomeScreen : com.wealthfront.magellan.Screen<HomeView>() {
 
-    override fun createView(context: android.content.Context): HomeView {
-        return HomeView(context)
-    }
+    override fun createView(context: android.content.Context) = HomeView(context)
 
-    override fun getTitle(context: android.content.Context?): String {
-        return "Ok Android"
-    }
+    override fun getTitle(context: android.content.Context?) = "Ok Android"
 
     fun onItemClicked(item: HomeItem) {
         navigator.goTo(item.screen)
@@ -51,23 +48,23 @@ class HomeScreen : com.wealthfront.magellan.Screen<HomeView>() {
 
 class HomeView(context: android.content.Context) : BaseScreenView<HomeScreen>(context) {
 
-    val list: RecyclerView by bindView(R.id.list)
+    val list: RecyclerView by bindView(R.id.recycler)
 
     val slimAdapter by lazy {
         SlimAdapter.create()
-                .register<HomeItem>(R.layout.item_home) { data: HomeItem, injector ->
+                .register<HomeItem>(R.layout.home_item_card) { data: HomeItem, injector ->
                     injector.text(R.id.home_item_title, data.title)
                             .text(R.id.home_item_description, data.description)
                             .clicked(R.id.card_view, { _ -> screen.onItemClicked(data) })
                 }
-                .register<HeaderItem>(R.layout.item_setion_header) { item: HeaderItem, injector ->
-                    injector.text(R.id.section_title, item.title)
+                .register<HeaderItem>(R.layout.home_item_section) { item: HeaderItem, injector ->
+                    injector.text(R.id.home_item_title, item.title)
                 }
                 .attachTo(list)
     }
 
     init {
-        inflater.inflate(R.layout.activity_start, this, attach)
+        inflateViewFrom(R.layout.home_screen)
         with(list) {
             layoutManager = LinearLayoutManager(context)
             adapter = slimAdapter
