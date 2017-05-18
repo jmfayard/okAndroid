@@ -16,7 +16,7 @@ class DetailScreen : Screen<DetailView>() {
 
 }
 
-class DetailView internal constructor(context: Context) : BaseScreenView<DetailScreen>(context) {
+class DetailView (context: Context) : BaseScreenView<DetailScreen>(context) {
 
     init {
         inflateViewFrom(R.layout.detail_screen)
