@@ -25,10 +25,10 @@ class VerificationScreen : Screen<VerificationView>() {
 
     fun verify(pin: String) {
         if ("123" == pin) {
-            view.toast("Success, you are now connected!")
+            toast("Success, you are now connected!")
             navigator.goTo(HomeScreen())
         } else {
-            view.toast("Error, you did not entered 123!")
+            toast("Error, you did not entered 123!")
         }
     }
 

@@ -1,6 +1,4 @@
 
----
-
 # OkAndroid
 
 I experiment with the good new stuff that came to Android in the recent years inside this project
@@ -13,8 +11,20 @@ Visit this URL to view them as slides
 
 https://gitpitch.com/jmfayard/okandroid/master
 
+---
 
-----
+# Room
+
+See package package com.github.jmfayard.okandroid.screens.room
+
+
+https://medium.com/@tonyowen/a-room-with-a-view-getting-started-ec010f9f5448
+
+https://developer.android.com/topic/libraries/architecture/room.html
+
+
+
+---
 
 # Android Resouces Naming Convention
 
@@ -44,7 +54,7 @@ See: [A successful XML naming convention](https://jeroenmols.com/blog/2016/03/07
 
 (I reveresed what and where in the `package by features` spirit)
 
----------
+---
 
 # Ditching activities and fragments with Magellan
 
@@ -80,7 +90,7 @@ Links
 - [Modern Android: Ditching Activities and Fragments](https://news.realm.io/news/sf-fabien-davos-modern-android-ditching-activities-fragments/)
 
 
-------
+---
 
 
 # Preferences delegates
@@ -100,7 +110,7 @@ The first parameter is the default value. The second the name of the key.
 If omitted, the name of the variable is used instead.
 
 
------
+---
 
 # Binding Views
 
@@ -124,7 +134,7 @@ class RegisterView(context: Context) : BaseScreenView<RegisterScreen>(context) {
 ```
 
 
------
+---
 
 
 

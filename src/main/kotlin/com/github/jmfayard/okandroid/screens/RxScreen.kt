@@ -7,6 +7,7 @@ import com.github.jmfayard.okandroid.attach
 import com.github.jmfayard.okandroid.databinding.RxScreenBinding
 import com.github.jmfayard.okandroid.databinding.RxScreenBinding.inflate
 import com.github.jmfayard.okandroid.inflater
+import com.github.jmfayard.okandroid.toast
 import com.github.jmfayard.okandroid.utils.See
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.itemSelections
@@ -31,14 +32,14 @@ class RxScreen : Screen<RxView>() {
         diposable?.dispose()
         diposable = view.uxEvents()
                 .retry { t ->
-                    view.toast("Error : $t")
+                    toast("Error : $t")
                     true
                 }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
-                        onNext = { view.toast(it.toString()) },
-                        onError = { view.toast("Error : $it") }
+                        onNext = { toast(it.toString()) },
+                        onError = { toast("Error : $it") }
                 )
     }
 

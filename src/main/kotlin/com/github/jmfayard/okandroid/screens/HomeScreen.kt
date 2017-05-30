@@ -5,6 +5,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import com.github.jmfayard.okandroid.R
 import com.github.jmfayard.okandroid.inflateViewFrom
+import com.github.jmfayard.okandroid.screens.room.RoomScreen
 import com.github.jmfayard.okandroid.utils.See
 import com.wealthfront.magellan.BaseScreenView
 import com.wealthfront.magellan.Screen
@@ -33,6 +34,7 @@ class HomeScreen : com.wealthfront.magellan.Screen<HomeView>() {
 
     val ITEMS: List<ListItem> = listOf(
             HeaderItem("Current Stuff"),
+            HomeItem("Room", "Google's component for sqlite", RoomScreen()),
             HomeItem("TagsScreen", "Try #android #features", TagsScreen()),
             HomeItem("RegisterScreen", "Registration by SMS flow", RegisterScreen()),
             HeaderItem("Old Stuff"),
@@ -70,5 +72,6 @@ class HomeView(context: android.content.Context) : BaseScreenView<HomeScreen>(co
             adapter = slimAdapter
         }
     }
+
 
 }
