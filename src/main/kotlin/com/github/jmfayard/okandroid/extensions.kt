@@ -15,6 +15,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
 import com.wealthfront.magellan.BaseScreenView
+import com.wealthfront.magellan.Screen
 import java.io.File
 
 
@@ -34,6 +35,9 @@ val BaseScreenView<*>.inflater: LayoutInflater
 fun BaseScreenView<*>.toast(s: String) = Toast.makeText(context, s, Toast.LENGTH_SHORT).show()
 
 fun BaseScreenView<*>.longToast(s: String) = Toast.makeText(context, s, Toast.LENGTH_LONG).show()
+
+fun Screen<*>.toast(s: String) = (getView() as BaseScreenView<*>).toast(s)
+
 
 
 inline fun Context.buildNotification(operation: NotificationCompat.Builder.() -> Unit): Notification =

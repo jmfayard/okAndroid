@@ -11,6 +11,18 @@ Visit this URL to view them as slides
 
 https://gitpitch.com/jmfayard/okandroid/master
 
+---
+
+# Room
+
+See package package com.github.jmfayard.okandroid.screens.room
+
+
+https://medium.com/@tonyowen/a-room-with-a-view-getting-started-ec010f9f5448
+
+https://developer.android.com/topic/libraries/architecture/room.html
+
+
 
 ---
 

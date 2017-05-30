@@ -46,7 +46,7 @@ You can #clear history
             "#notification" -> view.createNotification()
             "#dialogs" -> createMagellanDialog()
             in intentHashtags -> view.launchIntent(view.createIntent(hashtag))
-            else -> view.toast("Hashtag $hashtag not handled")
+            else -> toast("Hashtag $hashtag not handled")
         }
     }
 
@@ -57,7 +57,7 @@ You can #clear history
     private fun createMagellanDialog() = buildDialog {
         fun show(message: String) {
             log("Dialog Result: $message")
-            view.toast(message)
+            toast(message)
         }
         setTitle("This is a magellan Dialog")
         setMessage("You can either approve or dismiss it")
@@ -79,6 +79,8 @@ You can #clear history
             AlertDialog.Builder(activity).apply { builder() }.show()
         }
     }
+
+
 }
 
 

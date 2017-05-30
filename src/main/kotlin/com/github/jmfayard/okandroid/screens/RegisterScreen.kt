@@ -35,7 +35,7 @@ class RegisterScreen : Screen<RegisterView>() {
         }
         view.onChooseCountry = { position, data ->
             country = data as String
-            view.toast("Your country : $country")
+            toast("Your country : $country")
         }
 
     }
