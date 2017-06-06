@@ -1,5 +1,6 @@
 def FAST = project.hasProperty('FAST')
 def version = [
+        "android_gradle" : "3.0.0-alpha3",
         "support": "25.3.1",
         "retrofit" : "2.2.0",
         "okhttp" : "3.6.0",
@@ -17,19 +18,19 @@ def version = [
         "junit": "4.12",
         "butterknife": "8.4.0",
         "dagger2": "2.8",
-        "room" : "1.0.0-alpha1"
+        "room" : "1.0.0-alpha2"
 
 ]
 buildscript {
-    ext.kotlin_version = "1.1.2-3"
+    ext.kotlin_version = '1.1.2-4'
 
     repositories {
+        maven { url 'https://maven.google.com' }
         jcenter()
-        mavenCentral()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.4.0-alpha7'
+        classpath 'com.android.tools.build:gradle:3.0.0-alpha3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -137,9 +138,6 @@ dependencies {
 
     //compile "com.google.dagger:dagger:${version.dagger2}"
     //kapt "com.google.dagger:dagger-compiler:${version.dagger2}"
-    //compile "com.jakewharton.auto.value:auto-value-annotations:1.3"
-    //kapt "com.google.auto.value:auto-value:1.3"
-    //kapt "com.ryanharter.auto.value:auto-value-parcel:0.2.5"
 
     // https://github.com/JakeWharton/timber
     compile "com.jakewharton.timber:timber:4.4.0"
@@ -186,7 +184,7 @@ dependencies {
     // https://github.com/pawegio/KAndroid
 //    compile 'com.pawegio.kandroid:kandroid:0.8.0'
 
-    kapt "com.android.databinding:compiler:2.3.0"
+    kapt "com.android.databinding:compiler:${version.android_gradle}"
 
     // https://github.com/MEiDIK/SlimAdapter
     // A slim & clean & typeable Adapter without# VIEWHOLDER
