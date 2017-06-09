@@ -142,6 +142,7 @@ class TagsView(context: Context) : BaseScreenView<TagsScreen>(context) {
     }
 
     fun launchIntent(intent: Intent) {
+        history += intent.description() + "\n"
         if (intent.resolveActivity(context.packageManager) != null) {
             startActivity(context, intent, android.os.Bundle())
         } else {

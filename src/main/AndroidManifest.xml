@@ -3,6 +3,23 @@
           xmlns:tools="http://schemas.android.com/tools"
           package="com.github.jmfayard.okandroid">
 
+    <!-- The NFC permission is required to use NfcAdapter. -->
+    <uses-permission android:name="android.permission.NFC" />
+    <!-- Inform app distribution channels that NFC is used, though not required. -->
+    <!-- (This step is optional, but recommended.) -->
+    <uses-feature android:name="android.hardware.nfc" android:required="false" />
+
+    <!-- Declare this required feature if you want to make the app available to BLE-capable
+devices only.  If you want to make your app available to devices that don't support BLE,
+you should omit this in the manifest.  Instead, determine BLE capability by using
+PackageManager.hasSystemFeature(FEATURE_BLUETOOTH_LE) -->
+    <uses-feature android:name="android.hardware.bluetooth_le" android:required="true"/>
+
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+
+
+
 
     <application
         android:name=".App"

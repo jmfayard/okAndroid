@@ -38,7 +38,13 @@ fun BaseScreenView<*>.longToast(s: String) = Toast.makeText(context, s, Toast.LE
 
 fun Screen<*>.toast(s: String) = (getView() as BaseScreenView<*>).toast(s)
 
-
+fun  Intent.description(): String = buildString {
+    append(this@description.toString())
+    val data = extras?.keySet().orEmpty().map { key ->
+        key to extras?.get(key)
+    }.toMap()
+    if (data.isNotEmpty()) append(data.toString())
+}
 
 inline fun Context.buildNotification(operation: NotificationCompat.Builder.() -> Unit): Notification =
         NotificationCompat.Builder(this).apply { operation() }.build()

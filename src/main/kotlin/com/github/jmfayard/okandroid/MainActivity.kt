@@ -1,5 +1,6 @@
 package com.github.jmfayard.okandroid
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
@@ -17,6 +18,7 @@ import android.nfc.NfcAdapter
 import android.os.Parcelable
 import android.widget.TextView
 import android.content.Intent
+import android.widget.Toast
 import com.github.jmfayard.okandroid.screens.TagsScreen
 
 
@@ -73,4 +75,35 @@ class MainActivity : SingleActivity() {
         }
     }
 
+
+    public override fun onResume() {
+        super.onResume()
+        // Check to see that the Activity started due to an Android Beam
+        processIntent(intent)
+//        if (NfcAdapter.ACTION_NDEF_DISCOVERED == intent.action) {
+//        }
+    }
+
+    public override fun onNewIntent(intent: Intent) {
+        // onResume gets called after this to handle the intent
+        setIntent(intent)
+    }
+
+    /**
+     * Parses the NDEF Message from the intent and prints to the TextView
+     */
+    fun processIntent(intent: Intent?) {
+        if (intent == null || intent.hasCategory(Intent.CATEGORY_LAUNCHER)) return
+
+        Toast.makeText(this, intent.description(), Toast.LENGTH_LONG).show()
+//        val rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)
+////         only one message sent during the beam
+//        val msg = rawMsgs[0] as NdefMessage
+////         record 0 contains the MIME type, record 1 is the AAR, if present
+//        val payload = String(msg.records[0].payload)
+//        getNavigator().currentScreen().toast(payload)
+    }
+
 }
+
+
