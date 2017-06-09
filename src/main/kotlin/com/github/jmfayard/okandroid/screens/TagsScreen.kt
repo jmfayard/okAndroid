@@ -1,7 +1,14 @@
 package com.github.jmfayard.okandroid.screens
 
 import android.app.AlertDialog
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothManager
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.nfc.NdefMessage
+import android.nfc.NdefRecord
+import android.nfc.NfcAdapter
 import android.support.v4.content.ContextCompat.startActivity
 import com.github.jmfayard.okandroid.*
 import com.github.jmfayard.okandroid.databinding.TagsScreenBinding
@@ -49,6 +56,7 @@ You can #clear history
             else -> toast("Hashtag $hashtag not handled")
         }
     }
+
 
     private fun log(line: String) {
         view.history += "\n" + line
@@ -100,7 +108,7 @@ class TagsView(context: Context) : BaseScreenView<TagsScreen>(context) {
                 .into(binding.htmlContent)
     }
 
-    fun createIntent(hashtag: String): android.content.Intent = when (hashtag) {
+    fun createIntent(hashtag: String): Intent = when (hashtag) {
         "#email" -> Intents.sendEmail(email = "katogarabato1@gmail.com", text = "Que tal?", subject = "hola")
         "#playstore" -> Intents.openPlaystore("com.whatsapp")
         "#share" -> Intents.shareText(screen.text)
@@ -109,12 +117,12 @@ class TagsView(context: Context) : BaseScreenView<TagsScreen>(context) {
             scheme("https")
             host("google.com")
         }
-        else -> android.content.Intent()
+        else -> Intent()
     }
 
     fun createNotification() {
         context.sendNotification(id = 42) {
-            setSmallIcon(com.github.jmfayard.okandroid.R.drawable.ic_okandroid)
+            setSmallIcon(R.drawable.ic_okandroid)
             setContentTitle("My notification")
             setContentText("Hello World!")
             setAutoCancel(true)
@@ -122,18 +130,18 @@ class TagsView(context: Context) : BaseScreenView<TagsScreen>(context) {
             val urlIntent = context.pendingIntent(createIntent("#url"))
             setContentIntent(urlIntent)
 
-            addAction(com.github.jmfayard.okandroid.R.drawable.ic_http_black_24dp, "google", urlIntent)
+            addAction(R.drawable.ic_http_black_24dp, "google", urlIntent)
 
-            addAction(com.github.jmfayard.okandroid.R.drawable.ic_email_black_24dp, "email",
+            addAction(R.drawable.ic_email_black_24dp, "email",
                     context.pendingIntent(createIntent("#email")))
-            addAction(com.github.jmfayard.okandroid.R.drawable.ic_share_black_24dp, "share",
+            addAction(R.drawable.ic_share_black_24dp, "share",
                     context.pendingIntent(createIntent("#share")))
 
 
         }
     }
 
-    fun launchIntent(intent: android.content.Intent) {
+    fun launchIntent(intent: Intent) {
         if (intent.resolveActivity(context.packageManager) != null) {
             startActivity(context, intent, android.os.Bundle())
         } else {

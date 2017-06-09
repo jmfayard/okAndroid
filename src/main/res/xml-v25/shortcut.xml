@@ -9,7 +9,7 @@
             android:action="android.intent.action.VIEW"
             android:targetClass="com.github.jmfayard.okandroid.MainActivity"
             android:targetPackage="com.github.jmfayard.okandroid">
-            <extra android:name="screen" android:value="android" />
+            <extra android:name="screen" android:value="tags" />
         </intent>
         <categories android:name="android.shortcut.conversation" />
     </shortcut>

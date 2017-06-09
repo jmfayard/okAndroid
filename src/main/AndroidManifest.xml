@@ -3,6 +3,7 @@
           xmlns:tools="http://schemas.android.com/tools"
           package="com.github.jmfayard.okandroid">
 
+
     <application
         android:name=".App"
         android:icon="@drawable/ic_okandroid"
@@ -10,6 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:label">
+
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait"
@@ -35,7 +37,23 @@
                 <data android:scheme="http" android:host="mobile.twitter.com" android:pathPattern="/.*"/>
                 <data android:scheme="https" android:host="mobile.twitter.com" android:pathPattern="/.*"/>
             </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="text/plain" />
+            </intent-filter>
         </activity>
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.github.jmfayard.okandroid"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/fileprovider" />
+        </provider>
 
     </application>
 </manifest>

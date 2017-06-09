@@ -13,7 +13,7 @@
   <string name="register_title_phone">Enter your phone number</string>
   <string name="verfiy_tryagain">Not received? You can try again</string>
   <string name="verify_pin">Enter the PIN</string>
-  <string name="shortcut_android">#android</string>
+  <string name="shortcut_android">#tags</string>
   <string name="airbnb_label_login">Login</string>
   <string name="airbnb_label_showpassword">Show</string>
   <string name="airbnb_edit_email">Email</string>

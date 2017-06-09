@@ -11,19 +11,30 @@ import com.wealthfront.magellan.Screen
 import com.wealthfront.magellan.ScreenLifecycleListener
 import com.wealthfront.magellan.support.SingleActivity
 import com.wealthfront.magellan.transitions.DefaultTransition
+import android.databinding.adapters.TextViewBindingAdapter.setText
+import android.nfc.NdefMessage
+import android.nfc.NfcAdapter
+import android.os.Parcelable
+import android.widget.TextView
+import android.content.Intent
+import com.github.jmfayard.okandroid.screens.TagsScreen
+
 
 @See(layout = R.layout.all_activity)
 class MainActivity : SingleActivity() {
 
-    var rootScreen = "main"
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.all_activity)
+        handleShortcutIntents()
+    }
 
-        rootScreen = intent?.extras?.getString("screen") ?: "main"
-
-        //FIXME handle shortcut intents
+    fun handleShortcutIntents() {
+        // Overwriting root screen with magellan https://github.com/wealthfront/magellan/issues/41
+        val screen = intent?.extras?.getString("screen") ?: "main"
+        if (screen == "tags") {
+            getNavigator().resetWithRoot(this, TagsScreen())
+        }
     }
 
 
@@ -61,4 +72,5 @@ class MainActivity : SingleActivity() {
             Log.i("Navigator", "onHide(screen = '$title')")
         }
     }
+
 }
