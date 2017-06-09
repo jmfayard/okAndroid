@@ -9,6 +9,7 @@ import android.content.pm.PackageManager
 import android.nfc.NdefMessage
 import android.nfc.NdefRecord
 import android.nfc.NfcAdapter
+import android.os.Bundle
 import android.support.v4.content.ContextCompat.startActivity
 import com.github.jmfayard.okandroid.*
 import com.github.jmfayard.okandroid.databinding.TagsScreenBinding
@@ -26,7 +27,7 @@ import java.util.regex.Pattern.compile
 class TagsScreen : Screen<TagsView>() {
 
     val text = """
-With Intents, we can open an #url or send an #email or open the #playstore or #share content, take a #photo and are also used inside a #notification
+With Intents, we can open an #url or send an #email or open the #playstore or #share content, take a #photo and are also used inside a #notification or open another #activity
 
 Magellan has support for #dialogs
 
@@ -34,7 +35,7 @@ Magellan has support for #dialogs
 
 You can #clear history
 """
-    val intentHashtags = listOf("#url", "#email", "#playstore", "#share", "#photo")
+    val intentHashtags = listOf("#url", "#email", "#playstore", "#share", "#photo", "#activity")
 
     override fun createView(context: Context) = TagsView(context)
 
@@ -109,6 +110,9 @@ class TagsView(context: Context) : BaseScreenView<TagsScreen>(context) {
     }
 
     fun createIntent(hashtag: String): Intent = when (hashtag) {
+        "#activity" -> Intent(context, ReceiverActivity::class.java).apply {
+            putExtra("Greeting", "Hello World")
+        }
         "#email" -> Intents.sendEmail(email = "katogarabato1@gmail.com", text = "Que tal?", subject = "hola")
         "#playstore" -> Intents.openPlaystore("com.whatsapp")
         "#share" -> Intents.shareText(screen.text)

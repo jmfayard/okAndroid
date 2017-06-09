@@ -3,23 +3,21 @@
       xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:tools="http://schemas.android.com/tools"
 >
-  <LinearLayout
+  <ScrollView
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:orientation="vertical"
-      tools:ignore="Overdraw"
   >
 
     <TextView
+        android:id="@+id/detail_label_content"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:text="@string/detail_view_text"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
-        android:textSize="20sp"
+        android:text="@string/detail_view_text"
+        android:textSize="18sp"
         android:textStyle="bold"
-        android:textColor="@android:color/white"
-    />
+        />
 
-  </LinearLayout>
+  </ScrollView>
 </layout>

@@ -6,6 +6,9 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.nfc.NdefMessage
+import android.nfc.NdefRecord
+import android.nfc.NfcAdapter
 import android.os.Bundle
 import android.support.annotation.LayoutRes
 import android.support.v4.app.NotificationCompat
@@ -44,6 +47,14 @@ fun  Intent.description(): String = buildString {
         key to extras?.get(key)
     }.toMap()
     if (data.isNotEmpty()) append(data.toString())
+    if (ndefRecords().isNotEmpty()) {
+        ndefRecords().forEach { append("Record ${String(it.payload)}${String(it.type)}\n") }
+    }
+}
+
+fun Intent.ndefRecords() : List<NdefRecord> {
+    val rawMessages = getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES) ?: return emptyList()
+    return rawMessages.flatMap { (it as NdefMessage).records.toList() }
 }
 
 inline fun Context.buildNotification(operation: NotificationCompat.Builder.() -> Unit): Notification =

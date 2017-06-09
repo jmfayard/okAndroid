@@ -7,13 +7,12 @@ import android.content.pm.PackageManager
 import android.nfc.NdefMessage
 import android.nfc.NdefRecord
 import android.nfc.NfcAdapter
+import android.nfc.NfcEvent
 import com.github.jmfayard.okandroid.BuildConfig
 import com.github.jmfayard.okandroid.R
 import com.github.jmfayard.okandroid.screens.TagsScreen
-import com.github.jmfayard.okandroid.screens.TagsView
 import com.github.jmfayard.okandroid.toast
 import com.github.jmfayard.okandroid.utils.See
-import com.wealthfront.magellan.BaseScreenView
 import com.wealthfront.magellan.Screen
 
 
@@ -21,7 +20,9 @@ import com.wealthfront.magellan.Screen
 class P2PScreen : Screen<P2PView>() {
 
     val text = """
-See #bluetooth info and #nfc
+Bluetooth: show #infos
+
+NFC: send #text ; #url ; #aar #textAar
 
 """
 
@@ -32,31 +33,50 @@ See #bluetooth info and #nfc
     override fun onResume(context: Context?) {
         view.htmlContent = text
         view.setupTags()
+
     }
 
 
     fun clickedOn(hashtag: String) {
         log("Clicked on $hashtag")
         when (hashtag) {
-            "#bluetooth" -> handleBluetooth()
-            "#nfc" -> handleNfc()
+            "#infos" -> handleBluetooth()
+            in nfcPushes().keys -> handleNfc(nfcPushes()[hashtag]!!)
             else -> toast("Hashtag $hashtag not handled")
         }
     }
 
-    fun handleNfc() {
+    fun nfcPushes(): Map<String, NdefMessage> {
+        val macAddress = android.provider.Settings.Secure.getString(activity.contentResolver, "bluetooth_address")
+        val handhoverRecord = NdefRecord.createTextRecord("EN", "Hello World! from $macAddress")
+        val urlRecord = NdefRecord.createUri("http://www.google.com/pat/rick/ok")
+        val applicationRecord = NdefRecord.createApplicationRecord(BuildConfig.APPLICATION_ID)
+
+        return mapOf(
+            "#url" to NdefMessage(urlRecord),
+            "#aar" to NdefMessage(applicationRecord),
+            "#textAar" to NdefMessage(handhoverRecord, applicationRecord),
+            "#text" to NdefMessage(handhoverRecord)
+        )
+    }
+
+
+    fun handleNfc(message: NdefMessage) {
         val context = activity ?: return
         val nfc = NfcAdapter.getDefaultAdapter(context)
-        if (nfc != null) {
-            log("NFC available")
-            val macAddress = android.provider.Settings.Secure.getString(context.contentResolver, "bluetooth_address")
-            val applicationRecord = NdefRecord.createApplicationRecord(BuildConfig.APPLICATION_ID)
-            val handhoverRecord = NdefRecord.createTextRecord("EN", "Hello World! from $macAddress")
-            val message = NdefMessage(applicationRecord, handhoverRecord)
-            nfc.setNdefPushMessage(message, activity)
-        } else {
+        if (nfc == null) {
             log("NFC is not available")
+            return
         }
+
+        log("Will sent NFC Push message: $message")
+        nfc.setNdefPushMessage(message, activity)
+        nfc.setOnNdefPushCompleteCallback({ event ->
+            activity?.runOnUiThread {
+                activity ?: return@runOnUiThread
+                log("NFC Push callback $event")
+            }
+        }, activity, emptyArray())
     }
 
     fun handleBluetooth() {
