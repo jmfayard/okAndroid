@@ -1,5 +1,6 @@
 package com.github.jmfayard.okandroid
 
+import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -20,10 +21,15 @@ import android.widget.TextView
 import android.content.Intent
 import android.widget.Toast
 import com.github.jmfayard.okandroid.screens.TagsScreen
+import timber.log.Timber
 
 
 @See(layout = R.layout.all_activity)
 class MainActivity : SingleActivity() {
+
+    companion object {
+        val REQUEST_ENABLE_BT = 101
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,6 +108,22 @@ class MainActivity : SingleActivity() {
 ////         record 0 contains the MIME type, record 1 is the AAR, if present
 //        val payload = String(msg.records[0].payload)
 //        getNavigator().currentScreen().toast(payload)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        val result = when(resultCode) {
+            Activity.RESULT_CANCELED -> "RESULT_CANCELED"
+            Activity.RESULT_OK -> "RESULT_OK"
+            else -> "ResultCode:$resultCode"
+        }
+        val request = when(requestCode) {
+            REQUEST_ENABLE_BT -> "REQUEST_ENABLE_BT"
+            else -> "Code $requestCode"
+        }
+        val message = "OnActivityResult for $request : $result data=${data?.description()}"
+        Timber.w(message)
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 
 }

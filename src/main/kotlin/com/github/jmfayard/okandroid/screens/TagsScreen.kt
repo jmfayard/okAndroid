@@ -1,15 +1,8 @@
 package com.github.jmfayard.okandroid.screens
 
 import android.app.AlertDialog
-import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothManager
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.nfc.NdefMessage
-import android.nfc.NdefRecord
-import android.nfc.NfcAdapter
-import android.os.Bundle
 import android.support.v4.content.ContextCompat.startActivity
 import com.github.jmfayard.okandroid.*
 import com.github.jmfayard.okandroid.databinding.TagsScreenBinding
@@ -20,6 +13,7 @@ import com.github.jmfayard.okandroid.utils.See
 import com.marcinmoskala.kotlinandroidviewbindings.bindToText
 import com.wealthfront.magellan.BaseScreenView
 import com.wealthfront.magellan.Screen
+import timber.log.Timber
 import java.util.regex.Pattern.compile
 
 
@@ -48,24 +42,27 @@ You can #clear history
 
 
     fun clickedOn(hashtag: String) {
-        log("Clicked on $hashtag")
+        say("Clicked on $hashtag", toast = false)
         when (hashtag) {
             "#clear" -> view.history = ""
             "#notification" -> view.createNotification()
             "#dialogs" -> createMagellanDialog()
             in intentHashtags -> view.launchIntent(view.createIntent(hashtag))
-            else -> toast("Hashtag $hashtag not handled")
+            else -> say("Hashtag $hashtag not handled")
         }
     }
 
 
-    private fun log(line: String) {
-        view.history += "\n" + line
+    fun say(message: String, toast: Boolean = true) {
+        Timber.i("SAY: $message")
+        if (view == null) return
+        if (toast) toast(message)
+        view.history += "\n" + message
     }
 
     private fun createMagellanDialog() = buildDialog {
         fun show(message: String) {
-            log("Dialog Result: $message")
+            say("Dialog Result: $message")
             toast(message)
         }
         setTitle("This is a magellan Dialog")
@@ -150,7 +147,7 @@ class TagsView(context: Context) : BaseScreenView<TagsScreen>(context) {
         if (intent.resolveActivity(context.packageManager) != null) {
             startActivity(context, intent, android.os.Bundle())
         } else {
-            toast("Can not handle this intent")
+            screen.say("Can not handle this intent")
         }
     }
 }

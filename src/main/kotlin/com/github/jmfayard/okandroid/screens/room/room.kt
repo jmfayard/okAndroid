@@ -35,7 +35,7 @@ data class Person(
         val lastName: String = ""
 )
 
-@Database(entities = arrayOf(Person::class), version = 1)
+@Database(entities = arrayOf(Person::class), version = 1, exportSchema = false)
 abstract class MyDatabase : RoomDatabase() {
     abstract fun personDao(): PersonDao
 }

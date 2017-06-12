@@ -39,6 +39,9 @@ repositories {
     jcenter()
     maven { url 'https://maven.google.com' }
     maven { url 'https://jitpack.io' }
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots"
+    }
 
 }
 
@@ -215,6 +218,10 @@ dependencies {
 
     // https://github.com/moove-it/fakeit
     compile 'com.github.moove-it:fakeit:v0.2'
+
+    // https://github.com/palaima/AndroidSmoothBluetooth
+    compile 'io.palaima:smoothbluetooth:0.2.0-SNAPSHOT'
+
 
 }
 
