@@ -222,6 +222,8 @@ dependencies {
     // https://github.com/palaima/AndroidSmoothBluetooth
     compile 'io.palaima:smoothbluetooth:0.2.0-SNAPSHOT'
 
+    // https://github.com/afollestad/material-dialogs
+    compile 'com.afollestad.material-dialogs:core:0.9.4.5'
 
 }
 

@@ -1,6 +1,7 @@
 package com.github.jmfayard.okandroid.screens
 
 import android.app.AlertDialog
+import android.app.ProgressDialog.show
 import android.content.Context
 import android.content.Intent
 import android.support.v4.content.ContextCompat.startActivity
@@ -15,6 +16,10 @@ import com.wealthfront.magellan.BaseScreenView
 import com.wealthfront.magellan.Screen
 import timber.log.Timber
 import java.util.regex.Pattern.compile
+import android.view.View
+import com.afollestad.materialdialogs.MaterialDialog
+
+
 
 
 @See(layout = R.layout.tags_screen, java = PatternEditableBuilder::class)
@@ -23,11 +28,9 @@ class TagsScreen : Screen<TagsView>() {
     val text = """
 With Intents, we can open an #url or send an #email or open the #playstore or #share content, take a #photo and are also used inside a #notification or open another #activity
 
-Magellan has support for #dialogs
+Widgets: #dialogs #choose
 
---
-
-You can #clear history
+-- #clear
 """
     val intentHashtags = listOf("#url", "#email", "#playstore", "#share", "#photo", "#activity")
 
@@ -44,12 +47,24 @@ You can #clear history
     fun clickedOn(hashtag: String) {
         say("Clicked on $hashtag", toast = false)
         when (hashtag) {
+            "#choose" -> materialDialog()
             "#clear" -> view.history = ""
             "#notification" -> view.createNotification()
             "#dialogs" -> createMagellanDialog()
             in intentHashtags -> view.launchIntent(view.createIntent(hashtag))
             else -> say("Hashtag $hashtag not handled")
         }
+    }
+
+    private fun materialDialog() {
+        val items = listOf("Twitter", "Facebook", "Hacker News")
+        MaterialDialog.Builder(activity)
+                .title("You waste more time on:")
+                .items(items)
+                .itemsCallback { _, _, which, text ->
+                    say("Your choice: $text (option #$which)")
+                }
+                .show()
     }
 
 
