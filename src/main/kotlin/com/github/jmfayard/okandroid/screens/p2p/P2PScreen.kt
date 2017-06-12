@@ -4,32 +4,31 @@ import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.wifi.p2p.WifiP2pConfig
+import android.net.wifi.p2p.WifiP2pDevice
+import android.net.wifi.p2p.WifiP2pManager
 import android.nfc.NdefMessage
 import android.nfc.NdefRecord
 import android.nfc.NfcAdapter
-import com.github.jmfayard.okandroid.BuildConfig
-import com.github.jmfayard.okandroid.R
+import android.os.Bundle
+import android.support.v4.app.ActivityCompat.startActivityForResult
+import android.support.v4.content.ContextCompat.startActivity
+import android.util.Log
+import com.afollestad.materialdialogs.MaterialDialog
+import com.github.jmfayard.okandroid.*
 import com.github.jmfayard.okandroid.screens.TagsScreen
-import com.github.jmfayard.okandroid.toast
 import com.github.jmfayard.okandroid.utils.See
 import com.wealthfront.magellan.Screen
 import io.palaima.smoothbluetooth.Device
 import io.palaima.smoothbluetooth.SmoothBluetooth
 import timber.log.Timber
-import android.support.v4.app.ActivityCompat.startActivityForResult
-import android.content.Intent
-import android.os.Bundle
-import android.support.v4.content.ContextCompat.startActivity
-import com.github.jmfayard.okandroid.MainActivity
+import android.net.wifi.WifiManager
 
-val text = """
-Bluetooth: show #infod #enableBT
 
-NFC: #enableNFC, send #text ; #url ; #aar #textAar
 
-SmoothBluetooth: #configure #stop #tryConnect #doDiscovery #sendData
-"""
+
 
 
 @See(layout = R.layout.tags_screen, java = TagsScreen::class)
@@ -39,12 +38,64 @@ class P2PScreen : Screen<P2PView>() {
 
     override fun getTitle(context: Context): String = "P2P"
 
-    override fun onResume(context: Context?) {
+
+    fun updateContent() {
+        val nfc = NfcAdapter.getDefaultAdapter(activity)
+        val nfcText = when {
+            nfc == null -> "NFC: no support"
+            nfc.isEnabled -> "NFC enabled: send #text ; #url ; #aar #textAar"
+            else -> "NFC disabled: #enableNFC"
+        }
+        val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
+        val bluetoothText = when {
+            bluetoothAdapter == null -> "Bluetooth: no support"
+            !bluetoothAdapter.isEnabled -> "Bluetoth disabled: #enableBT"
+            else -> "Bluetooth: #infos #configure #stop #tryConnect #doDiscovery #sendData"
+        }
+
+        val wifiManger = activity.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+        val wifiText = when {
+            !wifiManger.isWifiEnabled -> "Wifi not enabled: #enableWifi"
+            !wifiManger.isP2pSupported -> "Wifi P2P not supported"
+            else -> "WifiP2P enabled: #setup #discovery #connect #disconnect"
+        }
+
+        val text = """
+$nfcText
+
+$wifiText
+
+$bluetoothText
+"""
         view.htmlContent = text
         view.setupTags()
-        showBluetoothInfos()
+    }
+
+    fun enableBluetooth() {
+        val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
+        if (bluetoothAdapter == null) {
+            say("Device does not support bluetooth")
+        } else if (!bluetoothAdapter.isEnabled) {
+            say("Please enable bluetooth")
+            val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+            startActivityForResult(activity, enableBtIntent, MainActivity.REQUEST_ENABLE_BT, Bundle())
+        } else {
+            say("Bluetooth is available and enabled")
+        }
 
     }
+
+
+
+
+    override fun onShow(context: Context?) {
+        updateContent()
+        showBluetoothInfos()
+    }
+//    override fun onResume(context: Context?) {
+//        updateContent()
+//        showBluetoothInfos()
+//    }
 
     override fun onHide(context: Context?) {
         stopBluetooth()
@@ -58,10 +109,15 @@ class P2PScreen : Screen<P2PView>() {
     fun clickedOn(hashtag: String) {
         say("Clicked on $hashtag", toast = false)
         when (hashtag) {
-            "#infos" -> showBluetoothInfos()
             in nfcPushes().keys -> handleNfc(nfcPushes()[hashtag]!!)
+            "#setup" -> WiFiHelper.setupWiFiReceiver(App.ctx)
+            "#connect" -> wifiConnect()
+            "#discovery" -> discovery()
+            "#disconnect" -> disconnect()
+            "#infos" -> showBluetoothInfos()
             "#enableNFC" -> enableNFC()
             "#enableBT" -> enableBluetooth()
+            "#enableWifi" -> enableWifi()
             "#configure" -> smoothBluetooth = configureBluetooth()
             "#stop" -> stopBluetooth()
             "#tryConnect" -> smoothBluetooth?.tryConnection() ?: toast("Configure bluetooth first")
@@ -69,6 +125,64 @@ class P2PScreen : Screen<P2PView>() {
             "#sendData" -> smoothBluetooth?.send("Hello World".toByteArray(), true) ?: toast("Configure bluetooth first")
             else -> toast("Hashtag $hashtag not handled")
         }
+    }
+
+    fun enableWifi() {
+        say("Enabling Wifi")
+        val wifiManger = activity.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+        wifiManger.isWifiEnabled = true
+        updateContent()
+    }
+
+    fun wifiConnect() {
+        if (Personality.deviceList == null || Personality.deviceList.isEmpty()) {
+            say("wifiConnect: no devices")
+
+        } else {
+            val names = Personality.deviceList.map { device ->
+                "${device.deviceName} [${device.deviceAddress}]"
+            }
+            MaterialDialog.Builder(activity)
+                    .title("Connect via Wifi P2P to:")
+                    .items(names)
+                    .itemsCallback { _, _, which, text ->
+                        say("Your choice: $text (option #$which)")
+                        wifiConnect(Personality.deviceList[which])
+                    }
+                    .show()
+        }
+    }
+
+    fun wifiConnect(device: WifiP2pDevice) {
+        say("wifiConnect to [${device.deviceName}] with address: ${device.deviceAddress}")
+
+        val config = WifiP2pConfig()
+        config.deviceAddress = device.deviceAddress
+        config.groupOwnerIntent = 0
+
+        Personality.wifiP2pManager.connect(Personality.wifiP2pChannel, config, wifiListener("connect"))
+    }
+
+    fun disconnect() {
+        say("disconnect start")
+        Personality.wifiP2pManager.removeGroup(Personality.wifiP2pChannel, null)
+        Personality.wifiP2pManager.cancelConnect(Personality.wifiP2pChannel, null)
+    }
+
+    fun discovery() {
+        say("discovery start")
+        Personality.wifiP2pManager.discoverPeers(Personality.wifiP2pChannel, wifiListener("discovery"))
+    }
+
+    fun wifiListener(message: String) = object: WifiP2pManager.ActionListener {
+        override fun onSuccess() {
+            say("WifiP2P[$message] : success", toast = false)
+        }
+
+        override fun onFailure(reason: Int) {
+            say("WifiP2P[$message] : FAILURE with code $reason", toast = false)
+        }
+
     }
 
     @SuppressLint("ObsoleteSdkInt")
@@ -86,19 +200,6 @@ class P2PScreen : Screen<P2PView>() {
         }
     }
 
-    fun enableBluetooth() {
-        val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
-        if (bluetoothAdapter == null) {
-            say("Device does not support bluetooth")
-        } else if (!bluetoothAdapter.isEnabled) {
-            say("Please enable bluetooth")
-            val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
-            startActivityForResult(activity, enableBtIntent, MainActivity.REQUEST_ENABLE_BT, Bundle())
-        } else {
-            say("Bluetooth is available and enabled")
-        }
-
-    }
 
     fun nfcPushes(): Map<String, NdefMessage> {
         val macAddress = android.provider.Settings.Secure.getString(activity.contentResolver, "bluetooth_address")
@@ -107,10 +208,10 @@ class P2PScreen : Screen<P2PView>() {
         val applicationRecord = NdefRecord.createApplicationRecord(BuildConfig.APPLICATION_ID)
 
         return mapOf(
-            "#url" to NdefMessage(urlRecord),
-            "#aar" to NdefMessage(applicationRecord),
-            "#textAar" to NdefMessage(handhoverRecord, applicationRecord),
-            "#text" to NdefMessage(handhoverRecord)
+                "#url" to NdefMessage(urlRecord),
+                "#aar" to NdefMessage(applicationRecord),
+                "#textAar" to NdefMessage(handhoverRecord, applicationRecord),
+                "#text" to NdefMessage(handhoverRecord)
         )
     }
 
@@ -172,7 +273,7 @@ class P2PScreen : Screen<P2PView>() {
 
     fun configureBluetooth(): SmoothBluetooth {
         stopBluetooth()
-        
+
         val listener = object : SmoothBluetooth.Listener {
             override fun onDevicesFound(devices: MutableList<Device>, callback: SmoothBluetooth.ConnectionCallback) {
                 say("onDevicesFound")
@@ -226,7 +327,7 @@ class P2PScreen : Screen<P2PView>() {
         return SmoothBluetooth(activity.baseContext, SmoothBluetooth.ConnectionTo.ANDROID_DEVICE, SmoothBluetooth.Connection.SECURE, listener)
     }
 
-    var smoothBluetooth : SmoothBluetooth?  = null
+    var smoothBluetooth: SmoothBluetooth? = null
 
 
 }
