@@ -4,6 +4,7 @@ import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiManager;
+import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pGroup;
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.util.Log;
@@ -72,9 +73,10 @@ public class WiFiService extends IntentService {
     private void setupClient(int port, WifiP2pInfo p2pInfo, WifiP2pGroup p2pGroup) {
         Log.d(LOG_TAG, "setup client");
 
+        WifiP2pDevice device = P2PScreen.Companion.getLocalDevice();
         WiFiContainer container = new WiFiContainer();
         container.put(WiFiContainer.TIME_STAMP, new Date());
-        container.put(WiFiContainer.ORIGIN_NAME, Personality.localDevice.deviceName);
+        container.put(WiFiContainer.ORIGIN_NAME, device != null ? device.deviceName : "");
 
         String host = p2pInfo.groupOwnerAddress.getHostAddress();
 
@@ -112,10 +114,11 @@ public class WiFiService extends IntentService {
 
     private void setupServer(int port, WifiP2pInfo p2pInfo, WifiP2pGroup p2pGroup) {
         Log.d(LOG_TAG, "server start");
+        WifiP2pDevice device = P2PScreen.Companion.getLocalDevice();
 
         WiFiContainer container = new WiFiContainer();
         container.put(WiFiContainer.TIME_STAMP, new Date());
-        container.put(WiFiContainer.ORIGIN_NAME, Personality.localDevice.deviceName);
+        container.put(WiFiContainer.ORIGIN_NAME, device != null ? device.deviceName : "");
 
         try {
             ServerSocket serverSocket = new ServerSocket(port);

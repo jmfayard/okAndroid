@@ -9,9 +9,11 @@ import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pGroup;
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
+import android.os.Parcelable;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -41,19 +43,19 @@ public class WiFiReceiver extends BroadcastReceiver implements WifiP2pManager.Co
             int state = intent.getIntExtra(WifiP2pManager.EXTRA_WIFI_STATE, -1);
             if (state == WifiP2pManager.WIFI_P2P_STATE_ENABLED) {
                 Log.d(LOG_TAG, "wifi state enabled");
-                Personality.wifiEnabled = true;
+                P2PScreen.Companion.setWifiEnabled(true);
             } else {
                 Log.d(LOG_TAG, "wifi state disabled");
-                Personality.wifiEnabled = false;
+                P2PScreen.Companion.setWifiEnabled(false);
             }
         } else if (WifiP2pManager.WIFI_P2P_DISCOVERY_CHANGED_ACTION.equals(action)) {
             int state = intent.getIntExtra(WifiP2pManager.EXTRA_DISCOVERY_STATE, -1);
             if (state == WifiP2pManager.WIFI_P2P_DISCOVERY_STARTED) {
                 Log.d(LOG_TAG, "wifi discovery start");
-                Personality.wifiDiscovery = true;
+                P2PScreen.Companion.setWifiDiscovery(true);
             } else {
                 Log.d(LOG_TAG, "wifi discovery stop");
-                Personality.wifiDiscovery = false;
+                P2PScreen.Companion.setWifiDiscovery(false);
             }
         } else if (WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action)) {
             _manager.requestPeers(_channel, this);
@@ -75,7 +77,8 @@ public class WiFiReceiver extends BroadcastReceiver implements WifiP2pManager.Co
             }
         } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {
             Log.d(LOG_TAG, "update local device");
-            Personality.localDevice = intent.getParcelableExtra(WifiP2pManager.EXTRA_WIFI_P2P_DEVICE);
+            Parcelable device = intent.getParcelableExtra(WifiP2pManager.EXTRA_WIFI_P2P_DEVICE);
+            P2PScreen.Companion.setLocalDevice(((WifiP2pDevice) device));
         }
     }
 
@@ -96,7 +99,7 @@ public class WiFiReceiver extends BroadcastReceiver implements WifiP2pManager.Co
     public void onPeersAvailable(WifiP2pDeviceList peerList) {
         Log.d(LOG_TAG, "peers available");
 
-        DeviceList results = new DeviceList();
+        ArrayList<WifiP2pDevice> results = new ArrayList<>();
 
         Collection<WifiP2pDevice> deviceList = peerList.getDeviceList();
         Iterator<WifiP2pDevice> iterator = deviceList.iterator();
@@ -106,6 +109,6 @@ public class WiFiReceiver extends BroadcastReceiver implements WifiP2pManager.Co
             results.add(device);
         }
 
-        Personality.deviceList = results;
+        P2PScreen.Companion.setDeviceList(results);
     }
 }

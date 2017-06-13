@@ -33,15 +33,17 @@ class HomeScreen : com.wealthfront.magellan.Screen<HomeView>() {
         navigator.goTo(item.screen)
     }
 
-    val ITEMS: List<ListItem> = listOf(
-            HeaderItem("Current Stuff"),
-            HomeItem("TagsScreen", "Try #android #features", TagsScreen()),
-            HomeItem("P2PScreen", "NFC, Bluetooth, Wifi-Direct", P2PScreen()),
-            HomeItem("Room", "Google's component for sqlite", RoomScreen()),
-            HomeItem("RegisterScreen", "Registration by SMS flow", RegisterScreen()),
-            HeaderItem("Old Stuff"),
-            HomeItem("RxScreen", "RxJava / RxBinding", RxScreen())
-    )
+    val ITEMS: List<ListItem> by lazy {
+        listOf(
+                HeaderItem("Current Stuff"),
+                HomeItem("TagsScreen", "Try #android #features", TagsScreen()),
+                HomeItem("P2PScreen", "NFC, Bluetooth, Wifi-Direct", P2PScreen.from(activity)),
+                HomeItem("Room", "Google's component for sqlite", RoomScreen()),
+                HomeItem("RegisterScreen", "Registration by SMS flow", RegisterScreen()),
+                HeaderItem("Old Stuff"),
+                HomeItem("RxScreen", "RxJava / RxBinding", RxScreen())
+        )
+    }
 
     override fun onShow(context: Context?) {
         view.slimAdapter.updateData(ITEMS)

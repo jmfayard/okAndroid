@@ -1,11 +1,14 @@
 package com.github.jmfayard.okandroid.screens.p2p
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.app.Application
 import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothManager
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.net.wifi.WifiManager
 import android.net.wifi.p2p.WifiP2pConfig
 import android.net.wifi.p2p.WifiP2pDevice
 import android.net.wifi.p2p.WifiP2pManager
@@ -13,26 +16,70 @@ import android.nfc.NdefMessage
 import android.nfc.NdefRecord
 import android.nfc.NfcAdapter
 import android.os.Bundle
+import android.os.Looper
 import android.support.v4.app.ActivityCompat.startActivityForResult
 import android.support.v4.content.ContextCompat.startActivity
-import android.util.Log
 import com.afollestad.materialdialogs.MaterialDialog
-import com.github.jmfayard.okandroid.*
+import com.github.jmfayard.okandroid.BuildConfig
+import com.github.jmfayard.okandroid.MainActivity
+import com.github.jmfayard.okandroid.R
 import com.github.jmfayard.okandroid.screens.TagsScreen
+import com.github.jmfayard.okandroid.toast
 import com.github.jmfayard.okandroid.utils.See
 import com.wealthfront.magellan.Screen
 import io.palaima.smoothbluetooth.Device
 import io.palaima.smoothbluetooth.SmoothBluetooth
 import timber.log.Timber
-import android.net.wifi.WifiManager
-
-
-
-
 
 
 @See(layout = R.layout.tags_screen, java = TagsScreen::class)
-class P2PScreen : Screen<P2PView>() {
+class P2PScreen(
+        val nfc: NfcAdapter?,
+        val bluetoothAdapter: BluetoothAdapter?,
+        val wifiManger: WifiManager,
+        val macAddress: String
+) : Screen<P2PView>() {
+
+    companion object {
+
+        fun from(activity: Activity): P2PScreen = P2PScreen(
+                nfc = NfcAdapter.getDefaultAdapter(activity.applicationContext),
+                bluetoothAdapter = BluetoothAdapter.getDefaultAdapter(),
+                wifiManger = activity.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager,
+                macAddress = android.provider.Settings.Secure.getString(activity.contentResolver, "bluetooth_address")
+        )
+
+        var wifiDiscovery: Boolean = false
+        var wifiEnabled: Boolean = false
+
+        var deviceList: MutableList<WifiP2pDevice> = mutableListOf()
+
+        lateinit var wifiP2pManager: WifiP2pManager
+        lateinit var wifiP2pChannel: WifiP2pManager.Channel
+        var localDevice: WifiP2pDevice? = null
+
+        /** Used in in Application.onCreate() **/
+        fun setupWiFiReceiver(application: Application): Pair<WiFiReceiver, IntentFilter> {
+            val manager = application.getSystemService(Context.WIFI_P2P_SERVICE) as WifiP2pManager
+            val channel = manager.initialize(application, Looper.getMainLooper(), null)
+
+            val intentFilter = IntentFilter()
+            intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION)
+            intentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION)
+            intentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION)
+            intentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION)
+            intentFilter.addAction(WifiP2pManager.WIFI_P2P_DISCOVERY_CHANGED_ACTION)
+
+            val wiFiReceiver = WiFiReceiver(application, manager, channel)
+
+            wifiP2pManager = manager
+            wifiP2pChannel = channel
+
+            return wiFiReceiver to intentFilter
+        }
+
+
+    }
 
     override fun createView(context: Context) = P2PView(context)
 
@@ -40,24 +87,22 @@ class P2PScreen : Screen<P2PView>() {
 
 
     fun updateContent() {
-        val nfc = NfcAdapter.getDefaultAdapter(activity)
         val nfcText = when {
             nfc == null -> "NFC: no support"
             nfc.isEnabled -> "NFC enabled: send #text ; #url ; #aar #textAar"
             else -> "NFC disabled: #enableNFC"
         }
-        val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
+
         val bluetoothText = when {
             bluetoothAdapter == null -> "Bluetooth: no support"
             !bluetoothAdapter.isEnabled -> "Bluetoth disabled: #enableBT"
             else -> "Bluetooth: #infos #configure #stop #tryConnect #doDiscovery #sendData"
         }
 
-        val wifiManger = activity.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
         val wifiText = when {
             !wifiManger.isWifiEnabled -> "Wifi not enabled: #enableWifi"
-            !wifiManger.isP2pSupported -> "Wifi P2P not supported"
-            else -> "WifiP2P enabled: #setup #discovery #connect #disconnect"
+//            !wifiManger.isP2pSupported -> "Wifi P2P not supported"
+            else -> "WifiP2P enabled: #discovery #connect #disconnect"
         }
 
         val text = """
@@ -72,7 +117,6 @@ $bluetoothText
     }
 
     fun enableBluetooth() {
-        val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
         if (bluetoothAdapter == null) {
             say("Device does not support bluetooth")
         } else if (!bluetoothAdapter.isEnabled) {
@@ -86,16 +130,10 @@ $bluetoothText
     }
 
 
-
-
     override fun onShow(context: Context?) {
         updateContent()
         showBluetoothInfos()
     }
-//    override fun onResume(context: Context?) {
-//        updateContent()
-//        showBluetoothInfos()
-//    }
 
     override fun onHide(context: Context?) {
         stopBluetooth()
@@ -110,7 +148,6 @@ $bluetoothText
         say("Clicked on $hashtag", toast = false)
         when (hashtag) {
             in nfcPushes().keys -> handleNfc(nfcPushes()[hashtag]!!)
-            "#setup" -> WiFiHelper.setupWiFiReceiver(App.ctx)
             "#connect" -> wifiConnect()
             "#discovery" -> discovery()
             "#disconnect" -> disconnect()
@@ -129,17 +166,16 @@ $bluetoothText
 
     fun enableWifi() {
         say("Enabling Wifi")
-        val wifiManger = activity.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
         wifiManger.isWifiEnabled = true
         updateContent()
     }
 
     fun wifiConnect() {
-        if (Personality.deviceList == null || Personality.deviceList.isEmpty()) {
+        if (deviceList.isEmpty()) {
             say("wifiConnect: no devices")
 
         } else {
-            val names = Personality.deviceList.map { device ->
+            val names = deviceList.map { device ->
                 "${device.deviceName} [${device.deviceAddress}]"
             }
             MaterialDialog.Builder(activity)
@@ -147,7 +183,7 @@ $bluetoothText
                     .items(names)
                     .itemsCallback { _, _, which, text ->
                         say("Your choice: $text (option #$which)")
-                        wifiConnect(Personality.deviceList[which])
+                        wifiConnect(deviceList[which])
                     }
                     .show()
         }
@@ -160,21 +196,21 @@ $bluetoothText
         config.deviceAddress = device.deviceAddress
         config.groupOwnerIntent = 0
 
-        Personality.wifiP2pManager.connect(Personality.wifiP2pChannel, config, wifiListener("connect"))
+        wifiP2pManager.connect(wifiP2pChannel, config, wifiListener("connect"))
     }
 
     fun disconnect() {
         say("disconnect start")
-        Personality.wifiP2pManager.removeGroup(Personality.wifiP2pChannel, null)
-        Personality.wifiP2pManager.cancelConnect(Personality.wifiP2pChannel, null)
+        wifiP2pManager.removeGroup(wifiP2pChannel, null)
+        wifiP2pManager.cancelConnect(wifiP2pChannel, null)
     }
 
     fun discovery() {
         say("discovery start")
-        Personality.wifiP2pManager.discoverPeers(Personality.wifiP2pChannel, wifiListener("discovery"))
+        wifiP2pManager.discoverPeers(wifiP2pChannel, wifiListener("discovery"))
     }
 
-    fun wifiListener(message: String) = object: WifiP2pManager.ActionListener {
+    fun wifiListener(message: String) = object : WifiP2pManager.ActionListener {
         override fun onSuccess() {
             say("WifiP2P[$message] : success", toast = false)
         }
@@ -187,8 +223,7 @@ $bluetoothText
 
     @SuppressLint("ObsoleteSdkInt")
     fun enableNFC() {
-        val nfc = NfcAdapter.getDefaultAdapter(activity) ?: return
-        if (nfc.isEnabled) {
+        if (nfc != null && nfc.isEnabled) {
             say("NFC already enabled")
         } else {
             say("Please enable NFC")
@@ -202,7 +237,7 @@ $bluetoothText
 
 
     fun nfcPushes(): Map<String, NdefMessage> {
-        val macAddress = android.provider.Settings.Secure.getString(activity.contentResolver, "bluetooth_address")
+
         val handhoverRecord = NdefRecord.createTextRecord("EN", "Hello World! from $macAddress")
         val urlRecord = NdefRecord.createUri("http://www.google.com/pat/rick/ok")
         val applicationRecord = NdefRecord.createApplicationRecord(BuildConfig.APPLICATION_ID)
@@ -217,8 +252,6 @@ $bluetoothText
 
 
     fun handleNfc(message: NdefMessage) {
-        val context = activity ?: return
-        val nfc = NfcAdapter.getDefaultAdapter(context)
         if (nfc == null) {
             say("NFC is not available")
             return
@@ -237,7 +270,6 @@ $bluetoothText
     fun showBluetoothInfos() {
         val context = view?.context ?: return
 
-        val nfc = NfcAdapter.getDefaultAdapter(context)
         if (nfc == null) {
             say("NFC is not available")
         } else {
@@ -246,21 +278,15 @@ $bluetoothText
         }
 
 
-        // Use this check to determine whether BLE is supported on the device.  Then you can
-        // selectively disable BLE-related features.
-        // Initializes a Bluetooth adapter.  For API level 18 and above, get a reference to
-        // BluetoothAdapter through BluetoothManager.
-        val bluetoothManager: BluetoothManager = context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
-        val adapter: BluetoothAdapter? = bluetoothManager.adapter // OR BluetoothAdapter.getDefaultAdapter()
-        if (adapter == null || !context.packageManager.hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
+        if (bluetoothAdapter == null || !context.packageManager.hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
             say("Bluetooth LE not supported")
             return
         }
-        val state = if (adapter.isEnabled) "enabled" else "disabled"
+        val state = if (bluetoothAdapter.isEnabled) "enabled" else "disabled"
         say("Bluetooth $state", toast = false)
         val macAddress = android.provider.Settings.Secure.getString(context.contentResolver, "bluetooth_address")
 
-        val bleInfo = "Bluetooth: Address=${adapter.address} Name=${adapter.name} macAddress=$macAddress"
+        val bleInfo = "Bluetooth: Address=${bluetoothAdapter.address} Name=${bluetoothAdapter.name} macAddress=$macAddress"
         say(bleInfo)
     }
 
@@ -331,6 +357,9 @@ $bluetoothText
 
 
 }
+
+
+
 
 
 
