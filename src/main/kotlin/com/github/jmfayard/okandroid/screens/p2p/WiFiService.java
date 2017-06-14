@@ -7,8 +7,12 @@ import android.net.wifi.WifiManager;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pGroup;
 import android.net.wifi.p2p.WifiP2pInfo;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.github.jmfayard.okandroid.ExtensionsKt;
+
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
@@ -27,6 +31,7 @@ public class WiFiService extends IntentService {
     private static final String EXTRA_P2P_GROUP = "net.braingang.service.extra.group";
     private static final String EXTRA_P2P_INFO = "net.braingang.service.extra.info";
     private static final String EXTRA_PORT = "net.braingang.service.extra.port";
+    private LocalBroadcastManager localBroadcastManager;
 
     public static void startAction(Context context, int port, WifiP2pInfo p2pInfo, WifiP2pGroup p2pGroup) {
         Intent intent = new Intent(context, WiFiService.class);
@@ -48,6 +53,7 @@ public class WiFiService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        localBroadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());
         if (intent != null) {
             final String action = intent.getAction();
             if (ACTION_START.equals(action)) {
@@ -73,32 +79,45 @@ public class WiFiService extends IntentService {
     private void setupClient(int port, WifiP2pInfo p2pInfo, WifiP2pGroup p2pGroup) {
         Log.d(LOG_TAG, "setup client");
 
-        WifiP2pDevice device = P2PScreen.Companion.getLocalDevice();
         WiFiContainer container = new WiFiContainer();
         container.put(WiFiContainer.TIME_STAMP, new Date());
-        container.put(WiFiContainer.ORIGIN_NAME, device != null ? device.deviceName : "");
+        container.put(WiFiContainer.ORIGIN_NAME, P2PScreen.Companion.getLocalDevice().deviceName );
 
         String host = p2pInfo.groupOwnerAddress.getHostAddress();
 
-        Socket socket = new Socket();
-
         try {
+            Log.w(LOG_TAG, "Making the client sleep for 5 s");
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+        }
+        for(int i = 0 ; i < 3 ; i++) {
+            boolean success = tryConnectToServer(port, container, host);
+            if (success) break;
+        }
+
+    }
+
+    private boolean tryConnectToServer(int port, WiFiContainer container, String host) {
+        Socket socket = new Socket();
+        try {
+            Log.w(LOG_TAG, "CLIENT: connecting to " + host + ":" + port);
             socket.bind(null);
             socket.connect((new InetSocketAddress(host, port)), SOCKET_TIMEOUT);
             ObjectOutputStream oss = new ObjectOutputStream(socket.getOutputStream());
             oss.writeObject(container);
-            Log.d(LOG_TAG, "write:" + container.get(WiFiContainer.ORIGIN_NAME));
+            String msg = "sending to server:" + container.get(WiFiContainer.ORIGIN_NAME);
+            Log.w(LOG_TAG, msg);
+            localBroadcastManager.sendBroadcast(ExtensionsKt.dataExchange(msg));
 
             ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
             WiFiContainer wfc = (WiFiContainer) ois.readObject();
-            Log.d(LOG_TAG, "read:" + wfc.get(WiFiContainer.ORIGIN_NAME));
+            msg = "server responded:" + wfc.get(WiFiContainer.ORIGIN_NAME);
+            localBroadcastManager.sendBroadcast(ExtensionsKt.dataExchange(msg));
 
-            /*
-            Personality.wifiP2pManager.cancelConnect(Personality.wifiP2pChannel, null);
-            WiFiReceiver.restartReceiver(getBaseContext());
-            */
+            return true;
         } catch(Exception exception) {
             exception.printStackTrace();
+            return false;
         } finally {
             if (socket != null) {
                 if (socket.isConnected()) {
@@ -120,21 +139,28 @@ public class WiFiService extends IntentService {
         container.put(WiFiContainer.TIME_STAMP, new Date());
         container.put(WiFiContainer.ORIGIN_NAME, device != null ? device.deviceName : "");
 
+        ServerSocket serverSocket = null;
+        Socket client = null;
+
         try {
-            ServerSocket serverSocket = new ServerSocket(port);
-            Socket client = serverSocket.accept();
-            Log.d(LOG_TAG, "client socket:" + client.getInetAddress());
+            serverSocket = new ServerSocket(port);
+            client = serverSocket.accept();
+            Log.w(LOG_TAG, "client socket:" + client.getInetAddress());
 
             ObjectInputStream ois = new ObjectInputStream(client.getInputStream());
             WiFiContainer wfc = (WiFiContainer) ois.readObject();
-            Log.d(LOG_TAG, "server read:" + wfc.get(WiFiContainer.ORIGIN_NAME));
+            String msg = "server read:" + wfc.get(WiFiContainer.ORIGIN_NAME);
+            Log.w(LOG_TAG, msg);
+            localBroadcastManager.sendBroadcast(ExtensionsKt.dataExchange(msg));
 
             ObjectOutputStream oos = new ObjectOutputStream(client.getOutputStream());
             oos.writeObject(container);
-            Log.d(LOG_TAG, "server write:" + container.get(WiFiContainer.ORIGIN_NAME));
+            msg = "server write:" + container.get(WiFiContainer.ORIGIN_NAME);
+            Log.w(LOG_TAG, msg);
+            localBroadcastManager.sendBroadcast(ExtensionsKt.dataExchange(msg));
 
             serverSocket.close();
-            Log.d(LOG_TAG, "server close");
+            Log.w(LOG_TAG, "server close");
 
             /*
             Personality.wifiP2pManager.removeGroup(Personality.wifiP2pChannel, null);
@@ -142,6 +168,19 @@ public class WiFiService extends IntentService {
             */
         } catch (Exception exception) {
             exception.printStackTrace();
+        } finally {
+
+            if (client != null) try {
+                client.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (serverSocket != null) try {
+                serverSocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
         }
     }
 }

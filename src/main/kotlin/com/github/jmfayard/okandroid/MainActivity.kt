@@ -1,6 +1,7 @@
 package com.github.jmfayard.okandroid
 
 import android.app.Activity
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -19,8 +20,15 @@ import android.nfc.NfcAdapter
 import android.os.Parcelable
 import android.widget.TextView
 import android.content.Intent
+import android.content.IntentFilter
+import android.support.v4.app.FragmentTransaction
+import android.support.v4.content.LocalBroadcastManager
+import android.view.View
 import android.widget.Toast
+import com.afollestad.materialdialogs.util.DialogUtils
+import com.github.jmfayard.okandroid.MainActivity.Companion.REQUEST_ENABLE_BT
 import com.github.jmfayard.okandroid.screens.TagsScreen
+import com.wealthfront.magellan.support.SingleActivity.getNavigator
 import timber.log.Timber
 
 
@@ -35,6 +43,26 @@ class MainActivity : SingleActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.all_activity)
         handleShortcutIntents()
+        listenForDataExchange()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        LocalBroadcastManager.getInstance(applicationContext).unregisterReceiver(localDashReceiver)
+    }
+
+    private val localDashReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            if (intent.action == DATA_EXCHANGE) {
+                val message = intent.getStringExtra("message")
+                Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    fun listenForDataExchange() {
+        LocalBroadcastManager.getInstance(applicationContext).registerReceiver(
+                localDashReceiver, IntentFilter(DATA_EXCHANGE))
     }
 
     fun handleShortcutIntents() {
