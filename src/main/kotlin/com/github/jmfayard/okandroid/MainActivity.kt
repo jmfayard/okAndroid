@@ -14,21 +14,12 @@ import com.wealthfront.magellan.Screen
 import com.wealthfront.magellan.ScreenLifecycleListener
 import com.wealthfront.magellan.support.SingleActivity
 import com.wealthfront.magellan.transitions.DefaultTransition
-import android.databinding.adapters.TextViewBindingAdapter.setText
-import android.nfc.NdefMessage
-import android.nfc.NfcAdapter
-import android.os.Parcelable
-import android.widget.TextView
 import android.content.Intent
 import android.content.IntentFilter
-import android.support.v4.app.FragmentTransaction
 import android.support.v4.content.LocalBroadcastManager
-import android.view.View
 import android.widget.Toast
-import com.afollestad.materialdialogs.util.DialogUtils
-import com.github.jmfayard.okandroid.MainActivity.Companion.REQUEST_ENABLE_BT
 import com.github.jmfayard.okandroid.screens.TagsScreen
-import com.wealthfront.magellan.support.SingleActivity.getNavigator
+import com.github.jmfayard.okandroid.screens.p2p.DATA_EXCHANGE
 import timber.log.Timber
 
 
@@ -48,10 +39,10 @@ class MainActivity : SingleActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        LocalBroadcastManager.getInstance(applicationContext).unregisterReceiver(localDashReceiver)
+        LocalBroadcastManager.getInstance(applicationContext).unregisterReceiver(receiver)
     }
 
-    private val localDashReceiver = object : BroadcastReceiver() {
+    private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             if (intent.action == DATA_EXCHANGE) {
                 val message = intent.getStringExtra("message")
@@ -62,7 +53,7 @@ class MainActivity : SingleActivity() {
 
     fun listenForDataExchange() {
         LocalBroadcastManager.getInstance(applicationContext).registerReceiver(
-                localDashReceiver, IntentFilter(DATA_EXCHANGE))
+                receiver, IntentFilter(DATA_EXCHANGE))
     }
 
     fun handleShortcutIntents() {

@@ -52,9 +52,6 @@ fun  Intent.description(): String = buildString {
     }
 }
 
-val DATA_EXCHANGE = "DATA_EXCHANGE"
-fun dataExchange(message: String) : Intent = Intent(DATA_EXCHANGE).apply { putExtra("message", message) }
-
 fun Intent.ndefRecords() : List<NdefRecord> {
     val rawMessages = getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES) ?: return emptyList()
     return rawMessages.flatMap { (it as NdefMessage).records.toList() }

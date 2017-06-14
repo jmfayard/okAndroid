@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Application
 import android.bluetooth.BluetoothAdapter
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
@@ -19,6 +20,8 @@ import android.os.Bundle
 import android.os.Looper
 import android.support.v4.app.ActivityCompat.startActivityForResult
 import android.support.v4.content.ContextCompat.startActivity
+import android.support.v4.content.LocalBroadcastManager
+import android.widget.Toast
 import com.afollestad.materialdialogs.MaterialDialog
 import com.github.jmfayard.okandroid.BuildConfig
 import com.github.jmfayard.okandroid.MainActivity
@@ -30,6 +33,12 @@ import com.wealthfront.magellan.Screen
 import io.palaima.smoothbluetooth.Device
 import io.palaima.smoothbluetooth.SmoothBluetooth
 import timber.log.Timber
+
+
+val DATA_EXCHANGE = "DATA_EXCHANGE"
+val WIFI_RECEIVER = "WIFI_RECEIVER"
+fun dataExchange(message: String) : Intent = Intent(DATA_EXCHANGE).apply { putExtra("message", message) }
+
 
 
 @See(layout = R.layout.tags_screen, java = TagsScreen::class)
@@ -129,10 +138,28 @@ $bluetoothText
 
     }
 
+    private val receiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            if (intent.action == WIFI_RECEIVER) {
+                val message = intent.getStringExtra("message")
+                if (view == null) return
+                view.history = "$message\n" + view.history
+            }
+        }
+    }
+
 
     override fun onShow(context: Context?) {
+
+    }
+
+    override fun onPause(context: Context?) {
+        LocalBroadcastManager.getInstance(context).unregisterReceiver(receiver)
+    }
+
+    override fun onResume(context: Context?) {
         updateContent()
-        showBluetoothInfos()
+        LocalBroadcastManager.getInstance(context).registerReceiver(receiver, IntentFilter(WIFI_RECEIVER))
     }
 
     override fun onHide(context: Context?) {
@@ -182,7 +209,7 @@ $bluetoothText
                     .title("Connect via Wifi P2P to:")
                     .items(names)
                     .itemsCallback { _, _, which, text ->
-                        say("Your choice: $text (option #$which)")
+                        say("Trying to connect to: $text (option #$which)", toast = true)
                         wifiConnect(deviceList[which])
                     }
                     .show()
@@ -293,7 +320,7 @@ $bluetoothText
     fun say(message: String, toast: Boolean = true) {
         Timber.i("SAY: $message")
         if (view == null) return
-        view.history += "\n" + message
+        view.history += "$message\n" + view.history
         if (toast) toast(message)
     }
 
