@@ -24,6 +24,7 @@ public class WiFiReceiver extends BroadcastReceiver implements WifiP2pManager.Co
 
     private final WifiP2pManager _manager;
     private final WifiP2pManager.Channel _channel;
+    private WifiP2pGroup p2pGroup;
 
     public WiFiReceiver(Context context, WifiP2pManager manager, WifiP2pManager.Channel channel) {
         super();
@@ -63,6 +64,7 @@ public class WiFiReceiver extends BroadcastReceiver implements WifiP2pManager.Co
             NetworkInfo netInfo = intent.getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
             WifiP2pInfo p2pInfo = intent.getParcelableExtra(WifiP2pManager.EXTRA_WIFI_P2P_INFO);
             WifiP2pGroup p2pGroup = intent.getParcelableExtra(WifiP2pManager.EXTRA_WIFI_P2P_GROUP);
+            this.p2pGroup = p2pGroup;
 
             Log.d(LOG_TAG, "netInfo:" + netInfo);
             Log.d(LOG_TAG, "p2pInfo:" + p2pInfo);
@@ -71,7 +73,6 @@ public class WiFiReceiver extends BroadcastReceiver implements WifiP2pManager.Co
             if (netInfo.isConnected()) {
                 Log.d(LOG_TAG, "connect noted");
                 _manager.requestConnectionInfo(_channel, this);
-                WiFiService.startAction(_context, WiFiService.PORT, p2pInfo, p2pGroup);
             } else {
                 Log.d(LOG_TAG, "disconnect noted");
             }
@@ -86,7 +87,7 @@ public class WiFiReceiver extends BroadcastReceiver implements WifiP2pManager.Co
     @Override
     public void onConnectionInfoAvailable(WifiP2pInfo p2pInfo) {
         Log.d(LOG_TAG, "connection noted:" + p2pInfo.toString());
-
+        WiFiService.startAction(_context, WiFiService.PORT, p2pInfo, p2pGroup);
         if (p2pInfo.isGroupOwner) {
             Toast.makeText(_context, "Group Owner True", Toast.LENGTH_LONG).show();
         } else {

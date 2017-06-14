@@ -85,11 +85,6 @@ public class WiFiService extends IntentService {
 
         String host = p2pInfo.groupOwnerAddress.getHostAddress();
 
-        try {
-            Log.w(LOG_TAG, "Making the client sleep for 5 s");
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-        }
         for(int i = 0 ; i < 3 ; i++) {
             boolean success = tryConnectToServer(port, container, host);
             if (success) break;
