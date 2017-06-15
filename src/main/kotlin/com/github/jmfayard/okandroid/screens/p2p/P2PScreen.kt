@@ -10,9 +10,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.net.wifi.WifiManager
-import android.net.wifi.p2p.WifiP2pConfig
-import android.net.wifi.p2p.WifiP2pDevice
-import android.net.wifi.p2p.WifiP2pManager
+import android.net.wifi.p2p.*
 import android.nfc.NdefMessage
 import android.nfc.NdefRecord
 import android.nfc.NfcAdapter
@@ -21,7 +19,6 @@ import android.os.Looper
 import android.support.v4.app.ActivityCompat.startActivityForResult
 import android.support.v4.content.ContextCompat.startActivity
 import android.support.v4.content.LocalBroadcastManager
-import android.widget.Toast
 import com.afollestad.materialdialogs.MaterialDialog
 import com.github.jmfayard.okandroid.BuildConfig
 import com.github.jmfayard.okandroid.MainActivity
@@ -29,10 +26,16 @@ import com.github.jmfayard.okandroid.R
 import com.github.jmfayard.okandroid.screens.TagsScreen
 import com.github.jmfayard.okandroid.toast
 import com.github.jmfayard.okandroid.utils.See
+import com.squareup.moshi.Moshi
 import com.wealthfront.magellan.Screen
 import io.palaima.smoothbluetooth.Device
 import io.palaima.smoothbluetooth.SmoothBluetooth
 import timber.log.Timber
+import timber.log.Timber.w
+
+val moshi = Moshi.Builder().build()
+val handoverAdapter = moshi.adapter(HandoverData::class.java)
+data class HandoverData(val name: String, val address: String, val port: Int)
 
 
 val DATA_EXCHANGE = "DATA_EXCHANGE"
@@ -58,6 +61,8 @@ class P2PScreen(
                 macAddress = android.provider.Settings.Secure.getString(activity.contentResolver, "bluetooth_address")
         )
 
+        var  handoverData: HandoverData? = null
+
         var wifiDiscovery: Boolean = false
         var wifiEnabled: Boolean = false
 
@@ -70,7 +75,7 @@ class P2PScreen(
         /** Used in in Application.onCreate() **/
         fun setupWiFiReceiver(application: Application): Pair<WiFiReceiver, IntentFilter> {
             val manager = application.getSystemService(Context.WIFI_P2P_SERVICE) as WifiP2pManager
-            val channel = manager.initialize(application, Looper.getMainLooper(), null)
+            val channel: WifiP2pManager.Channel = manager.initialize(application, Looper.getMainLooper(), null)
 
             val intentFilter = IntentFilter()
             intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION)
@@ -86,6 +91,8 @@ class P2PScreen(
 
             return wiFiReceiver to intentFilter
         }
+
+        var p2pGroup: WifiP2pGroup? = null
 
 
     }
@@ -115,6 +122,8 @@ class P2PScreen(
         }
 
         val text = """
+Handover #NfcWifiP2p
+
 $nfcText
 
 $wifiText
@@ -141,9 +150,14 @@ $bluetoothText
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             if (intent.action == WIFI_RECEIVER) {
+                val event = intent.getStringExtra("event")
                 val message = intent.getStringExtra("message")
-                if (view == null) return
-                view.history = "$message\n" + view.history
+
+                when {
+                    view == null -> return
+                    event == "peers" -> onPeersAvailable(Companion.deviceList)
+                    message != null -> view.history = "$message\n" + view.history
+                }
             }
         }
     }
@@ -174,6 +188,7 @@ $bluetoothText
     fun clickedOn(hashtag: String) {
         say("Clicked on $hashtag", toast = false)
         when (hashtag) {
+            "#NfcWifiP2p" -> handoverNfcWifi()
             in nfcPushes().keys -> handleNfc(nfcPushes()[hashtag]!!)
             "#connect" -> wifiConnect()
             "#discovery" -> discovery()
@@ -190,6 +205,39 @@ $bluetoothText
             else -> toast("Hashtag $hashtag not handled")
         }
     }
+
+
+    fun startLookingFor(handoverData: HandoverData) {
+        wifiP2pManager.discoverPeers(wifiP2pChannel, wifiListener("discovery"))
+        w("startLookingFor: I hope to connect to $handoverData")
+        Companion.handoverData = handoverData
+    }
+
+    fun onPeersAvailable(peers: MutableList<WifiP2pDevice>) {
+        val address = handoverData?.address ?: return
+        val name = handoverData!!.name
+        val device = peers.firstOrNull { d ->
+            d.deviceAddress == address || d.deviceName == name
+        }
+        if (device != null) {
+            w("Found expected device $device")
+            handoverData = null
+            wifiConnect(device)
+        }
+    }
+
+    fun handoverNfcWifi() {
+        discovery()
+        val device = localDevice ?: return
+        val deviceInfo = HandoverData(name = device.deviceName, address = device.deviceAddress, port = WiFiService.PORT)
+        val handhoverRecord = NdefRecord.createTextRecord("EN", handoverAdapter.toJson(deviceInfo))
+        val applicationRecord = NdefRecord.createApplicationRecord(BuildConfig.APPLICATION_ID)
+        val message = NdefMessage(handhoverRecord, applicationRecord)
+        handleNfc(message)
+        toast("Put devices back to back")
+    }
+
+
 
     fun enableWifi() {
         say("Enabling Wifi")
@@ -217,13 +265,31 @@ $bluetoothText
     }
 
     fun wifiConnect(device: WifiP2pDevice) {
-        say("wifiConnect to [${device.deviceName}] with address: ${device.deviceAddress}")
+        w("wifiConnect to [${device.deviceName}] with address: ${device.deviceAddress}")
 
         val config = WifiP2pConfig()
         config.deviceAddress = device.deviceAddress
         config.groupOwnerIntent = 0
 
-        wifiP2pManager.connect(wifiP2pChannel, config, wifiListener("connect"))
+        wifiP2pManager.connect(wifiP2pChannel, config, object : WifiP2pManager.ActionListener {
+            override fun onSuccess() {
+                w("Connect succes => wifiP2pManager.requestConnectionInfo ")
+                wifiP2pManager.requestConnectionInfo(wifiP2pChannel) {
+                    info -> WiFiService.startAction(activity.applicationContext, WiFiService.PORT, info, p2pGroup!! )
+                }
+            }
+
+            override fun onFailure(reason: Int) {
+                val error = when(reason) {
+                    WifiP2pManager.BUSY -> "BUSY"
+                    WifiP2pManager.P2P_UNSUPPORTED -> "P2P_UNSUPPORTED"
+                    WifiP2pManager.ERROR -> "ERROR"
+                    else -> "Failure $reason"
+                }
+                say("Connect failure: $error")
+            }
+
+        })
     }
 
     fun disconnect() {
@@ -239,11 +305,11 @@ $bluetoothText
 
     fun wifiListener(message: String) = object : WifiP2pManager.ActionListener {
         override fun onSuccess() {
-            say("WifiP2P[$message] : success", toast = false)
+            w("WifiP2P[$message] : success")
         }
 
         override fun onFailure(reason: Int) {
-            say("WifiP2P[$message] : FAILURE with code $reason", toast = false)
+            w("WifiP2P[$message] : FAILURE with code $reason")
         }
 
     }
@@ -286,12 +352,6 @@ $bluetoothText
 
         say("Will sent NFC Push message: $message")
         nfc.setNdefPushMessage(message, activity)
-        nfc.setOnNdefPushCompleteCallback({ event ->
-            activity?.runOnUiThread {
-                activity ?: return@runOnUiThread
-                say("NFC Push callback $event")
-            }
-        }, activity, emptyArray())
     }
 
     fun showBluetoothInfos() {
@@ -381,7 +441,6 @@ $bluetoothText
     }
 
     var smoothBluetooth: SmoothBluetooth? = null
-
 
 }
 

@@ -19,8 +19,7 @@ import timber.log.Timber.d
 import java.util.ArrayList
 
 class WiFiReceiver(private val _context: Context, private val _manager: WifiP2pManager, private val _channel: WifiP2pManager.Channel) : BroadcastReceiver(), WifiP2pManager.ConnectionInfoListener, WifiP2pManager.PeerListListener {
-    private var p2pGroup: WifiP2pGroup? = null
-    
+
     val localBroadcastManager = LocalBroadcastManager.getInstance(_context)
 
     fun say(message: String) {
@@ -30,7 +29,7 @@ class WiFiReceiver(private val _context: Context, private val _manager: WifiP2pM
     
     override fun onReceive(context: Context, intent: Intent) {
         val action = intent.action
-        say("onReceive:" + intent.action)
+        d("onReceive:" + intent.action)
 
         if (WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION == action) {
             val state = intent.getIntExtra(WifiP2pManager.EXTRA_WIFI_STATE, -1)
@@ -56,7 +55,7 @@ class WiFiReceiver(private val _context: Context, private val _manager: WifiP2pM
             val netInfo = intent.getParcelableExtra<NetworkInfo>(WifiP2pManager.EXTRA_NETWORK_INFO)
             val p2pInfo = intent.getParcelableExtra<WifiP2pInfo>(WifiP2pManager.EXTRA_WIFI_P2P_INFO)
             val p2pGroup = intent.getParcelableExtra<WifiP2pGroup>(WifiP2pManager.EXTRA_WIFI_P2P_GROUP)
-            this.p2pGroup = p2pGroup
+            P2PScreen.Companion.p2pGroup = p2pGroup
 
             d("netInfo:" + netInfo)
             d("p2pInfo:" + p2pInfo)
@@ -69,9 +68,10 @@ class WiFiReceiver(private val _context: Context, private val _manager: WifiP2pM
                 d("disconnect noted")
             }
         } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION == action) {
-            d("update local device")
-            val device = intent.getParcelableExtra<Parcelable>(WifiP2pManager.EXTRA_WIFI_P2P_DEVICE)
-            P2PScreen.localDevice = device as WifiP2pDevice
+            val device = intent.getParcelableExtra<WifiP2pDevice>(WifiP2pManager.EXTRA_WIFI_P2P_DEVICE)
+            P2PScreen.localDevice = device
+            d("My device is: $device")
+            d("Name:${device.deviceName} Address:${device.deviceAddress} Status:${device.status}")
         }
     }
 
@@ -79,7 +79,7 @@ class WiFiReceiver(private val _context: Context, private val _manager: WifiP2pM
     override fun onConnectionInfoAvailable(p2pInfo: WifiP2pInfo) {
         d("Group Owner? : ${p2pInfo.isGroupOwner}")
         d("connection noted:" + p2pInfo.toString())
-        WiFiService.startAction(_context, WiFiService.PORT, p2pInfo, p2pGroup!!)
+        WiFiService.startAction(_context, WiFiService.PORT, p2pInfo, P2PScreen.p2pGroup!!)
     }
 
     // PeerListListener
@@ -96,8 +96,9 @@ class WiFiReceiver(private val _context: Context, private val _manager: WifiP2pM
         val message =  results
                 .map { device -> "fresh device:${device.deviceName}:${device.deviceAddress}" }
                 .joinToString(separator = "\n")
-        say(message)
+        d(message)
 
+        localBroadcastManager.sendBroadcast(Intent(WIFI_RECEIVER).apply { putExtra("event", "peers") })
         P2PScreen.deviceList = results
     }
 

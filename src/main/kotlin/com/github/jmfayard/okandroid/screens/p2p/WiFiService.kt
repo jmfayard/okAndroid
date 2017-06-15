@@ -44,7 +44,7 @@ class WiFiService : IntentService("WiFiService") {
     }
 
 
-    private fun setupClient(port: Int, p2pInfo: WifiP2pInfo, p2pGroup: WifiP2pGroup) {
+    private fun setupClient(port: Int, p2pInfo: WifiP2pInfo, p2pGroup: WifiP2pGroup?) {
         Timber.d("setup client")
 
         val container = WiFiContainer()
@@ -134,7 +134,7 @@ class WiFiService : IntentService("WiFiService") {
         private val EXTRA_P2P_INFO = "net.braingang.service.extra.info"
         private val EXTRA_PORT = "net.braingang.service.extra.port"
 
-        fun startAction(context: Context, port: Int, p2pInfo: WifiP2pInfo, p2pGroup: WifiP2pGroup) {
+        fun startAction(context: Context, port: Int, p2pInfo: WifiP2pInfo, p2pGroup: WifiP2pGroup?) {
             val intent = Intent(context, WiFiService::class.java)
             intent.action = ACTION_START
             intent.putExtra(EXTRA_PORT, port)

@@ -16,10 +16,15 @@ import com.wealthfront.magellan.support.SingleActivity
 import com.wealthfront.magellan.transitions.DefaultTransition
 import android.content.Intent
 import android.content.IntentFilter
+import android.nfc.NdefRecord
+import android.nfc.NfcAdapter
 import android.support.v4.content.LocalBroadcastManager
 import android.widget.Toast
+import com.github.jmfayard.okandroid.MainActivity.Companion.REQUEST_ENABLE_BT
 import com.github.jmfayard.okandroid.screens.TagsScreen
 import com.github.jmfayard.okandroid.screens.p2p.DATA_EXCHANGE
+import com.github.jmfayard.okandroid.screens.p2p.P2PScreen
+import com.github.jmfayard.okandroid.screens.p2p.handoverAdapter
 import timber.log.Timber
 
 
@@ -101,32 +106,47 @@ class MainActivity : SingleActivity() {
     }
 
 
-    public override fun onResume() {
-        super.onResume()
-        // Check to see that the Activity started due to an Android Beam
-        processIntent(intent)
-//        if (NfcAdapter.ACTION_NDEF_DISCOVERED == intent.action) {
-//        }
-    }
-
     public override fun onNewIntent(intent: Intent) {
         // onResume gets called after this to handle the intent
         setIntent(intent)
     }
 
+    public override fun onResume() {
+        super.onResume()
+        // Check to see that the Activity started due to an Android Beam
+        when {
+            intent == null -> return
+            intent.hasCategory(Intent.CATEGORY_LAUNCHER) -> return
+            intent.action == NfcAdapter.ACTION_NDEF_DISCOVERED -> handleNfcHandover()
+            else -> Toast.makeText(this, intent.description(), Toast.LENGTH_LONG).show()
+        }
+    }
+
+
+
     /**
      * Parses the NDEF Message from the intent and prints to the TextView
      */
-    fun processIntent(intent: Intent?) {
-        if (intent == null || intent.hasCategory(Intent.CATEGORY_LAUNCHER)) return
+    fun handleNfcHandover() {
+        val records: List<NdefRecord> = intent?.ndefRecords() ?: emptyList()
+        if (records.isEmpty()) return
 
-        Toast.makeText(this, intent.description(), Toast.LENGTH_LONG).show()
-//        val rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)
-////         only one message sent during the beam
-//        val msg = rawMsgs[0] as NdefMessage
-////         record 0 contains the MIME type, record 1 is the AAR, if present
-//        val payload = String(msg.records[0].payload)
-//        getNavigator().currentScreen().toast(payload)
+        val handoverData = try {
+            val text = String(records.first().payload)
+             handoverAdapter.fromJson(text.substring(3))
+        } catch(e: Exception) {
+            Toast.makeText(this, intent.description(), Toast.LENGTH_LONG).show()
+            return
+        }
+        val screen: P2PScreen
+        if (getNavigator().currentScreen() is P2PScreen) {
+            screen = getNavigator().currentScreen() as P2PScreen
+        } else {
+            screen = P2PScreen.from(this)
+            getNavigator().showNow(screen)
+        }
+        screen.startLookingFor(handoverData)
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

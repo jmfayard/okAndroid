@@ -39,6 +39,7 @@ PackageManager.hasSystemFeature(FEATURE_BLUETOOTH_LE) -->
             android:name=".MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
+            android:launchMode="singleTask"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -61,23 +62,25 @@ PackageManager.hasSystemFeature(FEATURE_BLUETOOTH_LE) -->
                 <data android:scheme="https" android:host="mobile.twitter.com" android:pathPattern="/.*"/>
             </intent-filter>
 
-        </activity>
-
-        <activity android:name=".ReceiverActivity">
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <data android:mimeType="text/plain" />
             </intent-filter>
-            <!--intent-filter>
-                <action android:name="android.nfc.action.TAG_DISCOVERED"/>
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.nfc.action.TECH_DISCOVERED" />
-            </intent-filter>
-            <meta-data android:name="android.nfc.action.TECH_DISCOVERED" android:resource="@xml/nfc_tech_filter" /-->
 
         </activity>
+
+        <!--<activity android:name=".ReceiverActivity">-->
+
+            <!--&lt;!&ndash;intent-filter>-->
+                <!--<action android:name="android.nfc.action.TAG_DISCOVERED"/>-->
+            <!--</intent-filter>-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.nfc.action.TECH_DISCOVERED" />-->
+            <!--</intent-filter>-->
+            <!--<meta-data android:name="android.nfc.action.TECH_DISCOVERED" android:resource="@xml/nfc_tech_filter" /&ndash;&gt;-->
+
+        <!--</activity>-->
 
         <provider
             android:name="android.support.v4.content.FileProvider"
