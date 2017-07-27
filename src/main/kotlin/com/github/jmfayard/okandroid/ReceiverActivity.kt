@@ -13,7 +13,7 @@ class ReceiverActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        val view = findViewById(R.id.detail_label_content) as TextView
+        val view : TextView = findViewById(R.id.detail_label_content)
         view.text = "Got intent ${intent.description()}"
     }
 

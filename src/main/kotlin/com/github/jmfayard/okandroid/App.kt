@@ -18,7 +18,7 @@ class App : Application() {
 
         Timber.plant(Timber.DebugTree())
 
-        Fakeit.init(this)
+        Fakeit.init()
 
         val (wiFiReceiver, intentFilter) = P2PScreen.setupWiFiReceiver(this)
         registerReceiver(wiFiReceiver, intentFilter)

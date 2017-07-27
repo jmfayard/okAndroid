@@ -9,7 +9,7 @@ import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
 fun Activity.bindToItemSelected(@IdRes editTextId: Int): ReadWriteProperty<Any?, SpinnerListener>
-        = bindToItemSelected { findViewById(editTextId) as Spinner }
+        = bindToItemSelected { findViewById(editTextId) }
 
 fun Spinner.bindToItemSelected(): ReadWriteProperty<Any?, SpinnerListener>
         = bindToItemSelected { this }

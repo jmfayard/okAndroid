@@ -35,7 +35,7 @@ import timber.log.Timber.w
 
 val moshi = Moshi.Builder().build()
 val handoverAdapter = moshi.adapter(HandoverData::class.java)
-data class HandoverData(val name: String, val address: String, val port: Int)
+data class HandoverData(val name: String, val address: String, val port: Int, val groupOwnerIntent: Int)
 
 
 val DATA_EXCHANGE = "DATA_EXCHANGE"
@@ -122,7 +122,7 @@ class P2PScreen(
         }
 
         val text = """
-Handover #NfcWifiP2p
+Handover #p2p0 #p2p7 #p2p15
 
 $nfcText
 
@@ -188,7 +188,9 @@ $bluetoothText
     fun clickedOn(hashtag: String) {
         say("Clicked on $hashtag", toast = false)
         when (hashtag) {
-            "#NfcWifiP2p" -> handoverNfcWifi()
+            "#p2p0" -> handoverNfcWifi(0)
+            "#p2p7" -> handoverNfcWifi(7)
+            "#p2p15" -> handoverNfcWifi(15)
             in nfcPushes().keys -> handleNfc(nfcPushes()[hashtag]!!)
             "#connect" -> wifiConnect()
             "#discovery" -> discovery()
@@ -221,15 +223,15 @@ $bluetoothText
         }
         if (device != null) {
             w("Found expected device $device")
+            wifiConnect(device, handoverData!!.groupOwnerIntent)
             handoverData = null
-            wifiConnect(device)
         }
     }
 
-    fun handoverNfcWifi() {
+    fun handoverNfcWifi(groupOwnerIntent: Int) {
         discovery()
         val device = localDevice ?: return
-        val deviceInfo = HandoverData(name = device.deviceName, address = device.deviceAddress, port = WiFiService.PORT)
+        val deviceInfo = HandoverData(name = device.deviceName, address = device.deviceAddress, port = WiFiService.PORT, groupOwnerIntent = groupOwnerIntent)
         val handhoverRecord = NdefRecord.createTextRecord("EN", handoverAdapter.toJson(deviceInfo))
         val applicationRecord = NdefRecord.createApplicationRecord(BuildConfig.APPLICATION_ID)
         val message = NdefMessage(handhoverRecord, applicationRecord)
@@ -264,12 +266,12 @@ $bluetoothText
         }
     }
 
-    fun wifiConnect(device: WifiP2pDevice) {
+    fun wifiConnect(device: WifiP2pDevice, groupOwnerIntent: Int = -1) {
         w("wifiConnect to [${device.deviceName}] with address: ${device.deviceAddress}")
 
         val config = WifiP2pConfig()
         config.deviceAddress = device.deviceAddress
-        config.groupOwnerIntent = 0
+        config.groupOwnerIntent = groupOwnerIntent
 
         wifiP2pManager.connect(wifiP2pChannel, config, object : WifiP2pManager.ActionListener {
             override fun onSuccess() {
