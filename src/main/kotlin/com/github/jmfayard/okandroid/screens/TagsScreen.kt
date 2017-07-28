@@ -18,21 +18,28 @@ import timber.log.Timber
 import java.util.regex.Pattern.compile
 import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
+import com.github.jmfayard.okandroid.screens.TagAction.*
 
 
+enum class TagAction {
+    url, email, playtore, photo, activity,
+    choose, clear, notification, dialogs,
+    share;
 
+    override fun toString(): String = "#$name"
+}
 
 @See(layout = R.layout.tags_screen, java = PatternEditableBuilder::class)
 class TagsScreen : Screen<TagsView>() {
 
     val text = """
-With Intents, we can open an #url or send an #email or open the #playstore or #share content, take a #photo and are also used inside a #notification or open another #activity
+With Intents, we can open an $url or send an $email or open the $playtore or $share content, take a $photo and are also used inside a $notification or open another ${TagAction.activity}
 
-Widgets: #dialogs #choose
+Widgets: $dialogs $choose
 
--- #clear
+-- $clear
 """
-    val intentHashtags = listOf("#url", "#email", "#playstore", "#share", "#photo", "#activity")
+
 
     override fun createView(context: Context) = TagsView(context)
 
@@ -45,13 +52,14 @@ Widgets: #dialogs #choose
 
 
     fun clickedOn(hashtag: String) {
+        val action = TagAction.values().firstOrNull { it.toString() == hashtag } ?: return
         say("Clicked on $hashtag", toast = false)
-        when (hashtag) {
-            "#choose" -> materialDialog()
-            "#clear" -> view.history = ""
-            "#notification" -> view.createNotification()
-            "#dialogs" -> createMagellanDialog()
-            in intentHashtags -> view.launchIntent(view.createIntent(hashtag))
+        when (action) {
+            choose -> materialDialog()
+            clear -> view.history = ""
+            notification -> view.createNotification()
+            dialogs -> createMagellanDialog()
+            in listOf(url, email, playtore, photo, activity) -> view.launchIntent(view.createIntent(hashtag))
             else -> say("Hashtag $hashtag not handled")
         }
     }
