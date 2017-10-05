@@ -5,7 +5,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import com.github.jmfayard.okandroid.R
 import com.github.jmfayard.okandroid.inflateViewFrom
-import com.github.jmfayard.okandroid.screens.p2p.P2PScreen
 import com.github.jmfayard.okandroid.screens.room.RoomScreen
 import com.github.jmfayard.okandroid.utils.See
 import com.wealthfront.magellan.BaseScreenView
@@ -37,7 +36,6 @@ class HomeScreen : com.wealthfront.magellan.Screen<HomeView>() {
         listOf(
                 HeaderItem("Current Stuff"),
                 HomeItem("TagsScreen", "Try #android #features", TagsScreen()),
-                HomeItem("P2PScreen", "NFC, Bluetooth, Wifi-Direct", P2PScreen.from(activity)),
                 HomeItem("Room", "Google's component for sqlite", RoomScreen()),
                 HomeItem("RegisterScreen", "Registration by SMS flow", RegisterScreen()),
                 HeaderItem("Old Stuff"),

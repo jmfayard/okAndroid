@@ -1,9 +1,12 @@
 package com.github.jmfayard.okandroid
 
 import android.app.Application
-import com.github.jmfayard.okandroid.screens.p2p.P2PScreen
+import android.content.Context
 import com.mooveit.library.Fakeit
 import timber.log.Timber
+import android.support.multidex.MultiDex
+
+
 
 class App : Application() {
 
@@ -20,7 +23,12 @@ class App : Application() {
 
         Fakeit.init()
 
-        val (wiFiReceiver, intentFilter) = P2PScreen.setupWiFiReceiver(this)
-        registerReceiver(wiFiReceiver, intentFilter)
     }
+
+    override fun attachBaseContext(base: Context) {
+        super.attachBaseContext(base)
+        MultiDex.install(this)
+    }
+
+
 }
