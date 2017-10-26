@@ -70,17 +70,9 @@ PackageManager.hasSystemFeature(FEATURE_BLUETOOTH_LE) -->
 
         </activity>
 
-        <!--<activity android:name=".ReceiverActivity">-->
+        <activity android:name=".ReceiverActivity">
 
-            <!--&lt;!&ndash;intent-filter>-->
-                <!--<action android:name="android.nfc.action.TAG_DISCOVERED"/>-->
-            <!--</intent-filter>-->
-            <!--<intent-filter>-->
-                <!--<action android:name="android.nfc.action.TECH_DISCOVERED" />-->
-            <!--</intent-filter>-->
-            <!--<meta-data android:name="android.nfc.action.TECH_DISCOVERED" android:resource="@xml/nfc_tech_filter" /&ndash;&gt;-->
-
-        <!--</activity>-->
+        </activity>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -91,10 +83,6 @@ PackageManager.hasSystemFeature(FEATURE_BLUETOOTH_LE) -->
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/fileprovider" />
         </provider>
-
-        <service
-            android:name=".screens.p2p.WiFiService"
-            android:exported="false"/>
 
 
     </application>

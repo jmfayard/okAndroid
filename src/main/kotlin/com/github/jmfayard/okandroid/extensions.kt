@@ -19,29 +19,74 @@ import android.view.View
 import android.widget.Toast
 import com.wealthfront.magellan.BaseScreenView
 import com.wealthfront.magellan.Screen
+import io.reactivex.Scheduler
+import io.reactivex.SingleTransformer
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.schedulers.TestScheduler
 import java.io.File
 
 
-val BaseScreenView<*>.attach: Boolean
+typealias MagellanScreen = Screen<*>?
+typealias MagellanView = BaseScreenView<*>
+
+val MagellanScreen.ioThread : Scheduler
+    get() = if (isRunningTest) TestScheduler() else Schedulers.io()
+
+val MagellanScreen.mainThread : Scheduler
+    get() = if (isRunningTest) TestScheduler() else AndroidSchedulers.mainThread()
+
+
+val MagellanView.attach: Boolean
     get() = true
 
-val BaseScreenView<*>.dontAttach: Boolean
-    get() = false
 
-fun BaseScreenView<*>.inflateViewFrom(@LayoutRes layoutRes: Int): View =
+fun <T> onMainThread(operation: (T) -> Unit): SingleTransformer<T, T> {
+    return SingleTransformer { single ->
+        single.observeOn(AndroidSchedulers.mainThread())
+                .map { value ->
+                    operation(value)
+                    value
+                }
+                .observeOn(Schedulers.io())
+    }
+}
+
+
+fun MagellanView.inflateViewFrom(@LayoutRes layoutRes: Int): View =
         LayoutInflater.from(context).inflate(layoutRes, this, true)
 
 
 val BaseScreenView<*>.inflater: LayoutInflater
     get() = LayoutInflater.from(context)
 
-fun BaseScreenView<*>.toast(s: String) = Toast.makeText(context, s, Toast.LENGTH_SHORT).show()
 
-fun BaseScreenView<*>.longToast(s: String) = Toast.makeText(context, s, Toast.LENGTH_LONG).show()
+fun toast(message: String, long: Boolean = false) {
+    if (isRunningTest) return
+    val length = if (long) Toast.LENGTH_LONG else Toast.LENGTH_SHORT
+    // use the applicationContext so that the toast is shown even if the screen is not in the foreground
+    Toast.makeText(applicationContext(), message, length).show()
+}
 
-fun Screen<*>.toast(s: String) = (getView() as BaseScreenView<*>).toast(s)
+private fun applicationContext(): Context =
+        App.ctx
 
-fun  Intent.description(): String = buildString {
+// https://stackoverflow.com/questions/28550370/how-to-detect-whether-android-app-is-running-ui-test-with-espresso
+val isRunningTest: Boolean by lazy {
+    try {
+        Class.forName("android.support.test.espresso.Espresso")
+        return@lazy true
+    } catch (e: ClassNotFoundException) {
+    }
+    try {
+        Class.forName("io.kotlintest.specs.StringSpec")
+        return@lazy true
+    } catch (e: ClassNotFoundException) {
+    }
+    false
+}
+
+fun Intent.description(): String = buildString {
     append(this@description.toString())
     val data = extras?.keySet().orEmpty().map { key ->
         key to extras?.get(key)
@@ -52,7 +97,7 @@ fun  Intent.description(): String = buildString {
     }
 }
 
-fun Intent.ndefRecords() : List<NdefRecord> {
+fun Intent.ndefRecords(): List<NdefRecord> {
     val rawMessages = getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES) ?: return emptyList()
     return rawMessages.flatMap { (it as NdefMessage).records.toList() }
 }
