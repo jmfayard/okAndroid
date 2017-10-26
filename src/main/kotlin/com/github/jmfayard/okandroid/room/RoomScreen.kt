@@ -1,4 +1,4 @@
-package com.github.jmfayard.okandroid.screens.room
+package com.github.jmfayard.okandroid.room
 
 import android.content.Context
 import com.github.jmfayard.okandroid.R

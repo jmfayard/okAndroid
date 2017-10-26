@@ -1,4 +1,4 @@
-package com.github.jmfayard.okandroid.screens.room
+package com.github.jmfayard.okandroid.room
 
 import android.content.Context
 import android.support.v7.widget.LinearLayoutManager

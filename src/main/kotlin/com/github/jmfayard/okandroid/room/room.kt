@@ -1,4 +1,4 @@
-package com.github.jmfayard.okandroid.screens.room
+package com.github.jmfayard.okandroid.room
 
 import android.arch.persistence.room.*
 import com.github.jmfayard.okandroid.App
@@ -10,22 +10,16 @@ val DB: MyDatabase  by lazy {
 
 
 @Dao
-interface PersonDao {
+interface PersonDao : BaseDao<Person> {
 
     @Query("SELECT * FROM person")
     fun getAllPeople(): Flowable<List<Person>>
 
     @Query("DELETE FROM person")
     fun deleteAll(): Int
-
-    @Insert
-    fun insert(person: Person)
-
-    @Delete
-    fun delete(person: Person)
-
-
 }
+
+
 
 
 @Entity
@@ -37,5 +31,5 @@ data class Person(
 
 @Database(entities = arrayOf(Person::class), version = 1, exportSchema = false)
 abstract class MyDatabase : RoomDatabase() {
-    abstract fun personDao(): PersonDao
+    abstract fun albums(): PersonDao
 }

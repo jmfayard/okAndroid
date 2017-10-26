@@ -1,4 +1,4 @@
-package com.github.jmfayard.okandroid.screens.room
+package com.github.jmfayard.okandroid.room
 
 import io.reactivex.Flowable
 import io.reactivex.Scheduler
@@ -12,24 +12,24 @@ class DbConnector(
         val observeOn: Scheduler = AndroidSchedulers.mainThread()) {
 
     fun delete(person: Person): Single<Unit> =
-            { DB.personDao().delete(person) }
+            { DB.albums().delete(person) }
                     .toSingle()
                     .subscribeOn(subscribeOn)
                     .observeOn(observeOn)
 
     fun insert(person: Person): Single<Unit> =
-            { DB.personDao().insert(person) }
+            { DB.albums().insert(person) }
                     .toSingle()
                     .subscribeOn(subscribeOn)
                     .observeOn(observeOn)
 
     fun queryAll(): Flowable<List<Person>>? {
-        return DB.personDao().getAllPeople()
+        return DB.albums().getAllPeople()
                 .subscribeOn(subscribeOn)
                 .observeOn(observeOn)
     }
 
-    fun deleteAll(): Single<Int> = { DB.personDao().deleteAll() }
+    fun deleteAll(): Single<Int> = { DB.albums().deleteAll() }
             .toSingle()
             .subscribeOn(subscribeOn)
             .observeOn(observeOn)

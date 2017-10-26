@@ -5,7 +5,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import com.github.jmfayard.okandroid.R
 import com.github.jmfayard.okandroid.inflateViewFrom
-import com.github.jmfayard.okandroid.screens.room.RoomScreen
+import com.github.jmfayard.okandroid.room.RoomScreen
 import com.github.jmfayard.okandroid.utils.See
 import com.wealthfront.magellan.BaseScreenView
 import com.wealthfront.magellan.Screen
