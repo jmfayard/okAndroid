@@ -239,16 +239,18 @@ dependencies {
 
 configurations.all {
     resolutionStrategy {
-        force "com.android.support:appcompat-v7:${versions.support}"
-        force "com.android.support:preference-v7:${versions.support}"
-        force "com.android.support.constraint:constraint-layout:${versions.constraint}"
-        force "com.android.support:design:${versions.support}"
-        force "com.android.support:percent:${versions.support}"
-        force "com.android.support:support-v13:${versions.support}"
-        force "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-        force "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-        force "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
-//        force "com.google.code.findbugs:annotations"
+        eachDependency { details ->
+            // Force all of the primary support libraries to use the same version.
+            // https://github.com/JakeWharton/u2020/blob/68a5f3109ee585df276b3f541fdef31360331433/build.gradle#L105-L113
+            if (details.requested.group == 'com.android.support'
+                    && details.requested.name != 'multidex'
+                    && details.requested.name != 'multidex-instrumentation') {
+                details.useVersion versions.support
+            }
+            if (details.requested.group == "org.jetbrains.kotlin") {
+                details.useVersion kotlin_version
+            }
+        }
     }
 }
 
