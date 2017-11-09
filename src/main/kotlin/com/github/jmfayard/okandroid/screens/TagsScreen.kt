@@ -7,8 +7,6 @@ import android.support.v4.content.ContextCompat.startActivity
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.github.jmfayard.okandroid.*
-import com.github.jmfayard.okandroid.databinding.TagsScreenBinding
-import com.github.jmfayard.okandroid.databinding.TagsScreenBinding.inflate
 import com.github.jmfayard.okandroid.screens.TagAction.Companion.clickedOn
 import com.github.jmfayard.okandroid.utils.Intents
 import com.github.jmfayard.okandroid.utils.PatternEditableBuilder
@@ -139,7 +137,9 @@ class TagsScreen : Screen<TagsView>() {
             scheme("https")
             host("google.com")
         }
-        else -> { say("Error: no intent defined for $action") ; Intent() }
+        else -> {
+            say("Error: no intent defined for $action"); Intent()
+        }
     }
 
     fun createNotification() {
@@ -169,10 +169,12 @@ class TagsScreen : Screen<TagsView>() {
 
 class TagsView(context: Context) : BaseScreenView<TagsScreen>(context) {
 
+    init {
+        inflateViewFrom(R.layout.tags_screen)
+    }
 
-    val binding: TagsScreenBinding = inflate(inflater, this, attach)
-    var htmlContent by binding.htmlContent.bindToText()
-    var history by binding.actionResult.bindToText()
+    var htmlContent by bindToText(R.id.htmlContent)
+    var history by bindToText(R.id.actionResult)
 
     fun setupTags() {
         PatternEditableBuilder()
