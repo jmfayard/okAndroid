@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.1.51'
+    ext.kotlin_version = '1.2.0'
 
     repositories {
         maven { url 'https://maven.google.com' }
@@ -8,17 +8,18 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0'
+        classpath 'com.android.tools.build:gradle:3.0.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 plugins {
-    id 'com.gradle.build-scan' version '1.10.2'
+    id 'com.gradle.build-scan' version '1.11'
     id 'com.github.ben-manes.versions' version '0.17.0'
 }
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+
 
 def versions = [
         "android_gradle" : "3.0.0",
@@ -30,24 +31,26 @@ def versions = [
         "espresso": "3.0.1",
         "junit": "4.12",
         "konfig" : "1.5.0.0",
-        "KotlinAndroidViewBindings": "0.10",
+        "KotlinAndroidViewBindings": "0.11",
         "kotlintest" : "2.0.7",
         "magellan" : "1.0.0",
         "moshi" : "1.5.0",
-        "okhttp" : "3.9.0",
+        "okhttp" : "3.9.1",
         "okio" : "1.13.0",
         "retrofit" : "2.3.0",
         "rxandroid": "2.0.1",
         "rxbinding": "2.0.0",
         "rxjava" : "1.2.7",
-        "rxjava2" : "2.1.6",
+        "rxjava2" : "2.1.7",
         "rxkotlin": "1.0.0",
-        "rxkotlin2": "2.1.0",
+        "rxkotlin2": "2.2.0",
         "slimadapter" : "2.1.2",
-        "support": "27.0.0",
+        "support": "27.0.2",
         "timber" : "4.6.0",
         "calligraphy": "2.2.0",
         "permissions": "3.0.1",
+        "materialDialogs": "0.9.6.0",
+        "jacoco": "0.7.9",
 ]
 
 repositories {
@@ -213,7 +216,7 @@ dependencies {
     compile 'com.github.moove-it:fakeit:v0.7'
 
     // https://github.com/afollestad/material-dialogs
-    compile 'com.afollestad.material-dialogs:core:0.9.5.0'
+    compile "com.afollestad.material-dialogs:core:${versions.materialDialogs}"
 
 
     /****** TESTING ****/
