@@ -51,6 +51,7 @@ def versions = [
         "permissions": "3.0.1",
         "materialDialogs": "0.9.6.0",
         "jacoco": "0.7.9",
+        "androidjob" : "1.2.1",
 ]
 
 repositories {
@@ -218,6 +219,9 @@ dependencies {
     // https://github.com/afollestad/material-dialogs
     compile "com.afollestad.material-dialogs:core:${versions.materialDialogs}"
 
+
+    // https://github.com/evernote/android-job
+    compile 'com.evernote:android-job:' + versions.androidjob
 
     /****** TESTING ****/
 

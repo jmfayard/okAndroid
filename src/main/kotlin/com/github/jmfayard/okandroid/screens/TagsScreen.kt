@@ -7,6 +7,8 @@ import android.support.v4.content.ContextCompat.startActivity
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.github.jmfayard.okandroid.*
+import com.github.jmfayard.okandroid.jobs.Jobs
+import com.github.jmfayard.okandroid.screens.TagAction.*
 import com.github.jmfayard.okandroid.screens.TagAction.Companion.clickedOn
 import com.github.jmfayard.okandroid.utils.Intents
 import com.github.jmfayard.okandroid.utils.PatternEditableBuilder
@@ -21,7 +23,7 @@ import java.util.regex.Pattern
 enum class TagAction {
     url, email, playtore, photo, anotherActivity,
     choose, clear, notification, dialogs,
-    share;
+    share, requestbin, requestnow, sync;
 
     companion object {
         val text = """
@@ -29,7 +31,7 @@ With Intents, we can open an $url or send an $email or open the $playtore or $sh
 
 Widgets: $dialogs $choose
 
--- $clear
+Jobs: $requestbin $requestnow $sync $clear
 """
 
         fun TagsScreen.clickedOn(hashtag: String) {
@@ -46,6 +48,9 @@ Widgets: $dialogs $choose
                 photo -> launchIntent(action)
                 anotherActivity -> launchIntent(action)
                 share -> launchIntent(action)
+                requestbin -> Jobs.postSoonToHttpbin()
+                requestnow -> Jobs.postNowToHttpbin()
+                sync -> Jobs.launchSyncNow()
             }
         }
 
@@ -126,14 +131,14 @@ class TagsScreen : Screen<TagsView>() {
     }
 
     fun createIntent(action: TagAction): Intent = when (action) {
-        TagAction.anotherActivity -> Intent(activity, ReceiverActivity::class.java).apply {
+        anotherActivity -> Intent(activity, ReceiverActivity::class.java).apply {
             putExtra("Greeting", "Hello World")
         }
-        TagAction.email -> Intents.sendEmail(email = "katogarabato1@gmail.com", text = "Que tal?", subject = "hola")
-        TagAction.playtore -> Intents.openPlaystore("com.whatsapp")
-        TagAction.share -> Intents.shareText(TagAction.text)
-        TagAction.photo -> Intents.capturePhoto(activity.contentFile("image", "okandroid"))
-        TagAction.url -> Intents.viewUrl {
+        email -> Intents.sendEmail(email = "katogarabato1@gmail.com", text = "Que tal?", subject = "hola")
+        playtore -> Intents.openPlaystore("com.whatsapp")
+        share -> Intents.shareText(TagAction.text)
+        photo -> Intents.capturePhoto(activity.contentFile("image", "okandroid"))
+        url -> Intents.viewUrl {
             scheme("https")
             host("google.com")
         }
@@ -151,15 +156,15 @@ class TagsScreen : Screen<TagsView>() {
             setContentText("Hello World!")
             setAutoCancel(true)
 
-            val urlIntent = context.pendingIntent(createIntent(TagAction.url))
+            val urlIntent = context.pendingIntent(createIntent(url))
             setContentIntent(urlIntent)
 
             addAction(R.drawable.ic_http_black_24dp, "google", urlIntent)
 
             addAction(R.drawable.ic_email_black_24dp, "email",
-                    context.pendingIntent(createIntent(TagAction.email)))
+                    context.pendingIntent(createIntent(email)))
             addAction(R.drawable.ic_share_black_24dp, "share",
-                    context.pendingIntent(createIntent(TagAction.share)))
+                    context.pendingIntent(createIntent(share)))
 
 
         }

@@ -5,7 +5,7 @@ import android.content.Context
 import com.mooveit.library.Fakeit
 import timber.log.Timber
 import android.support.multidex.MultiDex
-
+import com.github.jmfayard.okandroid.jobs.Jobs
 
 
 class App : Application() {
@@ -22,6 +22,7 @@ class App : Application() {
         Timber.plant(Timber.DebugTree())
 
         Fakeit.init()
+        Jobs.initialize(this)
 
     }
 
