@@ -3,6 +3,7 @@ package com.github.jmfayard.okandroid.screens
 import android.content.Context
 import com.github.jmfayard.okandroid.R
 import com.github.jmfayard.okandroid.room.RoomScreen
+import com.github.jmfayard.okandroid.screens.mvi.MviScreen
 import com.github.jmfayard.okandroid.utils.See
 import com.wealthfront.magellan.Screen
 
@@ -33,7 +34,7 @@ class HomeScreen : MagellanScreen<HomeDisplay>() {
                 HeaderItem("Current Stuff"),
                 HomeItem("TagsScreen", "Try #android #features", TagsScreen()),
                 HomeItem("Room", "Google's component for sqlite", RoomScreen()),
-                HomeItem("MVI", "Rx Presenter", HomeScreen()),
+                HomeItem("MVI", "Rx Presenter", MviScreen()),
                 HomeItem("RegisterScreen", "Registration by SMS flow", RegisterScreen()),
                 HeaderItem("Old Stuff"),
                 HomeItem("RxScreen", "RxJava / RxBinding", RxScreen())

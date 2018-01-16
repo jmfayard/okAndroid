@@ -35,4 +35,7 @@
   <string name="rx_title">Rx Playground</string>
   <string name="rx_screen_title">Android Features</string>
   <string name="verification_title">Verify your phone number</string>
+  <string name="update">Update</string>
+  <string name="updating">Updating</string>
+  <string name="mvi_title">Article</string>
 </resources>
