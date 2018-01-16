@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.support.v4.content.ContextCompat.startActivity
-import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.github.jmfayard.okandroid.*
 import com.github.jmfayard.okandroid.jobs.Jobs
@@ -13,9 +12,6 @@ import com.github.jmfayard.okandroid.screens.TagAction.Companion.clickedOn
 import com.github.jmfayard.okandroid.utils.Intents
 import com.github.jmfayard.okandroid.utils.PatternEditableBuilder
 import com.github.jmfayard.okandroid.utils.See
-import com.marcinmoskala.kotlinandroidviewbindings.bindToText
-import com.wealthfront.magellan.BaseScreenView
-import com.wealthfront.magellan.Screen
 import timber.log.Timber
 import java.util.regex.Pattern
 
@@ -27,6 +23,8 @@ enum class TagAction {
 
     companion object {
         val text = """
+            HELLLO
+
 With Intents, we can open an $url or send an $email or open the $playtore or $share content, take a $photo and are also used inside a $notification or open $anotherActivity
 
 Widgets: $dialogs $choose
@@ -39,7 +37,7 @@ Jobs: $requestbin $requestnow $sync $clear
             say("Clicked on $hashtag", toast = false)
             when (action) {
                 choose -> materialDialog()
-                clear -> view.history = ""
+                clear -> display?.history = ""
                 notification -> createNotification()
                 dialogs -> createMagellanDialog()
                 url -> launchIntent(action)
@@ -63,14 +61,22 @@ Jobs: $requestbin $requestnow $sync $clear
 }
 
 @See(layout = R.layout.tags_screen, java = PatternEditableBuilder::class)
-class TagsScreen : Screen<TagsView>() {
+class TagsScreen : MagellanScreen<TagsDisplay>() {
 
-    override fun createView(context: Context) = TagsView(context)
+    override fun createView(context: Context) =
+            MagellanView(context, TagsDisplay.LAYOUT, SomeView::createTagsDisplay)
 
-    override fun getTitle(context: Context): String = context.getString(R.string.rx_screen_title)
+    override val screenTitle: Int
+        get() = R.string.rx_screen_title
 
     override fun onResume(context: Context?) {
-        view.setHtmlcontentAndSetupTags(TagAction.text)
+        display?.htmlContent = TagAction.text
+        PatternEditableBuilder()
+                .addPattern(Pattern.compile("\\@(\\w+)"))
+                .addPattern(Pattern.compile("#(\\w+)"), R.color.link) { hashtag ->
+                    clickedOn(hashtag)
+                }
+                .into(activity.findViewById(R.id.htmlContent))
     }
 
 
@@ -88,9 +94,9 @@ class TagsScreen : Screen<TagsView>() {
 
     fun say(message: String, toast: Boolean = true) {
         Timber.i("SAY: $message")
-        if (view == null) return
         if (toast) toast(message)
-        view.history += "\n" + message
+        val displayOk = display ?: return
+        displayOk.history = "$message\n${displayOk.history}"
     }
 
     fun createMagellanDialog() = buildDialog {
@@ -170,36 +176,6 @@ class TagsScreen : Screen<TagsView>() {
         }
     }
 }
-
-
-class TagsView(context: Context) : BaseScreenView<TagsScreen>(context) {
-
-    init {
-        inflateViewFrom(R.layout.tags_screen)
-    }
-
-    var htmlContent by bindToText(R.id.htmlContent)
-    var history by bindToText(R.id.actionResult)
-
-    fun setupTags() {
-        PatternEditableBuilder()
-                .addPattern(Pattern.compile("\\@(\\w+)"))
-                .addPattern(Pattern.compile("#(\\w+)"), R.color.link) { hashtag ->
-                    screen.clickedOn(hashtag)
-                }
-                .into(findViewById<TextView>(R.id.htmlContent))
-    }
-
-    fun setHtmlcontentAndSetupTags(content: String) {
-        htmlContent = content
-        setupTags()
-    }
-
-
-}
-
-
-
 
 
 
