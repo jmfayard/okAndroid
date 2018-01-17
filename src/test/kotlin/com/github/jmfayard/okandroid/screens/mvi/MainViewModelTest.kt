@@ -8,7 +8,6 @@ import io.reactivex.Observable
 import io.reactivex.Observable.just
 import io.reactivex.Single
 import io.reactivex.schedulers.TestScheduler
-import java.util.concurrent.TimeUnit
 
 class MainViewModelTest : StringSpec() { init {
 
@@ -22,13 +21,13 @@ class MainViewModelTest : StringSpec() { init {
 
 
         val model = present(
-                updateButtonClicks = just(Unit).delaySubscription(1, TimeUnit.SECONDS, testScheduler),
+                updateButtonClicks = just(Unit).delaySubscription(1.seconds, testScheduler),
                 articleClicks = Observable.never(),
                 articlesProvider = testArticlesProvider("article1", "article2")
         )
 
         val progressIsVisible = model.progressIsVisible.test()
-        testScheduler.advanceTimeTo(20, TimeUnit.SECONDS)
+        testScheduler.advanceTimeTo(20.seconds)
 
         progressIsVisible.assertValues(false, true, false)
     }
@@ -40,8 +39,8 @@ class MainViewModelTest : StringSpec() { init {
         )))
 
         val model = present(
-                updateButtonClicks = just(Unit).delaySubscription(1, TimeUnit.SECONDS, testScheduler),
-                articleClicks = just(1).delaySubscription(10, TimeUnit.SECONDS, testScheduler),
+                updateButtonClicks = just(Unit).delaySubscription(1.seconds, testScheduler),
+                articleClicks = just(1).delaySubscription(10.seconds, testScheduler),
                 articlesProvider = articlesProvider
         )
 
@@ -49,7 +48,7 @@ class MainViewModelTest : StringSpec() { init {
         val progressIsVisible = model.progressIsVisible.test()
         val emptyViewIsVisible = model.emptyViewIsVisible.test()
 
-        testScheduler.advanceTimeTo(20, TimeUnit.SECONDS)
+        testScheduler.advanceTimeTo(20.seconds)
 
         startDetailActivitySignals.assertResult(Article("article2"))
         progressIsVisible.values().last() shouldBe false
