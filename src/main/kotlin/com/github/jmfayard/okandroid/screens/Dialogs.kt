@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.widget.TextView
 import com.github.jmfayard.okandroid.App
 import com.github.jmfayard.okandroid.R
+import com.github.jmfayard.okandroid.app
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
@@ -69,7 +70,7 @@ class DialogViewBinding(lazyViewProvider: Lazy<TextView>) : ReadWriteProperty<An
 }
 
 
-object DummyDialog : Dialog(App.ctx) {
+object DummyDialog : Dialog(app().ctx) {
     override fun show() {}
     override fun hide() {}
     override fun setOnDismissListener(listener: DialogInterface.OnDismissListener?) {}

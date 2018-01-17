@@ -22,9 +22,7 @@ fun present(
 ): MainViewModel {
   // Internal states
 
-  val a = articlesProvider.getArticles()
-
-  val getArticlesWithStartAndEnd = articlesProvider.getArticles()
+  val getArticlesWithStartAndEnd = articlesProvider.fetchArticles()
     .markStartAndEnd()
 
   val getArticlesEvents = updateButtonClicks.flatMapWithDrop(getArticlesWithStartAndEnd)

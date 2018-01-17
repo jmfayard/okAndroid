@@ -1,8 +1,8 @@
 package com.github.jmfayard.okandroid.screens.mvi
 
-import android.app.LauncherActivity
 import com.github.jmfayard.okandroid.screens.ListItem
 import io.reactivex.Observable.just
+import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import java.io.Serializable
 import java.util.concurrent.TimeUnit
@@ -11,7 +11,12 @@ data class Article(
         val title: String
 ) : Serializable, ListItem
 
-class ArticlesProvider {
+interface ArticlesProvider {
+    fun fetchArticles(): Single<List<Article>>
+}
+
+
+object StaticArticlesProvider : ArticlesProvider {
 
     val titles = listOf(
             "Casting a \$20M Mirror for the World’s Largest Telescope ",
@@ -20,10 +25,16 @@ class ArticlesProvider {
             "Products Over Projects"
     )
 
-    fun getArticles()=
+    override fun fetchArticles() =
             just(titles.map { Article(it) })
-                .singleOrError()
-                .subscribeOn(Schedulers.io())
-                .delaySubscription(1500, TimeUnit.MILLISECONDS)
+                    .singleOrError()
+                    .subscribeOn(Schedulers.io())
+                    .delaySubscription(1500, TimeUnit.MILLISECONDS)
 
 }
+
+fun testArticlesProvider(vararg title: String): ArticlesProvider =
+        object : ArticlesProvider {
+            override fun fetchArticles(): Single<List<Article>>
+                    = Single.just(title.map { Article(it) })
+        }

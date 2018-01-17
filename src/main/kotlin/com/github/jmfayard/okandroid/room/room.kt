@@ -2,10 +2,11 @@ package com.github.jmfayard.okandroid.room
 
 import android.arch.persistence.room.*
 import com.github.jmfayard.okandroid.App
+import com.github.jmfayard.okandroid.app
 import io.reactivex.Flowable
 
 val DB: MyDatabase  by lazy {
-    Room.databaseBuilder(App.ctx, MyDatabase::class.java, "room-2day").build()
+    Room.databaseBuilder(app().ctx, MyDatabase::class.java, "room-2day").build()
 }
 
 

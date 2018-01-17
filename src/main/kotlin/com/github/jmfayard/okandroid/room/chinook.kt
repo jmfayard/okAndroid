@@ -4,6 +4,7 @@ import android.arch.persistence.room.*
 import android.content.Context
 import com.github.jmfayard.okandroid.App
 import com.github.jmfayard.okandroid.R
+import com.github.jmfayard.okandroid.app
 import com.github.jmfayard.okandroid.room.Chinook.ALBUMS
 import com.github.jmfayard.okandroid.room.Chinook.ARTISTS
 import com.github.jmfayard.okandroid.room.Chinook.CUSTOMERS
@@ -19,7 +20,7 @@ import java.io.File
 object Chinook {
 
     val DB: ChinookDatabase  by lazy {
-        Room.databaseBuilder(App.ctx, ChinookDatabase::class.java, "chinook.db").build()
+        Room.databaseBuilder(app().ctx, ChinookDatabase::class.java, "chinook.db").build()
     }
     /*** See http://www.sqlitetutorial.net/sqlite-sample-database/ **/
     const val SAMPLE_DATABASE = R.raw.chinook
