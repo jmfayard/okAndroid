@@ -1,7 +1,11 @@
 package com.github.jmfayard.okandroid.screens.mvi
 
 import com.github.jmfayard.okandroid.screens.ListItem
+import com.tbruyelle.rxpermissions2.Permission
+import io.reactivex.Observable
 import io.reactivex.Observable.just
+import io.reactivex.ObservableSource
+import io.reactivex.ObservableTransformer
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import java.io.Serializable
@@ -15,7 +19,17 @@ interface ArticlesProvider {
     fun fetchArticles(): Single<List<Article>>
 }
 
+interface PermissionProvider {
+    fun <T> requestPermissions(): ObservableTransformer<T, Permission>
+}
 
+fun testPermissionProvider(granted: Boolean) = object  : PermissionProvider {
+    override fun <T> requestPermissions() = ObservableTransformer<T, Permission> {
+        upstream ->
+        upstream.map { Permission("permission", granted) }
+    }
+
+}
 object StaticArticlesProvider : ArticlesProvider {
 
     val titles = listOf(
@@ -43,6 +57,5 @@ object StaticArticlesProvider : ArticlesProvider {
 
 fun testArticlesProvider(vararg title: String): ArticlesProvider =
         object : ArticlesProvider {
-            override fun fetchArticles(): Single<List<Article>>
-                    = Single.just(title.map { Article(it) })
+            override fun fetchArticles(): Single<List<Article>> = Single.just(title.map { Article(it) })
         }

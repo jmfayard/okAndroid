@@ -1,6 +1,7 @@
 package com.github.jmfayard.okandroid.screens.mvi
 
 import com.github.jmfayard.okandroid.R
+import com.tbruyelle.rxpermissions2.Permission
 import io.reactivex.Observable
 import io.reactivex.Observable.concat
 import io.reactivex.Observable.just
@@ -13,7 +14,8 @@ class MainViewModel(
   val progressIsVisible: Observable<Boolean>,
   val smallProgressIsVisible: Observable<Boolean>,
   val updateButtonText: Observable<Int>,
-  val startDetailActivitySignals: Observable<Article>
+  val startDetailActivitySignals: Observable<Article>,
+  val permissionSignal: Observable<Permission>
 ) {
   fun debug() = MainViewModel(
           articles.debug("articles"),
@@ -22,7 +24,8 @@ class MainViewModel(
           progressIsVisible.debug("progressIsVisible"),
           smallProgressIsVisible.debug("smallProgressIsVisible"),
           updateButtonText.debug("updateButtonText"),
-          startDetailActivitySignals.debug("startDetailActivitySignals")
+          startDetailActivitySignals.debug("startDetailActivitySignals"),
+          permissionSignal.debug("permissionSignal")
   )
 }
 
@@ -31,17 +34,28 @@ fun <T> Observable<T>.debug(name: String) : Observable<T>
         = this.doOnEach { Timber.i("$name -> $it") }
 
 fun present(
-  updateButtonClicks: Observable<Unit>,
-  articleClicks: Observable<Article>,
-  articlesProvider: ArticlesProvider
+        updateButtonClicks: Observable<Unit>,
+        articleClicks: Observable<Article>,
+        articlesProvider: ArticlesProvider,
+        permissionProvider: PermissionProvider
 ): MainViewModel {
   // Internal states
+
 
   val getArticlesWithStartAndEnd = articlesProvider.fetchArticles()
     .markStartAndEnd()
 
-  val getArticlesEvents = updateButtonClicks.flatMapWithDrop(getArticlesWithStartAndEnd)
-    .publish().autoConnect()
+
+  // View states
+  val permissionSignal = updateButtonClicks
+          .compose(permissionProvider.requestPermissions())
+          .publish().autoConnect()
+
+
+  val getArticlesEvents = permissionSignal
+          .filter { it.granted }
+          .flatMapWithDrop(getArticlesWithStartAndEnd)
+          .publish().autoConnect()
 
   val isDownloadingArticles = just(false).concatWith(
     getArticlesEvents.map { it.isRunning() }
@@ -58,20 +72,20 @@ fun present(
 
   val hasArticles = articles.map { it.isNotEmpty() }
 
-  // View states
+
 
   val updateButtonIsEnabled = isDownloadingArticles.map { it.not() }
 
-  val emptyViewIsVisible = combineLatest(isDownloadingArticles, hasArticles) { downloadingArticles, hasArticles ->
-    !hasArticles && !downloadingArticles
+  val emptyViewIsVisible = combineLatest(isDownloadingArticles, hasArticles) { downloadingArticles, hasArticle ->
+    !hasArticle && !downloadingArticles
   }
 
-  val progressIsVisible = combineLatest(isDownloadingArticles, hasArticles) { downloadingArticles, hasArticles ->
-    downloadingArticles && !hasArticles
+  val progressIsVisible = combineLatest(isDownloadingArticles, hasArticles) { downloadingArticles, hasArticle ->
+    downloadingArticles && !hasArticle
   }.distinctUntilChanged()
 
-  val smallProgressIsVisible = combineLatest(isDownloadingArticles, hasArticles) { downloadingArticles, hasArticles ->
-    downloadingArticles && hasArticles
+  val smallProgressIsVisible = combineLatest(isDownloadingArticles, hasArticles) { downloadingArticles, hasArticle ->
+    downloadingArticles && hasArticle
   }
 
   val updateButtonText = isDownloadingArticles.map { downloading ->
@@ -89,7 +103,8 @@ fun present(
     progressIsVisible = progressIsVisible,
     smallProgressIsVisible = smallProgressIsVisible,
     updateButtonText = updateButtonText,
-    startDetailActivitySignals = startDetailActivitySignals
+    startDetailActivitySignals = startDetailActivitySignals,
+    permissionSignal = permissionSignal
   )
 }
 

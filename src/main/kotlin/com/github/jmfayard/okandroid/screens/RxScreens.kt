@@ -1,9 +1,16 @@
 package com.github.jmfayard.okandroid.screens
 
+import android.Manifest
+import android.app.Activity
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import com.github.jmfayard.okandroid.screens.mvi.PermissionProvider
+import com.tbruyelle.rxpermissions2.Permission
+import com.tbruyelle.rxpermissions2.RxPermissions
+import io.reactivex.ObservableTransformer
+import timber.log.Timber
 
 interface HasId {
     val id: Int
@@ -35,3 +42,15 @@ fun SomeView.button(has: HasId): Button? =
         this.findViewById(has.id) as? Button
 
 
+
+
+fun SomeScreen.permissionProvider(activity: Activity, vararg permission: String) =         object : PermissionProvider {
+    val rxPermissions = RxPermissions(activity).apply { setLogging(true) }
+
+    init {
+        rxPermissions.request(*permission).subscribe { Timber.i("Request Permission: $it") }
+    }
+    override fun <T> requestPermissions() : ObservableTransformer<T, Permission> =
+            rxPermissions.ensureEachCombined(*permission)
+
+}

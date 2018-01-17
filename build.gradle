@@ -145,6 +145,8 @@ dependencies {
 //    compile "com.squareup.retrofit2:converter-simplexml:${versions.retrofit}"
 //    compile "com.squareup.retrofit2:converter-protobuf:${versions.retrofit}"
 
+    compile "com.tbruyelle.rxpermissions2:rxpermissions:0.9.5@aar"
+
 
     // https://github.com/square/okhttp/wiki/Recipes
     compile "com.squareup.okhttp3:okhttp:${versions.okhttp}"
