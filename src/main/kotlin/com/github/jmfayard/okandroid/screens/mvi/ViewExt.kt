@@ -18,14 +18,6 @@ fun View.onClick(function: () -> Unit) {
   }
 }
 
-fun View.clicks(): Observable<Unit> {
-  val clicks = BehaviorSubject.create<Unit>()
-  this.setOnClickListener {
-    clicks.onNext(Unit)
-  }
-  return clicks
-}
-
 var View.visible: Boolean
   get() {
     return this.visibility == View.VISIBLE

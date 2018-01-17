@@ -42,6 +42,6 @@ fun Observables.interval(delay: Long, scheduler: Scheduler = computation()): Obs
 fun Flowables.interval(delay: Long, scheduler: Scheduler = computation()): Flowable<Long> =
         Flowable.interval(delay, MILLISECONDS, scheduler)
 
-val Int.miliseconds get() = MINUTES.toMillis(this.toLong())
+val Int.miliseconds get() = MILLISECONDS.toMillis(this.toLong())
 val Int.seconds get() = SECONDS.toMillis(this.toLong())
 val Int.minutes get() = MINUTES.toMillis(this.toLong())

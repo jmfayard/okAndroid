@@ -22,12 +22,14 @@ class PresentRenderInputScreen(
 
     override fun createView(context: Context): PresentRenderInputView = PresentRenderInputView(context)
 
-    val articleClicks = BehaviorSubject.create<Int>()
+    val articleClicks = BehaviorSubject.create<Article>()
 
 
     override fun onRender(context: Context) {
-        display?.setupRecyclerView { toast("Hello $it") }
-        val model = present(
+        display?.setupRecyclerView {
+            articleClicks.onNext(it)
+        }
+        val model: MainViewModel = present(
                 updateButtonClicks = clicks(MviButtonUpdate),
                 articleClicks = articleClicks,
                 articlesProvider = provider
@@ -38,16 +40,14 @@ class PresentRenderInputScreen(
 
 
     fun render(model: MainViewModel) {
-        with(model) {
+        with(model.debug()) {
             articles.render { display?.updateRecyclerViewData(it) }
             updateButtonIsEnabled.render { button(MviButtonUpdate)?.isEnabled = it }
             emptyViewIsVisible.render { v(MviEmptyView)?.visible = it }
             progressIsVisible.render { v(MviProgressLarge)?.visible = it }
             smallProgressIsVisible.render { v(MviProgressSmall)?.visible = it }
             updateButtonText.render { text(MviButtonUpdate)?.text = app().ctx.getString(it) }
-            startDetailActivitySignals.render {
-                toast("Open details")
-            }
+            startDetailActivitySignals.render { toast("You clicked on $it") }
             Unit
         }
     }
@@ -69,7 +69,6 @@ enum class IdFrp(override val id: Int) : HasId {
 }
 
 
-
 class PresentRenderInputView(context: Context) : BaseScreenView<PresentRenderInputScreen>(context) {
 
     val slimAdapter: SlimAdapter = SlimAdapter.create()
@@ -78,7 +77,7 @@ class PresentRenderInputView(context: Context) : BaseScreenView<PresentRenderInp
         inflateViewFrom(Layout.id)
     }
 
-    fun setupRecyclerView(onclick: (ListItem) -> Unit) {
+    fun setupRecyclerView(onclick: (Article) -> Unit) {
         val recyclerView: RecyclerView = findViewById(MviListTitles.id)
         slimAdapter.register<Article>(MviItemLayout.id) { item: Article, injector ->
             injector.text(MviItemTitle.id, item.title)

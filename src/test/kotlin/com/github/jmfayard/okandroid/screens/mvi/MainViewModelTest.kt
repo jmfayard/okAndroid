@@ -32,7 +32,7 @@ class MainViewModelTest : StringSpec() { init {
         val model = present(
                 articlesProvider = testArticlesProvider("article1", "article2"),
                 updateButtonClicks = just(Unit).delaySubscription(1.seconds, testScheduler),
-                articleClicks = just(1).delaySubscription(10.seconds, testScheduler)
+                articleClicks = just(Article("article2")).delaySubscription(10.seconds, testScheduler)
         )
 
         val startDetailActivitySignals = model.startDetailActivitySignals.test()

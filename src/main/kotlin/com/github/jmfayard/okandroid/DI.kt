@@ -12,11 +12,8 @@ interface IApplicationComponent {
     val articlesProvider: ArticlesProvider
 }
 
-class RealApplicationComponent(app: App) : IApplicationComponent {
+class RealApplicationComponent(override val app: App) : IApplicationComponent {
     override val articlesProvider: ArticlesProvider = StaticArticlesProvider
-
-    override val app: App
-        get() = app
 
     override val ctx: Context
         get() = app

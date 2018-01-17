@@ -4,6 +4,7 @@ import com.github.jmfayard.okandroid.R
 import io.reactivex.Observable
 import io.reactivex.Observable.concat
 import io.reactivex.Observable.just
+import timber.log.Timber
 
 class MainViewModel(
   val articles: Observable<List<Article>>,
@@ -13,11 +14,25 @@ class MainViewModel(
   val smallProgressIsVisible: Observable<Boolean>,
   val updateButtonText: Observable<Int>,
   val startDetailActivitySignals: Observable<Article>
-)
+) {
+  fun debug() = MainViewModel(
+          articles.debug("articles"),
+          updateButtonIsEnabled.debug("articles"),
+          emptyViewIsVisible.debug("emptyViewIsVisible"),
+          progressIsVisible.debug("progressIsVisible"),
+          smallProgressIsVisible.debug("smallProgressIsVisible"),
+          updateButtonText.debug("updateButtonText"),
+          startDetailActivitySignals.debug("startDetailActivitySignals")
+  )
+}
+
+
+fun <T> Observable<T>.debug(name: String) : Observable<T>
+        = this.doOnEach { Timber.i("$name -> $it") }
 
 fun present(
   updateButtonClicks: Observable<Unit>,
-  articleClicks: Observable<Int>,
+  articleClicks: Observable<Article>,
   articlesProvider: ArticlesProvider
 ): MainViewModel {
   // Internal states
@@ -63,8 +78,8 @@ fun present(
     if (downloading) R.string.updating else R.string.update
   }
 
-  val startDetailActivitySignals = articleClicks.withLatestFrom(articles) { articleIndex, articles ->
-    articles[articleIndex]
+  val startDetailActivitySignals = articleClicks.withLatestFrom(articles) { article, _ ->
+    article
   }
 
   return MainViewModel(
