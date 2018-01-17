@@ -1,5 +1,7 @@
 package com.github.jmfayard.okandroid.screens
 
+import com.github.jmfayard.okandroid.screens.mvi.advanceTimeBy
+import com.github.jmfayard.okandroid.screens.mvi.seconds
 import io.kotlintest.matchers.beGreaterThan
 import io.kotlintest.matchers.beLessThan
 import io.kotlintest.matchers.should
@@ -10,14 +12,12 @@ import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.schedulers.TestScheduler
-import java.util.concurrent.TimeUnit
 import kotlin.system.measureTimeMillis
 
-class RxScreenTest : StringSpec() { init {
+class RxPlaygroundScreenTest : StringSpec() { init {
 
 
-
-    val screen = RxScreen()
+    val screen = RxPlaygroundScreen()
 
 
     "RxJavaPlugin use Schedulers.trampoline()" {
@@ -41,7 +41,7 @@ class RxScreenTest : StringSpec() { init {
 
             val test = screen.rxTesting().test()
 
-            testScheduler.advanceTimeBy(5, TimeUnit.SECONDS)
+            testScheduler.advanceTimeBy(5.seconds)
 
             test.assertComplete()
 

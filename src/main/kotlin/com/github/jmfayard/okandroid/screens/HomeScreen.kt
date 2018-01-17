@@ -37,7 +37,7 @@ class HomeScreen : MagellanScreen<HomeDisplay>() {
                 HomeItem("MVI", "Rx Presenter", MviScreen()),
                 HomeItem("RegisterScreen", "Registration by SMS flow", RegisterScreen()),
                 HeaderItem("Old Stuff"),
-                HomeItem("RxScreen", "RxJava / RxBinding", RxScreen())
+                HomeItem("RxScreen", "RxJava / RxBinding", RxPlaygroundScreen())
         )
     }
 

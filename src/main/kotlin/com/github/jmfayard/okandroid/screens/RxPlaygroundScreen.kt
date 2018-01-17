@@ -2,9 +2,16 @@ package com.github.jmfayard.okandroid.screens
 
 import android.content.Context
 import android.widget.Toast
-import com.github.jmfayard.okandroid.*
+import com.github.jmfayard.okandroid.R
+import com.github.jmfayard.okandroid.attach
 import com.github.jmfayard.okandroid.databinding.RxScreenBinding
 import com.github.jmfayard.okandroid.databinding.RxScreenBinding.inflate
+import com.github.jmfayard.okandroid.inflater
+import com.github.jmfayard.okandroid.screens.mvi.debounceMs
+import com.github.jmfayard.okandroid.screens.mvi.miliseconds
+import com.github.jmfayard.okandroid.screens.mvi.seconds
+import com.github.jmfayard.okandroid.screens.mvi.timer
+import com.github.jmfayard.okandroid.toast
 import com.github.jmfayard.okandroid.utils.See
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.itemSelections
@@ -12,16 +19,15 @@ import com.jakewharton.rxbinding2.widget.textChanges
 import com.wealthfront.magellan.BaseScreenView
 import com.wealthfront.magellan.Screen
 import io.reactivex.Observable
-import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import io.reactivex.rxkotlin.Observables
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
-import java.util.concurrent.TimeUnit
 
 @See(layout = R.layout.rx_screen, java = UxEvent::class)
-class RxScreen : Screen<RxView>() {
-    override fun createView(context: Context) = RxView(context)
+class RxPlaygroundScreen : Screen<RxPlaygroundView>() {
+    override fun createView(context: Context) = RxPlaygroundView(context)
 
     override fun getTitle(context: Context): String = context.getString(R.string.rx_title)
 
@@ -42,11 +48,11 @@ class RxScreen : Screen<RxView>() {
                 )
     }
 
-    fun rxTesting() : Observable<String> {
-        return Observable.just(1 , 2, 4)
+    fun rxTesting(): Observable<String> {
+        return Observable.just(1, 2, 4)
                 .subscribeOn(Schedulers.io())
                 .flatMap { n ->
-                    Observable.timer(n.toLong(), TimeUnit.SECONDS).map { n }
+                    Observables.timer(n.seconds).map { n }
                 }.observeOn(AndroidSchedulers.mainThread())
                 .map { n ->
                     val thred = Thread.currentThread().name
@@ -62,7 +68,7 @@ class RxScreen : Screen<RxView>() {
 }
 
 
-class RxView(context: Context) : BaseScreenView<RxScreen>(context) {
+class RxPlaygroundView(context: Context) : BaseScreenView<RxPlaygroundScreen>(context) {
 
     val binding: RxScreenBinding = inflate(inflater, this, attach)
 
@@ -81,12 +87,12 @@ class RxView(context: Context) : BaseScreenView<RxScreen>(context) {
                     ErrorThrown("failed")
                 },
                 binding.rxEditTime.textChanges()
-                        .debounce(500, TimeUnit.MILLISECONDS)
+                        .debounceMs(500.miliseconds)
                         .map { seq ->
                             UpdateTime(seq.toString())
                         },
                 binding.rxEditTime.textChanges()
-                        .debounce(500, TimeUnit.MILLISECONDS)
+                        .debounceMs(500.miliseconds)
                         .map { seq ->
                             UpdateTime(seq.toString())
                         },

@@ -5,7 +5,6 @@ import io.reactivex.Observable.just
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import java.io.Serializable
-import java.util.concurrent.TimeUnit
 
 data class Article(
         val title: String
@@ -29,7 +28,7 @@ object StaticArticlesProvider : ArticlesProvider {
             just(titles.map { Article(it) })
                     .singleOrError()
                     .subscribeOn(Schedulers.io())
-                    .delaySubscription(1500, TimeUnit.MILLISECONDS)
+                    .delaySubscription(1500.miliseconds)
 
 }
 

@@ -1,12 +1,9 @@
 package com.github.jmfayard.okandroid.screens.mvi
 
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.whenever
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.StringSpec
 import io.reactivex.Observable
 import io.reactivex.Observable.just
-import io.reactivex.Single
 import io.reactivex.schedulers.TestScheduler
 
 class MainViewModelTest : StringSpec() { init {
@@ -14,16 +11,14 @@ class MainViewModelTest : StringSpec() { init {
 
     val testScheduler = TestScheduler()
 
-    val articlesProvider: ArticlesProvider = mock()
-
 
     "on update click - progress is updated" {
 
 
         val model = present(
+                articlesProvider = testArticlesProvider("article1", "article2"),
                 updateButtonClicks = just(Unit).delaySubscription(1.seconds, testScheduler),
-                articleClicks = Observable.never(),
-                articlesProvider = testArticlesProvider("article1", "article2")
+                articleClicks = Observable.never()
         )
 
         val progressIsVisible = model.progressIsVisible.test()
@@ -33,15 +28,11 @@ class MainViewModelTest : StringSpec() { init {
     }
 
     "on article click - opens article" {
-        whenever(articlesProvider.fetchArticles()).thenReturn(Single.just(listOf(
-                Article("article1"),
-                Article("article2")
-        )))
 
         val model = present(
+                articlesProvider = testArticlesProvider("article1", "article2"),
                 updateButtonClicks = just(Unit).delaySubscription(1.seconds, testScheduler),
-                articleClicks = just(1).delaySubscription(10.seconds, testScheduler),
-                articlesProvider = articlesProvider
+                articleClicks = just(1).delaySubscription(10.seconds, testScheduler)
         )
 
         val startDetailActivitySignals = model.startDetailActivitySignals.test()
