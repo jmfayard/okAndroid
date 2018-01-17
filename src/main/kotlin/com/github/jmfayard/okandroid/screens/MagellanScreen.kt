@@ -26,7 +26,7 @@ import com.wealthfront.magellan.Screen
 interface IDisplay
 
 /** Used to define extension methods SomeScreen.() -> Unit */
-typealias SomeScreen = com.wealthfront.magellan.Screen<*>?
+typealias SomeScreen = com.wealthfront.magellan.Screen<*>
 
 /** Used to define extension methods SomeView.() -> Unit */
 typealias SomeView = com.wealthfront.magellan.BaseScreenView<*>

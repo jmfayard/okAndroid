@@ -34,8 +34,8 @@ fun SomeView.createMviDisplay() = object : MviDisplay {
         val recyclerView: RecyclerView = findViewById(R.id.mvi_list_titles)
         slimAdapter = SlimAdapter.create()
                 .register<Article>(R.layout.mvi_item) { item: Article, injector ->
-                    injector.text(R.id.mvi_title, item.title)
-                    injector.clicked(R.id.mvi_title) {
+                    injector.text(R.id.mvi_item_title, item.title)
+                    injector.clicked(R.id.mvi_item_title) {
                         onclick(item)
                     }
                 }
