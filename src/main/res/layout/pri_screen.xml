@@ -3,13 +3,16 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:id="@+id/pri_layout_all"
     >
 
     <LinearLayout
         android:id="@+id/pri_layout_prefs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="end"
+        >
 
         <TextView
             android:id="@+id/pri_label_prefs"
@@ -17,13 +20,14 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|start"
             tools:text="Preferences: color=red background=yellow"
+            android:layout_marginEnd="16dp"
             />
 
         <Button
             android:id="@+id/pri_button_prefs"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
+            android:layout_marginEnd="16dp"
             android:text="Update"
             />
     </LinearLayout>

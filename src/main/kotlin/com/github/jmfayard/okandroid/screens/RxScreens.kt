@@ -2,6 +2,7 @@ package com.github.jmfayard.okandroid.screens
 
 import android.app.Activity
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -17,6 +18,7 @@ interface HasId {
 
 fun SomeScreen.v(has: HasId): View? =
         this.getActivity()?.findViewById(has.id)
+
 
 fun SomeScreen.text(has: HasId): TextView? =
         this.getActivity().findViewById(has.id) as? TextView

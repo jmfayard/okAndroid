@@ -4,6 +4,7 @@ import com.github.jmfayard.okandroid.screens.advanceByFrame
 import com.github.jmfayard.okandroid.screens.marble
 import com.github.jmfayard.okandroid.screens.pri.DialogResult.*
 import com.github.jmfayard.okandroid.screens.pri.MviDialog.*
+import io.kotlintest.matchers.haveSize
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.StringSpec
 import io.reactivex.Observable
@@ -42,7 +43,7 @@ class MainViewModelTest : StringSpec() { init {
 
         /*** Subscribe to all sources at once **/
         val testDialogCmds = model.dialogCmds.test()
-        val testPreferences = model.preferences.test()
+        val testPreferences = model.preferences.distinctUntilChanged().test()
         val otherTests = listOf(model.updateButtonIsEnabled.test(),
                 model.permissionSignal.test(), model.smallProgressIsVisible.test(),
                 model.emptyViewIsVisible.test())
@@ -65,6 +66,39 @@ class MainViewModelTest : StringSpec() { init {
         otherTests.forEach { it.assertNoErrors() }
 
 
+    }
+
+    "Refresh prefs after articles are loaded" {
+        /** Build parameters **/
+        val results = listOf(
+                DialogOk(PrefsMain, "font"), DialogOk(PrefsFontColor, "red")
+        )
+        val prefsButtonClicks =
+                marble("-0----------", scheduler) { Unit }
+        val dialogResults: Observable<DialogResult> =
+                marble("---0--1-----", scheduler) { results[it] }
+        val articlesClick =
+                marble("---------0--", scheduler) { Unit }
+
+        /** Call our pure functions **/
+        val model: MainViewModel = present(
+                articlesClick, never(),
+                testArticlesProvider("article1", "article2"), testPermissionProvider(true),
+                prefsButtonClicks, dialogResults
+        )
+                .toDebugModel() // lot of output please
+
+
+        /*** Subscribe to all sources at once **/
+        val testPreferences = model.preferences.test()
+        val otherTests = listOf(model.updateButtonIsEnabled.test(),
+                model.permissionSignal.test(), model.smallProgressIsVisible.test(),
+                model.emptyViewIsVisible.test(), model.dialogCmds.test())
+
+        /** Time-Travel Machine **/
+        scheduler.advanceByFrame(20)
+        testPreferences.assertNoErrors()
+        testPreferences.values().map { it.fontColor } shouldBe listOf("black")
     }
 
     "on update click - progress is updated" {

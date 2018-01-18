@@ -1,6 +1,7 @@
 package com.github.jmfayard.okandroid.screens.pri
 
 import android.view.View
+import android.view.ViewGroup
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -24,3 +25,15 @@ var View.visible: Boolean
   set(visible: Boolean) {
     this.visibility = if (visible) View.VISIBLE else View.INVISIBLE
   }
+
+
+fun View.children(): List<View> {
+  if (this !is ViewGroup) return emptyList()
+  val result = mutableListOf<View>()
+  for (i in 0 until childCount) {
+    val child = getChildAt(i)
+    result += child
+    result.addAll(child.children())
+  }
+  return result
+}

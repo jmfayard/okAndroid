@@ -6,6 +6,7 @@ import com.tbruyelle.rxpermissions2.Permission
 import io.reactivex.Observable
 import io.reactivex.Observable.*
 import io.reactivex.rxkotlin.merge
+import java.util.concurrent.TimeUnit
 
 class MainViewModel(
         val articles: Observable<List<Article>>,
@@ -104,14 +105,13 @@ fun present(
 
   val dialogEvents = dialogResults.share()
 
-  val preferences = dialogEvents
-          .printEvents("dialogEvents")
+  val refreshPrefs = articles.map { DialogResult.DialogCancel(PrefsMain) }.delay(100, TimeUnit.MILLISECONDS)
+
+  val preferences = listOf(dialogEvents, refreshPrefs).merge()
+          .printEvents("updatePrefs")
           .scan(MviPrefs(), {
             prefs, result -> nextPref(prefs, result) }
           )
-          .printEvents("scannedEvents")
-          .startWith(MviPrefs())
-          .distinctUntilChanged()
 
   val dialogCmds = listOf(
           dialogEvents.flatMap {
