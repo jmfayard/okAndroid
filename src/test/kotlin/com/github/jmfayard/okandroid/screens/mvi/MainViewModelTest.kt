@@ -1,30 +1,87 @@
 package com.github.jmfayard.okandroid.screens.mvi
 
-import com.tbruyelle.rxpermissions2.Permission
+import com.github.jmfayard.okandroid.screens.advanceByFrame
+import com.github.jmfayard.okandroid.screens.debugList
+import com.github.jmfayard.okandroid.screens.marble
+import com.github.jmfayard.okandroid.screens.mvi.DialogResult.*
+import com.github.jmfayard.okandroid.screens.mvi.MviDialog.*
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.StringSpec
 import io.reactivex.Observable
-import io.reactivex.Observable.just
+import io.reactivex.Observable.*
 import io.reactivex.schedulers.TestScheduler
 
 class MainViewModelTest : StringSpec() { init {
 
 
-    val testScheduler = TestScheduler()
+    val scheduler = TestScheduler()
+    val noInts = emptyList<Int>()
 
+    fun <T> Observable<T>.delay(seconds: Int) = this.delaySubscription(seconds.toLong(), java.util.concurrent.TimeUnit.SECONDS, scheduler)
+
+
+    "Dialogs" {
+        /** Build parameters **/
+        val results = listOf(
+                DialogOk(PrefsMain, "font"), DialogOk(PrefsFontColor, "red"),
+                DialogOk(PrefsMain, "background"), DialogOk(PrefsBackgroundColor, "blue"),
+                DialogOk(PrefsMain, "reset"),
+                DialogCancel(PrefsMain)
+        )
+        val prefsButtonClicks =
+                marble("-0-------0------0----0----", scheduler) { Unit }
+        val dialogResults =
+                marble("---0--1-----2-3----4---5--", scheduler) { results[it] }
+
+        /** Call our pure functions **/
+        val model: MainViewModel = present(
+                never(), never(), testArticlesProvider(), testPermissionProvider(true),
+                prefsButtonClicks, dialogResults
+        )
+                .toDebugModel() // lot of output please
+
+
+        /*** Subscribe to all sources at once **/
+        val testDialogCmds = model.dialogCmds.test()
+        val testPreferences = model.preferences.test()
+        val otherTests = listOf(model.updateButtonIsEnabled.test(),
+                model.permissionSignal.test(), model.smallProgressIsVisible.test(),
+                model.emptyViewIsVisible.test())
+
+        /** Time-Travel Machine **/
+        scheduler.advanceByFrame(100)
+
+        /** Test output. Don't forget to check for errors **/
+        with(testDialogCmds) {
+            assertNoErrors()
+            values() shouldBe listOf(PrefsMain, PrefsFontColor, PrefsMain, PrefsBackgroundColor, PrefsMain, PrefsMain)
+        }
+
+        with(testPreferences) {
+            assertNoErrors()
+            values().map { it.backgroundColor } shouldBe listOf("white", "white", "blue", "white")
+            values().map { it.fontColor } shouldBe listOf("black", "red", "red", "black")
+        }
+
+        otherTests.forEach { it.assertNoErrors() }
+
+
+    }
 
     "on update click - progress is updated" {
 
 
-        val model = present(
-                updateButtonClicks = just(Unit).delaySubscription(1.seconds, testScheduler),
-                articleClicks = Observable.never(),
+        val model: MainViewModel = present(
+                updateButtonClicks = just(Unit).delay(1),
+                articleClicks = never(),
                 articlesProvider = testArticlesProvider("article1", "article2"),
-                permissionProvider = testPermissionProvider(granted = true)
+                permissionProvider = testPermissionProvider(granted = true),
+                prefsButtonClicks = never<Unit>(),
+                dialogResults = never<DialogResult>()
         )
 
         val progressIsVisible = model.progressIsVisible.test()
-        testScheduler.advanceTimeTo(20.seconds)
+        scheduler.advanceTimeTo(20.seconds)
 
         model.permissionSignal.test().assertNoValues()
         progressIsVisible.assertValues(false, true, false)
@@ -33,17 +90,19 @@ class MainViewModelTest : StringSpec() { init {
     "on article click - opens article" {
 
         val model = present(
-                updateButtonClicks = just(Unit).delaySubscription(1.seconds, testScheduler),
-                articleClicks = just(Article("article2")).delaySubscription(10.seconds, testScheduler),
+                updateButtonClicks = just(Unit).delay(1),
+                articleClicks = just(Article("article2")).delay(10),
                 articlesProvider = testArticlesProvider("article1", "article2"),
-                permissionProvider = testPermissionProvider(granted = true)
+                permissionProvider = testPermissionProvider(granted = true),
+                prefsButtonClicks = never<Unit>(),
+                dialogResults = never<DialogResult>()
         )
 
         val startDetailActivitySignals = model.startDetailActivitySignals.test()
         val progressIsVisible = model.progressIsVisible.test()
         val emptyViewIsVisible = model.emptyViewIsVisible.test()
 
-        testScheduler.advanceTimeTo(20.seconds)
+        scheduler.advanceTimeTo(20.seconds)
 
         model.permissionSignal.test().assertNoValues()
         startDetailActivitySignals.assertResult(Article("article2"))
@@ -53,10 +112,12 @@ class MainViewModelTest : StringSpec() { init {
 
     "when permission not granted, do nothing" {
         val model = present(
-                updateButtonClicks = just(Unit).delaySubscription(1.seconds, testScheduler),
-                articleClicks = Observable.never(),
+                updateButtonClicks = just(Unit).delay(1),
+                articleClicks = never(),
                 articlesProvider = testArticlesProvider("article1", "article2"),
-                permissionProvider = testPermissionProvider(granted = true)
+                permissionProvider = testPermissionProvider(granted = true),
+                prefsButtonClicks = never<Unit>(),
+                dialogResults = never<DialogResult>()
         )
         model.emptyViewIsVisible.test().run {
             values() shouldBe listOf(true)

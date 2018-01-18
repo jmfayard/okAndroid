@@ -1,7 +1,6 @@
 package com.github.jmfayard.okandroid.screens.mvi
 
 import android.Manifest
-import android.app.Activity
 import android.content.Context
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -12,9 +11,8 @@ import com.github.jmfayard.okandroid.screens.*
 import com.github.jmfayard.okandroid.screens.mvi.IdFrp.*
 import com.github.jmfayard.okandroid.toast
 import com.tbruyelle.rxpermissions2.Permission
-import com.tbruyelle.rxpermissions2.RxPermissions
 import com.wealthfront.magellan.BaseScreenView
-import io.reactivex.ObservableTransformer
+import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import net.idik.lib.slimadapter.SlimAdapter
 import timber.log.Timber
@@ -39,9 +37,11 @@ class PresentRenderInputScreen(
                 updateButtonClicks = clicks(MviButtonUpdate),
                 articleClicks = articleClicks,
                 articlesProvider = provider,
-                permissionProvider = permissionProvider(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_CONTACTS)
+                permissionProvider = permissionProvider(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_CONTACTS),
+                prefsButtonClicks = Observable.never<Unit>(),
+                dialogResults = Observable.never<DialogResult>()
         )
-        renderModel(model.debug())
+        renderModel(model.toDebugModel())
 
 
     }
@@ -61,6 +61,8 @@ class PresentRenderInputScreen(
                 Timber.i("permissionSignal: $p")
                 if (!p.granted) toast("We need permission ${p.name} to continue")
             }
+            dialogCmds.render { Timber.e("Dialogs: $it") }
+            preferences.render { Timber.e("Preferences: $it") }
             Unit
         }
     }

@@ -11,6 +11,15 @@ import io.reactivex.schedulers.Schedulers
 import java.io.Serializable
 import java.util.concurrent.ThreadLocalRandom
 
+enum class MviDialog {
+    PrefsMain, PrefsFontColor, PrefsBackgroundColor
+}
+
+data class MviPrefs(
+        val fontColor: String = "black",
+        val backgroundColor: String = "white"
+)
+
 data class Article(
         val title: String
 ) : Serializable, ListItem
