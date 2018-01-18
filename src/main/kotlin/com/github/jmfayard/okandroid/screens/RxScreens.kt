@@ -1,12 +1,11 @@
 package com.github.jmfayard.okandroid.screens
 
-import android.Manifest
 import android.app.Activity
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import com.github.jmfayard.okandroid.screens.mvi.PermissionProvider
+import com.github.jmfayard.okandroid.screens.pri.PermissionProvider
 import com.tbruyelle.rxpermissions2.Permission
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.ObservableTransformer

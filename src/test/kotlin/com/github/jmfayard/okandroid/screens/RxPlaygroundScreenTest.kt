@@ -1,7 +1,7 @@
 package com.github.jmfayard.okandroid.screens
 
-import com.github.jmfayard.okandroid.screens.mvi.advanceTimeBy
-import com.github.jmfayard.okandroid.screens.mvi.seconds
+import com.github.jmfayard.okandroid.screens.pri.advanceTimeBy
+import com.github.jmfayard.okandroid.screens.pri.seconds
 import io.kotlintest.matchers.beGreaterThan
 import io.kotlintest.matchers.beLessThan
 import io.kotlintest.matchers.should

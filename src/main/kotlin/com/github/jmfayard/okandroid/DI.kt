@@ -1,8 +1,8 @@
 package com.github.jmfayard.okandroid
 
 import android.content.Context
-import com.github.jmfayard.okandroid.screens.mvi.ArticlesProvider
-import com.github.jmfayard.okandroid.screens.mvi.StaticArticlesProvider
+import com.github.jmfayard.okandroid.screens.pri.ArticlesProvider
+import com.github.jmfayard.okandroid.screens.pri.StaticArticlesProvider
 
 fun app() : IApplicationComponent = App.applicationComponent
 

@@ -7,10 +7,10 @@ import com.github.jmfayard.okandroid.attach
 import com.github.jmfayard.okandroid.databinding.RxScreenBinding
 import com.github.jmfayard.okandroid.databinding.RxScreenBinding.inflate
 import com.github.jmfayard.okandroid.inflater
-import com.github.jmfayard.okandroid.screens.mvi.debounceMs
-import com.github.jmfayard.okandroid.screens.mvi.miliseconds
-import com.github.jmfayard.okandroid.screens.mvi.seconds
-import com.github.jmfayard.okandroid.screens.mvi.timer
+import com.github.jmfayard.okandroid.screens.pri.debounceMs
+import com.github.jmfayard.okandroid.screens.pri.miliseconds
+import com.github.jmfayard.okandroid.screens.pri.seconds
+import com.github.jmfayard.okandroid.screens.pri.timer
 import com.github.jmfayard.okandroid.toast
 import com.github.jmfayard.okandroid.utils.See
 import com.jakewharton.rxbinding2.view.clicks

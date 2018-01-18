@@ -1,10 +1,9 @@
-package com.github.jmfayard.okandroid.screens.mvi
+package com.github.jmfayard.okandroid.screens.pri
 
 import com.github.jmfayard.okandroid.screens.advanceByFrame
-import com.github.jmfayard.okandroid.screens.debugList
 import com.github.jmfayard.okandroid.screens.marble
-import com.github.jmfayard.okandroid.screens.mvi.DialogResult.*
-import com.github.jmfayard.okandroid.screens.mvi.MviDialog.*
+import com.github.jmfayard.okandroid.screens.pri.DialogResult.*
+import com.github.jmfayard.okandroid.screens.pri.MviDialog.*
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.StringSpec
 import io.reactivex.Observable

@@ -1,4 +1,4 @@
-package com.github.jmfayard.okandroid.screens.mvi
+package com.github.jmfayard.okandroid.screens.pri
 
 import com.github.jmfayard.okandroid.isRunningTest
 import io.reactivex.BackpressureStrategy

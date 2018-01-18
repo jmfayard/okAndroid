@@ -1,10 +1,9 @@
-package com.github.jmfayard.okandroid.screens.mvi
+package com.github.jmfayard.okandroid.screens.pri
 
 import android.view.View
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.subjects.BehaviorSubject
 
 
 fun <T> Observable<T>.render(onNext: (T) -> Unit): Disposable {

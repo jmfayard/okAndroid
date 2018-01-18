@@ -1,10 +1,8 @@
-package com.github.jmfayard.okandroid.screens.mvi
+package com.github.jmfayard.okandroid.screens.pri
 
 import com.github.jmfayard.okandroid.screens.ListItem
 import com.tbruyelle.rxpermissions2.Permission
-import io.reactivex.Observable
 import io.reactivex.Observable.just
-import io.reactivex.ObservableSource
 import io.reactivex.ObservableTransformer
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
