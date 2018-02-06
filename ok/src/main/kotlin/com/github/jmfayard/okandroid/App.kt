@@ -3,34 +3,27 @@ package com.github.jmfayard.okandroid
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
-import android.support.annotation.VisibleForTesting
+import android.support.multidex.MultiDex
+import com.github.jmfayard.AndroidCommonComponent
+import com.github.jmfayard.CommonComponent
+import com.github.jmfayard.okandroid.jobs.Jobs
+import com.github.jmfayard.room.RoomComponent
 import com.mooveit.library.Fakeit
 import timber.log.Timber
-import android.support.multidex.MultiDex
-import com.github.jmfayard.okandroid.jobs.Jobs
 
 
 open class App : Application() {
 
-    companion object {
-
-        @JvmStatic
-        lateinit var applicationComponent: IApplicationComponent
-            private set
-
-        @VisibleForTesting /** Can be called in unit tests **/
-        fun setupApplicationComponent(applicationComponent: IApplicationComponent) {
-            this.applicationComponent = applicationComponent
-        }
-
-    }
 
     @SuppressLint("VisibleForTests")
     override fun onCreate() {
         super.onCreate()
-        setupApplicationComponent(
-                buildAppComponent()
-        )
+
+        val component = DI(this)
+        CommonComponent.instance = component
+        AndroidCommonComponent.instance = component
+        RoomComponent.instance = component
+        OkComponent.instance = component
 
         Timber.plant(Timber.DebugTree())
 
@@ -38,10 +31,6 @@ open class App : Application() {
         Jobs.initialize(this)
 
     }
-
-    /** Can be overriden in instrumentation test **/
-    open fun buildAppComponent() : IApplicationComponent
-            = RealApplicationComponent(this)
 
 
     override fun attachBaseContext(base: Context) {

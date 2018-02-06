@@ -40,9 +40,9 @@ android {
 }
 
 dependencies {
-    implementation(project(path: ':common'))
-    implementation(project(path: ':androidcommon'))
-    implementation(project(path: ':room'))
+    compile(project(path: ':common'))
+    compile(project(path: ':androidcommon'))
+    compile(project(path: ':room'))
 
     // Kotlin
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -157,9 +157,9 @@ dependencies {
 
 
     // https://developer.android.com/topic/libraries/architecture/adding-components.html
-    compile "android.arch.persistence.room:runtime:${versions.architecture}"
-    compile "android.arch.persistence.room:rxjava2:${versions.architecture}"
-    kapt "android.arch.persistence.room:compiler:${versions.architecture}"
+//    compile "android.arch.persistence.room:runtime:${versions.architecture}"
+//    compile "android.arch.persistence.room:rxjava2:${versions.architecture}"
+//    kapt "android.arch.persistence.room:compiler:${versions.architecture}"
     compile "android.arch.lifecycle:runtime:${versions.architecture}"
     compile "android.arch.lifecycle:extensions:${versions.architecture}"
     kapt "android.arch.lifecycle:compiler:${versions.architecture}"

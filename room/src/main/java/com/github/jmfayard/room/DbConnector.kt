@@ -1,6 +1,5 @@
-package com.github.jmfayard.okandroid.room
+package com.github.jmfayard.room
 
-import com.github.jmfayard.okandroid.jobs.Jobs
 import io.reactivex.Flowable
 import io.reactivex.Scheduler
 import io.reactivex.Single
@@ -19,7 +18,6 @@ class DbConnector(
 
     fun insert(person: Person): Single<Unit> =
             Single.fromCallable { DB.persons().insert(person) }
-                    .doAfterSuccess { Jobs.launchSyncNow() }
                     .subscribeOn(subscribeOn)
                     .observeOn(observeOn)
 

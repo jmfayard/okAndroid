@@ -1,7 +1,7 @@
 package com.github.jmfayard.okandroid.jobs
 
 import com.evernote.android.job.Job
-import com.github.jmfayard.okandroid.room.DB
+import com.github.jmfayard.room.DB
 import timber.log.Timber
 
 class SyncJob: Job() {

@@ -1,4 +1,4 @@
-package com.github.jmfayard.okandroid.room
+package com.github.jmfayard.okandroid.screens
 
 import android.content.Context
 import android.support.v7.widget.LinearLayoutManager
@@ -6,8 +6,8 @@ import com.github.jmfayard.okandroid.R
 import com.github.jmfayard.okandroid.attach
 import com.github.jmfayard.okandroid.databinding.RoomScreenBinding
 import com.github.jmfayard.okandroid.inflater
-import com.github.jmfayard.okandroid.screens.HeaderItem
 import com.github.jmfayard.okandroid.utils.PatternEditableBuilder
+import com.github.jmfayard.room.Person
 import com.marcinmoskala.kotlinandroidviewbindings.bindToText
 import com.wealthfront.magellan.BaseScreenView
 import net.idik.lib.slimadapter.SlimAdapter

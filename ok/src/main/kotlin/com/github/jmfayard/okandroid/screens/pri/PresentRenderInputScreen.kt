@@ -2,7 +2,7 @@ package com.github.jmfayard.okandroid.screens.pri
 
 import android.Manifest
 import android.content.Context
-import com.github.jmfayard.okandroid.app
+import com.github.jmfayard.okandroid.ok
 import com.github.jmfayard.okandroid.screens.*
 import com.github.jmfayard.okandroid.screens.pri.IdFrp.*
 import com.github.jmfayard.okandroid.screens.pri.MviDialog.*
@@ -13,7 +13,7 @@ import timber.log.Timber
 
 
 class PresentRenderInputScreen(
-        val provider: ArticlesProvider = app().articlesProvider
+        val provider: ArticlesProvider = ok().articlesProvider
 ) : ReactiveScreen<PresentRenderInputView>() {
 
     override fun screenTitle(): Int = PriTitle.id
@@ -50,7 +50,7 @@ class PresentRenderInputScreen(
             emptyViewIsVisible.render { view(PriEmptyView)?.visible = it }
             progressIsVisible.render { view(PriProgressLarge)?.visible = it }
             smallProgressIsVisible.render { view(PriProgressSmall)?.visible = it }
-            updateButtonText.render { text(PriButtonUpdate)?.text = app().ctx.getString(it) }
+            updateButtonText.render { text(PriButtonUpdate)?.text = ok().ctx.getString(it) }
             startDetailActivitySignals.render { toast("You clicked on $it") }
             permissionSignal.render { p: Permission ->
                 Timber.i("permissionSignal: $p")

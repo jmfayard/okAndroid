@@ -1,11 +1,13 @@
-package com.github.jmfayard.okandroid.room
+package com.github.jmfayard.okandroid.screens
 
 import android.content.Context
 import com.github.jmfayard.okandroid.R
-import com.github.jmfayard.okandroid.screens.HeaderItem
+import com.github.jmfayard.okandroid.jobs.Jobs
 import com.github.jmfayard.okandroid.toast
 import com.github.jmfayard.okandroid.utils.PatternEditableBuilder
 import com.github.jmfayard.okandroid.utils.See
+import com.github.jmfayard.room.DbConnector
+import com.github.jmfayard.room.Person
 import com.mooveit.library.Fakeit
 import com.wealthfront.magellan.Screen
 import io.reactivex.rxkotlin.subscribeBy
@@ -40,7 +42,11 @@ Actions: #insert and #clear
 
     fun insert() {
         val person = Person(0, Fakeit.name().firstName(), Fakeit.name().lastName())
-        connector.insert(person).subscribeBy(onSuccess = this::noop, onError = this::showError)
+        connector.insert(person)
+                .subscribeBy(
+                        onSuccess = { Jobs.launchSyncNow() },
+                        onError = this::showError
+                )
     }
 
     fun delete() {

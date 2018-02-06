@@ -65,7 +65,7 @@ fun toast(message: String, long: Boolean = false) {
     if (isRunningTest) return
     val length = if (long) Toast.LENGTH_LONG else Toast.LENGTH_SHORT
     // use the applicationContext so that the toast is shown even if the screen is not in the foreground
-    Toast.makeText(app().ctx, message, length).show()
+    Toast.makeText(ok().ctx, message, length).show()
 }
 
 // https://stackoverflow.com/questions/28550370/how-to-detect-whether-android-app-is-running-ui-test-with-espresso

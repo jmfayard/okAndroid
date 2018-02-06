@@ -1,29 +1,26 @@
-package com.github.jmfayard.okandroid.room
+package com.github.jmfayard.room
 
 import android.arch.persistence.room.*
 import android.content.Context
-import com.github.jmfayard.okandroid.App
-import com.github.jmfayard.okandroid.R
-import com.github.jmfayard.okandroid.app
-import com.github.jmfayard.okandroid.room.Chinook.ALBUMS
-import com.github.jmfayard.okandroid.room.Chinook.ARTISTS
-import com.github.jmfayard.okandroid.room.Chinook.CUSTOMERS
-import com.github.jmfayard.okandroid.room.Chinook.EMPLOYEES
-import com.github.jmfayard.okandroid.room.Chinook.GENRES
-import com.github.jmfayard.okandroid.room.Chinook.MEDIA_TYPE
-import com.github.jmfayard.okandroid.room.Chinook.PLAYLISTS
-import com.github.jmfayard.okandroid.room.Chinook.PLAYLIST_TRACK
-import com.github.jmfayard.okandroid.room.Chinook.TRACKS
+import com.github.jmfayard.room.Chinook.ALBUMS
+import com.github.jmfayard.room.Chinook.ARTISTS
+import com.github.jmfayard.room.Chinook.CUSTOMERS
+import com.github.jmfayard.room.Chinook.EMPLOYEES
+import com.github.jmfayard.room.Chinook.GENRES
+import com.github.jmfayard.room.Chinook.MEDIA_TYPE
+import com.github.jmfayard.room.Chinook.PLAYLISTS
+import com.github.jmfayard.room.Chinook.PLAYLIST_TRACK
+import com.github.jmfayard.room.Chinook.TRACKS
 import io.reactivex.Flowable
 import java.io.File
 
 object Chinook {
 
     val DB: ChinookDatabase  by lazy {
-        Room.databaseBuilder(app().ctx, ChinookDatabase::class.java, "chinook.db").build()
+        Room.databaseBuilder(room().ctx, ChinookDatabase::class.java, "chinook.db").build()
     }
     /*** See http://www.sqlitetutorial.net/sqlite-sample-database/ **/
-    const val SAMPLE_DATABASE = R.raw.chinook
+    val SAMPLE_DATABASE = R.raw.chinook
 
     const val ALBUMS = "albums"
     const val TRACKS = "tracks"
@@ -49,11 +46,15 @@ object Chinook {
 
 }
 
-@Database(version = 1, exportSchema = false,
-        entities = arrayOf(
-    Album::class, Artist::class, Customer::class, Employee::class,
-    Genre::class, MediaType::class, Playlist::class, PlaylistTrack::class, Track::class
-))
+@Database(
+        version = 1,
+        exportSchema = false,
+        entities = [
+            Album::class, Artist::class, Customer::class,
+            Employee::class, Genre::class, MediaType::class,
+            Playlist::class, PlaylistTrack::class, Track::class
+        ]
+)
 abstract class ChinookDatabase : RoomDatabase() {
     abstract fun queries(): QueriesDao
     abstract fun albums(): AlbumsDao

@@ -1,12 +1,10 @@
-package com.github.jmfayard.okandroid.room
+package com.github.jmfayard.room
 
 import android.arch.persistence.room.*
-import com.github.jmfayard.okandroid.App
-import com.github.jmfayard.okandroid.app
 import io.reactivex.Flowable
 
 val DB: MyDatabase  by lazy {
-    Room.databaseBuilder(app().ctx, MyDatabase::class.java, "room-2day").build()
+    Room.databaseBuilder(room().ctx, MyDatabase::class.java, "room-2day").build()
 }
 
 
@@ -22,14 +20,12 @@ interface PersonDao : BaseDao<Person> {
     @Query("""
 select * from Person
 where deleted = 0 and synced = 0""")
-    fun unsyncedPeople() : List<Person>
+    fun unsyncedPeople(): List<Person>
 
     @Query("UPDATE `Person` SET `synced`=:synced WHERE uid=:uid")
     fun markAsSynced(uid: Long, synced: Boolean)
 
 }
-
-
 
 
 @Entity

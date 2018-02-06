@@ -1,18 +1,24 @@
 package com.github.jmfayard.okandroid
 
 import android.content.Context
+import com.github.jmfayard.AndroidCommonComponent
+import com.github.jmfayard.CommonComponent
+import com.github.jmfayard.ILogger
 import com.github.jmfayard.okandroid.screens.pri.ArticlesProvider
 import com.github.jmfayard.okandroid.screens.pri.StaticArticlesProvider
+import com.github.jmfayard.room.RoomComponent
+import timber.log.Timber
 
-fun app() : IApplicationComponent = App.applicationComponent
+class DI(
+        override val app: App
+) : OkComponent, RoomComponent, CommonComponent, AndroidCommonComponent {
 
-interface IApplicationComponent {
-    val ctx: Context
-    val app: App
-    val articlesProvider: ArticlesProvider
-}
+    override val logger = object: ILogger {
+        override fun log(message: String) = Timber.i(message)
+        override fun warn(message: String) = Timber.w(message)
+    }
 
-class RealApplicationComponent(override val app: App) : IApplicationComponent {
+    override val isRunningTest: Boolean = false
     override val articlesProvider: ArticlesProvider = StaticArticlesProvider
 
     override val ctx: Context
