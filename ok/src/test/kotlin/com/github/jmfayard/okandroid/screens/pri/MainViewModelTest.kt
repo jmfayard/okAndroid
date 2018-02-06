@@ -98,7 +98,7 @@ class MainViewModelTest : StringSpec() { init {
         /** Time-Travel Machine **/
         scheduler.advanceByFrame(20)
         testPreferences.assertNoErrors()
-        testPreferences.values().map { it.fontColor } shouldBe listOf("black")
+        testPreferences.values().map { it.fontColor } shouldBe listOf("black", "black", "red")
     }
 
     "on update click - progress is updated" {
