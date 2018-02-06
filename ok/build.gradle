@@ -1,19 +1,11 @@
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
-
-
-
-
-
-
+//apply plugin: 'kotlin-kapt'
 
 
 android {
-
-    dataBinding.enabled = true  //TODO: migrate away from databinding
 
     compileSdkVersion 27
 
@@ -142,7 +134,7 @@ dependencies {
     // https://github.com/pawegio/KAndroid
 //    compile 'com.pawegio.kandroid:kandroid:0.8.0'
 
-    kapt "com.android.databinding:compiler:${versions.android_gradle}"
+//    kapt "com.android.databinding:compiler:${versions.android_gradle}"
 
     // https://github.com/MEiDIK/SlimAdapter
     // A slim & clean & typeable Adapter without# VIEWHOLDER
@@ -160,9 +152,9 @@ dependencies {
 //    compile "android.arch.persistence.room:runtime:${versions.architecture}"
 //    compile "android.arch.persistence.room:rxjava2:${versions.architecture}"
 //    kapt "android.arch.persistence.room:compiler:${versions.architecture}"
-    compile "android.arch.lifecycle:runtime:${versions.architecture}"
-    compile "android.arch.lifecycle:extensions:${versions.architecture}"
-    kapt "android.arch.lifecycle:compiler:${versions.architecture}"
+//    compile "android.arch.lifecycle:runtime:${versions.architecture}"
+//    compile "android.arch.lifecycle:extensions:${versions.architecture}"
+//    kapt "android.arch.lifecycle:compiler:${versions.architecture}"
 
     // https://github.com/moove-it/fakeit
     compile 'com.github.moove-it:fakeit:v0.7'

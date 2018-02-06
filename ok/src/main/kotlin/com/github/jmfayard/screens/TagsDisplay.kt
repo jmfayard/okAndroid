@@ -6,7 +6,7 @@ import com.marcinmoskala.kotlinandroidviewbindings.bindToText
 
 
 interface TagsDisplay : IDisplay {
-    var htmlContent: String
+    var tagsContent: String
     var history: String
 
     companion object {
@@ -15,8 +15,8 @@ interface TagsDisplay : IDisplay {
 }
 
 fun SomeView.createTagsDisplay() = object : TagsDisplay {
-    override var htmlContent by bindToText(R.id.htmlContent)
-    override var history by bindToText(R.id.actionResult)
+    override var tagsContent by bindToText(R.id.tags_content)
+    override var history by bindToText(R.id.tags_history)
 }
 
 

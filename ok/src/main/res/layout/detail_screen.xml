@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-      xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:tools="http://schemas.android.com/tools"
->
-  <ScrollView
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-  >
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
 
     <TextView
         android:id="@+id/detail_label_content"
@@ -19,5 +16,4 @@
         android:textStyle="bold"
         />
 
-  </ScrollView>
-</layout>
+</ScrollView>

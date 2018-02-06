@@ -71,13 +71,13 @@ class TagsScreen : MagellanScreen<TagsDisplay>() {
         get() = R.string.rx_screen_title
 
     override fun onResume(context: Context?) {
-        display?.htmlContent = TagAction.text
+        display?.tagsContent = TagAction.text
         PatternEditableBuilder()
                 .addPattern(Pattern.compile("\\@(\\w+)"))
                 .addPattern(Pattern.compile("#(\\w+)"), R.color.link) { hashtag ->
                     clickedOn(hashtag)
                 }
-                .into(activity.findViewById(R.id.htmlContent))
+                .into(activity.findViewById(R.id.tags_content))
     }
 
 

@@ -5,5 +5,5 @@
     android:id="@+id/magellan_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.wealthfront.magellan.sample.MainActivity"
+    tools:context="com.github.jmfayard.okandroid.MainActivity"
     />
