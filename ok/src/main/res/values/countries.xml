@@ -1,9 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-  <string-array name="rx_spinner_countries" >
-    <item>Deutschland</item>
-    <item>USA</item>
-    <item>France</item>
-  </string-array>
 </resources>

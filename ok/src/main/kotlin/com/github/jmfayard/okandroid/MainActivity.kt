@@ -6,9 +6,9 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
-import com.github.jmfayard.okandroid.screens.HomeScreen
-import com.github.jmfayard.okandroid.screens.TagsScreen
-import com.github.jmfayard.okandroid.utils.See
+import com.github.jmfayard.screens.HomeScreen
+import com.github.jmfayard.screens.TagsScreen
+import com.github.jmfayard.utils.See
 import com.wealthfront.magellan.Navigator
 import com.wealthfront.magellan.Screen
 import com.wealthfront.magellan.ScreenLifecycleListener

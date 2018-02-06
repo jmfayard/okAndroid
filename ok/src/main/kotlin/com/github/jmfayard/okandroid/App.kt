@@ -6,7 +6,7 @@ import android.content.Context
 import android.support.multidex.MultiDex
 import com.github.jmfayard.AndroidCommonComponent
 import com.github.jmfayard.CommonComponent
-import com.github.jmfayard.okandroid.jobs.Jobs
+import com.github.jmfayard.jobs.Jobs
 import com.github.jmfayard.room.RoomComponent
 import com.mooveit.library.Fakeit
 import timber.log.Timber

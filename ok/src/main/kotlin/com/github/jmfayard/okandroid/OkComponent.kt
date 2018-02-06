@@ -1,7 +1,7 @@
 package com.github.jmfayard.okandroid
 
 import android.content.Context
-import com.github.jmfayard.okandroid.screens.pri.ArticlesProvider
+import com.github.jmfayard.pri.ArticlesProvider
 
 fun ok() : OkComponent = OkComponent.instance
 

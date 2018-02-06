@@ -4,8 +4,8 @@ import android.content.Context
 import com.github.jmfayard.AndroidCommonComponent
 import com.github.jmfayard.CommonComponent
 import com.github.jmfayard.ILogger
-import com.github.jmfayard.okandroid.screens.pri.ArticlesProvider
-import com.github.jmfayard.okandroid.screens.pri.StaticArticlesProvider
+import com.github.jmfayard.pri.ArticlesProvider
+import com.github.jmfayard.pri.StaticArticlesProvider
 import com.github.jmfayard.room.RoomComponent
 import timber.log.Timber
 
