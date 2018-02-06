@@ -16,9 +16,11 @@ interface HasId {
     val id: Int
 }
 
-fun SomeScreen.v(has: HasId): View? =
+fun SomeScreen.view(has: HasId): View? =
         this.getActivity()?.findViewById(has.id)
 
+fun SomeScreen.viewGroup(has: HasId): ViewGroup? =
+        this.getActivity()?.findViewById(has.id) as? ViewGroup
 
 fun SomeScreen.text(has: HasId): TextView? =
         this.getActivity().findViewById(has.id) as? TextView
@@ -30,7 +32,7 @@ fun SomeScreen.editText(has: HasId): EditText? =
         this.getActivity().findViewById(has.id) as? EditText
 
 
-fun SomeView.v(has: HasId): View? =
+fun SomeView.view(has: HasId): View? =
         this.findViewById(has.id)
 
 fun SomeView.text(has: HasId): TextView? =
@@ -41,6 +43,9 @@ fun SomeView.editText(has: HasId): EditText? =
 
 fun SomeView.button(has: HasId): Button? =
         this.findViewById(has.id) as? Button
+
+fun SomeView.viewGroup(has: HasId): ViewGroup? =
+        this.findViewById(has.id) as? ViewGroup
 
 
 

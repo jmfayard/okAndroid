@@ -47,9 +47,9 @@ class PresentRenderInputScreen(
         with(model) {
             articles.render { display?.updateRecyclerViewData(it) }
             updateButtonIsEnabled.render { button(PriButtonUpdate)?.isEnabled = it }
-            emptyViewIsVisible.render { v(PriEmptyView)?.visible = it }
-            progressIsVisible.render { v(PriProgressLarge)?.visible = it }
-            smallProgressIsVisible.render { v(PriProgressSmall)?.visible = it }
+            emptyViewIsVisible.render { view(PriEmptyView)?.visible = it }
+            progressIsVisible.render { view(PriProgressLarge)?.visible = it }
+            smallProgressIsVisible.render { view(PriProgressSmall)?.visible = it }
             updateButtonText.render { text(PriButtonUpdate)?.text = app().ctx.getString(it) }
             startDetailActivitySignals.render { toast("You clicked on $it") }
             permissionSignal.render { p: Permission ->

@@ -5,13 +5,11 @@ import android.graphics.Color
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.widget.TextView
+import androidx.view.forEach
 import com.afollestad.materialdialogs.MaterialDialog
 import com.github.jmfayard.okandroid.R
 import com.github.jmfayard.okandroid.inflateViewFrom
-import com.github.jmfayard.okandroid.screens.HasId
-import com.github.jmfayard.okandroid.screens.ListItem
-import com.github.jmfayard.okandroid.screens.text
-import com.github.jmfayard.okandroid.screens.v
+import com.github.jmfayard.okandroid.screens.*
 import com.wealthfront.magellan.BaseScreenView
 import io.reactivex.subjects.BehaviorSubject
 import net.idik.lib.slimadapter.SlimAdapter
@@ -67,8 +65,9 @@ class PresentRenderInputView(context: Context) : BaseScreenView<PresentRenderInp
     }
 
     fun updateColor(p: MviPrefs) {
-        v(IdFrp.PriLayoutAll)?.setBackgroundColor(color(p.backgroundColor))
-        v(IdFrp.PriLayoutAll)?.children()?.filterIsInstance(TextView::class.java)?.forEach {
+        view(IdFrp.PriLayoutAll)?.setBackgroundColor(color(p.backgroundColor))
+        viewGroup(IdFrp.PriLayoutAll)?.forEach {  }
+        view(IdFrp.PriLayoutAll)?.children()?.filterIsInstance(TextView::class.java)?.forEach {
             it.setTextColor(color(p.fontColor))
         }
         text(IdFrp.PriLabelPrefs)?.text = "Prefs: color=${p.fontColor} highlight=${p.backgroundColor}"

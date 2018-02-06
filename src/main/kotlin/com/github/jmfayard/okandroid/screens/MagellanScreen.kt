@@ -9,6 +9,7 @@ import android.support.annotation.VisibleForTesting
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import androidx.content.systemService
 import com.wealthfront.magellan.BaseScreenView
 import com.wealthfront.magellan.Navigator
 import com.wealthfront.magellan.Screen
@@ -45,7 +46,7 @@ abstract class MagellanScreen<Display : IDisplay> : Screen<MagellanView<Display>
 
     abstract val screenTitle: Int
 
-    override final fun getTitle(context: Context): String {
+    final override fun getTitle(context: Context): String {
         return context.getString(screenTitle)
     }
 
@@ -99,14 +100,12 @@ val NOOP: ViewCallback = {}
 
 fun Context.hideSoftKeyboard(view: View?) {
     if (view != null && view.requestFocus()) {
-        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(view.rootView.windowToken, 0) // InputMethodManager.SHOW_IMPLICIT
+        systemService<InputMethodManager>().hideSoftInputFromWindow(view.rootView.windowToken, 0) // InputMethodManager.SHOW_IMPLICIT
     }
 }
 
 fun Context.showSoftKeyboard(view: View?) {
     if (view != null && view.requestFocus()) {
-        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.showSoftInput(view, 0) //InputMethodManager.SHOW_IMPLICIT)
+        systemService<InputMethodManager>().showSoftInput(view, 0) //InputMethodManager.SHOW_IMPLICIT)
     }
 }

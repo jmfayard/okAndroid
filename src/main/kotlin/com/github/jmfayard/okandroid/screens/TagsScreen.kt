@@ -12,6 +12,7 @@ import com.github.jmfayard.okandroid.screens.TagAction.Companion.clickedOn
 import com.github.jmfayard.okandroid.utils.Intents
 import com.github.jmfayard.okandroid.utils.PatternEditableBuilder
 import com.github.jmfayard.okandroid.utils.See
+import com.github.jmfayard.okandroid.utils.intentFor
 import timber.log.Timber
 import java.util.regex.Pattern
 
@@ -137,9 +138,7 @@ class TagsScreen : MagellanScreen<TagsDisplay>() {
     }
 
     fun createIntent(action: TagAction): Intent = when (action) {
-        anotherActivity -> Intent(activity, ReceiverActivity::class.java).apply {
-            putExtra("Greeting", "Hello World")
-        }
+        anotherActivity -> activity.intentFor<ReceiverActivity>("Greeting" to "Hello World")
         email -> Intents.sendEmail(email = "katogarabato1@gmail.com", text = "Que tal?", subject = "hola")
         playtore -> Intents.openPlaystore("com.whatsapp")
         share -> Intents.shareText(TagAction.text)
