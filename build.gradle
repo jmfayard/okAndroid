@@ -108,6 +108,16 @@ task i(type: Exec) {
     }
 }
 
+/** $ gw monkey
+ * Launch the android monkey in order to detect crashes early
+ ****/
+task monkey(type: Exec) {
+    def PACKAGE="com.github.jmfayard.okandroid"
+    dependsOn ":i"
+    description 'launch the monkey'
+    commandLine "bash -x gradle/monkey.sh ${PACKAGE}".split(" ")
+}
+
 /*** $ gw t
  ** Launch the unit tests
  **/
