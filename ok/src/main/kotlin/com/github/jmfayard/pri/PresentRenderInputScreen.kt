@@ -1,11 +1,11 @@
-package com.github.jmfayard.okandroid.screens.pri
+package com.github.jmfayard.pri
 
 import android.Manifest
 import android.content.Context
 import com.github.jmfayard.okandroid.ok
-import com.github.jmfayard.okandroid.screens.*
-import com.github.jmfayard.okandroid.screens.pri.IdFrp.*
-import com.github.jmfayard.okandroid.screens.pri.MviDialog.*
+import com.github.jmfayard.screens.*
+import com.github.jmfayard.pri.IdFrp.*
+import com.github.jmfayard.pri.MviDialog.*
 import com.github.jmfayard.okandroid.toast
 import com.tbruyelle.rxpermissions2.Permission
 import io.reactivex.subjects.BehaviorSubject

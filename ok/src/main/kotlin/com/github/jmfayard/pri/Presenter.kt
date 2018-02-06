@@ -1,7 +1,7 @@
-package com.github.jmfayard.okandroid.screens.pri
+package com.github.jmfayard.pri
 
 import com.github.jmfayard.okandroid.R
-import com.github.jmfayard.okandroid.screens.pri.MviDialog.*
+import com.github.jmfayard.pri.MviDialog.*
 import com.tbruyelle.rxpermissions2.Permission
 import io.reactivex.Observable
 import io.reactivex.Observable.*
@@ -110,7 +110,9 @@ fun present(
   val preferences = listOf(dialogEvents, refreshPrefs).merge()
           .printEvents("updatePrefs")
           .scan(MviPrefs(), {
-            prefs, result -> nextPref(prefs, result) }
+            prefs, result ->
+            nextPref(prefs, result)
+          }
           )
 
   val dialogCmds = listOf(

@@ -1,4 +1,4 @@
-package com.github.jmfayard.okandroid.screens.pri
+package com.github.jmfayard.pri
 
 import android.view.View
 import android.view.ViewGroup

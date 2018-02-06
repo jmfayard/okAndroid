@@ -1,4 +1,4 @@
-package com.github.jmfayard.okandroid.screens.pri
+package com.github.jmfayard.pri
 
 import android.content.Context
 import android.graphics.Color
@@ -9,7 +9,7 @@ import androidx.view.forEach
 import com.afollestad.materialdialogs.MaterialDialog
 import com.github.jmfayard.okandroid.R
 import com.github.jmfayard.okandroid.inflateViewFrom
-import com.github.jmfayard.okandroid.screens.*
+import com.github.jmfayard.screens.*
 import com.wealthfront.magellan.BaseScreenView
 import io.reactivex.subjects.BehaviorSubject
 import net.idik.lib.slimadapter.SlimAdapter
