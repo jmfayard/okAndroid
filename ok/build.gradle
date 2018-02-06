@@ -40,7 +40,9 @@ android {
 }
 
 dependencies {
-
+    implementation(project(path: ':common'))
+    implementation(project(path: ':androidcommon'))
+    implementation(project(path: ':room'))
 
     // Kotlin
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -122,8 +124,8 @@ dependencies {
 //    kapt "com.jakewharton:butterknife-compiler:${versions.butterknife}"
 
     // https://github.com/hotchemi/PermissionsDispatcher
-    compile "com.github.hotchemi:permissionsdispatcher:${versions.permissions}"
-    kapt "com.github.hotchemi:permissionsdispatcher-processor:${versions.permissions}"
+//    compile "com.github.hotchemi:permissionsdispatcher:${versions.permissions}"
+//    kapt "com.github.hotchemi:permissionsdispatcher-processor:${versions.permissions}"
 
 
 

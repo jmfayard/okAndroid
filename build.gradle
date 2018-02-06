@@ -27,6 +27,7 @@ def versions = [
         "dagger" : "2.9",
         "dagger2": "2.8",
         "espresso": "3.0.1",
+        "fakeit": "v0.7",
         "junit": "4.12",
         "konfig" : "1.5.0.0",
         "KotlinAndroidViewBindings": "0.11",
@@ -85,6 +86,7 @@ allprojects {
   }
 
 }
+
 
 
 

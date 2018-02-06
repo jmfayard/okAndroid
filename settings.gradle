@@ -1,1 +1,1 @@
-include ':ok'
+include ':ok', ':common', ':androidcommon', ':room'
