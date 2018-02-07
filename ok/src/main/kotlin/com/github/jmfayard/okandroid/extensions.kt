@@ -17,6 +17,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
+import com.github.jmfayard.screens.MagellanScreen
+import com.github.jmfayard.screens.MagellanView
+import com.github.jmfayard.screens.SomeScreen
+import com.github.jmfayard.screens.SomeView
 import com.wealthfront.magellan.BaseScreenView
 import com.wealthfront.magellan.Screen
 import io.reactivex.Scheduler
@@ -27,17 +31,15 @@ import io.reactivex.schedulers.TestScheduler
 import java.io.File
 
 
-typealias MagellanScreen = Screen<*>?
-typealias MagellanView = BaseScreenView<*>
 
-val MagellanScreen.ioThread : Scheduler
+val SomeScreen.ioThread : Scheduler
     get() = if (isRunningTest) TestScheduler() else Schedulers.io()
 
-val MagellanScreen.mainThread : Scheduler
+val SomeScreen.mainThread : Scheduler
     get() = if (isRunningTest) TestScheduler() else AndroidSchedulers.mainThread()
 
 
-val MagellanView.attach: Boolean
+val SomeView.attach: Boolean
     get() = true
 
 
@@ -53,7 +55,7 @@ fun <T> onMainThread(operation: (T) -> Unit): SingleTransformer<T, T> {
 }
 
 
-fun MagellanView.inflateViewFrom(@LayoutRes layoutRes: Int): View =
+fun SomeView.inflateViewFrom(@LayoutRes layoutRes: Int): View =
         LayoutInflater.from(context).inflate(layoutRes, this, true)
 
 

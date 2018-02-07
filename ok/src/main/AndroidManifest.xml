@@ -3,6 +3,8 @@
           xmlns:tools="http://schemas.android.com/tools"
           package="com.github.jmfayard.okandroid">
 
+
+
     <!-- The NFC permission is required to use NfcAdapter. -->
     <uses-permission android:name="android.permission.NFC" />
     <!-- Inform app distribution channels that NFC is used, though not required. -->
@@ -29,6 +31,12 @@ PackageManager.hasSystemFeature(FEATURE_BLUETOOTH_LE) -->
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
 
 
+
+    <!--- checkvist module -->
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <!--- checkvist module -->
+
     <application
         android:name=".App"
         android:icon="@drawable/ic_okandroid"
@@ -36,6 +44,11 @@ PackageManager.hasSystemFeature(FEATURE_BLUETOOTH_LE) -->
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:label">
+
+        <!--- checkvist module -->
+        <service android:name="com.github.jmfayard.checkvist.ChatHeadService"  android:enabled="true"  android:exported="false"/>
+        <!--- checkvist module -->
+
 
         <activity
             android:name=".MainActivity"
