@@ -1,7 +1,6 @@
 import java.nio.file.Paths
 
 buildscript {
-    ext.kotlin_version = '1.2.21'
 
     repositories {
         google()
@@ -11,7 +10,7 @@ buildscript {
 
     dependencies {
         classpath 'com.android.tools.build:gradle:3.0.1'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:" + Versions.kotlin
     }
 }
 plugins {
@@ -19,44 +18,8 @@ plugins {
     id 'com.github.ben-manes.versions' version '0.17.0'
 }
 
-def versions = [
-        "android_gradle" : "3.0.0",
-        "architecture" : "1.0.0",
-        "butterknife": "8.4.0",
-        "constraint" : "1.0.2",
-        "dagger" : "2.9",
-        "dagger2": "2.8",
-        "espresso": "3.0.1",
-        "fakeit": "v0.7",
-        "junit": "4.12",
-        "konfig" : "1.5.0.0",
-        "KotlinAndroidViewBindings": "0.11",
-        "kotlintest" : "2.0.7",
-        "ktx": "0.1",
-        "magellan" : "1.0.0",
-        "moshi" : "1.5.0",
-        "okhttp" : "3.9.1",
-        "okio" : "1.13.0",
-        "retrofit" : "2.3.0",
-        "rxandroid": "2.0.1",
-        "rxbinding": "2.0.0",
-        "rxjava" : "1.2.7",
-        "rxjava2" : "2.1.7",
-        "rxkotlin": "1.0.0",
-        "rxkotlin2": "2.2.0",
-        "slimadapter" : "2.1.2",
-        "support": "27.0.2",
-        "timber" : "4.6.0",
-        "calligraphy": "2.2.0",
-        "permissions": "3.0.1",
-        "materialDialogs": "0.9.6.0",
-        "jacoco": "0.7.9",
-        "androidjob" : "1.2.1",
-]
-
 
 allprojects {
-  project.ext.versions = versions
 
   repositories {
       google()
@@ -64,22 +27,22 @@ allprojects {
       maven { url 'https://maven.google.com' }
       maven { url 'https://jitpack.io' }
       maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
-
   }
 
 
   configurations.all {
       resolutionStrategy {
+          force "io.reactivex.rxjava2:rxandroid:" + Versions.rxandroid
           eachDependency { details ->
               // Force all of the primary support libraries to use the same version.
               // https://github.com/JakeWharton/u2020/blob/68a5f3109ee585df276b3f541fdef31360331433/build.gradle#L105-L113
               if (details.requested.group == 'com.android.support'
                       && details.requested.name != 'multidex'
                       && details.requested.name != 'multidex-instrumentation') {
-                  details.useVersion versions.support
+                  details.useVersion Versions.support
               }
               if (details.requested.group == "org.jetbrains.kotlin") {
-                  details.useVersion kotlin_version
+                  details.useVersion Versions.kotlin
               }
           }
       }
@@ -96,8 +59,8 @@ allprojects {
  * $ gw t i
  ****/
 task i(type: Exec) {
-    def PACKAGE="com.github.jmfayard.okandroid"
-    dependsOn ":ok:installDebug" //, ":common:check"
+    def PACKAGE=Android.Package
+    dependsOn Android.GradleInstallTask
     description 'Install the app'
     commandLine "adb shell am start -n ${PACKAGE}/${PACKAGE}.MainActivity -a android.intent.action.MAIN -c android.intent.category.LAUNCHER".split(" ")
     doLast {
@@ -112,17 +75,16 @@ task i(type: Exec) {
  * Launch the android monkey in order to detect crashes early
  ****/
 task monkey(type: Exec) {
-    def PACKAGE="com.github.jmfayard.okandroid"
     dependsOn ":i"
     description 'launch the monkey'
-    commandLine "bash -x gradle/monkey.sh ${PACKAGE}".split(" ")
+    commandLine "bash -x gradle/monkey.sh ${Android.Package}".split(" ")
 }
 
 /*** $ gw t
  ** Launch the unit tests
  **/
 task t() {
-    dependsOn ":ok:testDebugUnitTest"
+    dependsOn Android.GradleTestTask
     description 'Run the unit tests'
     doLast {
         def path = Paths.get("ok/build/reports/tests/testDebugUnitTest/index.html").toRealPath()
