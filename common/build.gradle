@@ -8,8 +8,7 @@ dependencies { /* :common */
     testCompileOnly Deps.Jsr305
     api Deps.RxJava2
     api Deps.RxKotlin
-    api Deps.Retrofit
-    api Deps.RetrofitMoshi
+    api Deps.Retrofit("retrofit", "converter-moshi")
     api Deps.Okhttp
     api Deps.Okhttp
     api Deps.OkhttpLogging

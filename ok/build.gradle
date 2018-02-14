@@ -39,9 +39,8 @@ dependencies {
     compile(project(path: ':room'))
 
     /****** TESTING ****/
+    testCompile Deps.Kotlin("kotlin-reflect", "kotlin-reflect")
     testCompile Deps.KotlinTest
-    testCompile Deps.kotlin("reflect")
-    testCompile Deps.kotlin("test")
     testCompile Deps.JUnit
     testCompile Deps.MockitoKotlin
     testCompile Deps.OkhttpMockserver
@@ -52,7 +51,7 @@ dependencies {
     androidTestCompile Deps.EspressoContrib
 
     // Kotlin
-    compile Deps.kotlin("stdlib")
+    compile Deps.Kotlin("kotlin-stdlib")
 
     // Support & google libraries
     compile Deps.AndroidSupport(
@@ -78,9 +77,7 @@ dependencies {
     compile Deps.OkhttpLogging
     compile Deps.Moshi
     compile Deps.Okio
-    compile Deps.Retrofit
-    compile Deps.RetrofitMoshi
-    compile Deps.RetrofitMock
+    compile Deps.Retrofit("retrofit", "converter-moshi", "retrofit-mock")
     compile Deps.RetrofitRxjava2
     compile Deps.RxPermissions
 

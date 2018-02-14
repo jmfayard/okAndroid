@@ -1,5 +1,3 @@
-import java.nio.file.Paths
-
 buildscript {
 
     repositories {
@@ -87,7 +85,7 @@ task t() {
     dependsOn Android.GradleTestTask
     description 'Run the unit tests'
     doLast {
-        def path = Paths.get("ok/build/reports/tests/testDebugUnitTest/index.html").toRealPath()
+        def path = new File("ok/build/reports/tests/testDebugUnitTest/index.html").absolutePath
         println("All unit tests have run")
         println("Details are available under...")
         println("\$ open ${path}")

@@ -36,7 +36,7 @@ dependencies {
 
     testImplementation Deps.JUnit
     testImplementation Deps.KotlinTest
-    testImplementation Deps.kotlin("reflect")
+    testImplementation Deps.Kotlin("kotlin-reflect")
 
     androidTestImplementation Deps.EspressoTestRunner
     androidTestImplementation Deps.EspressoCore

@@ -127,14 +127,14 @@ data class TrackData(
         val MediaType: String
 )
 
-@Entity(tableName = ALBUMS)
+@Entity(tableName = ALBUMS, indices = [Index("AlbumId")])
 data class Album(
         @PrimaryKey(autoGenerate = true) val AlbumId: Long,
         val Title: String = "",
         val ArtistId: Long = 0
 )
 
-@Entity(tableName = ARTISTS)
+@Entity(tableName = ARTISTS, indices = [Index("ArtistId")])
 data class Artist(
         @PrimaryKey(autoGenerate = true) val ArtistId: Long,
         val Name: String = ""
@@ -186,11 +186,12 @@ data class Playlist(
 )
 
 @Entity(tableName = TRACKS,
-        foreignKeys = arrayOf(
+        indices = [Index("AlbumId")],
+        foreignKeys = [
                 ForeignKey(entity = Album::class, parentColumns = arrayOf("AlbumId"), childColumns = arrayOf("AlbumId")),
                 ForeignKey(entity = MediaType::class, parentColumns = arrayOf("MediaTypeId"), childColumns = arrayOf("MediaTypeId")),
                 ForeignKey(entity = Genre::class, parentColumns = arrayOf("GenreId"), childColumns = arrayOf("GenreId"))
-))
+])
 data class Track(
         @PrimaryKey(autoGenerate = true) val TrackId: Long,
         val Name: String = "",
