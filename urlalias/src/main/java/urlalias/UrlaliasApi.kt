@@ -18,6 +18,9 @@ interface UrlaliasApi {
     @GET("api/url/{urlId}")
     fun getUrl(@Path("urlId") urlId: Long) : Call<UrlAlias>
 
+    @POST("api/url/{urlId}")
+    fun modifyUrl(@Body url: PostUrl) : Call<UrlAlias>
+
     @GET("api/url")
     fun getAllUrls() : Call<List<UrlAlias>>
 
@@ -35,6 +38,7 @@ data class PostUrl(val url: String)
 data class PostAlias(val urlId: Long, val alias: String)
 
 enum class ApiError(val code: Int, val clarification: String) {
+    ENDPOINT_NOT_IMPLEMENTED(99, "Endpoint will be implemented later"),
     INVALID_URLID(100, "UrlId not found"),
     INVALID_URL_FORMAT(101, "Invalid url format"),
     INVALID_ALIAS_FORMAT(102, "Invalid alias format"),

@@ -5,13 +5,21 @@ import okhttp3.HttpUrl
 fun urlalias() : UrlaliasComponent = UrlaliasModule
 
 interface UrlaliasComponent {
+    val rootUrl : HttpUrl
+    val pageNotFoundUrl : HttpUrl
     val repository: UrlaliasRepository
-    val sampleData : List<UrlAlias>
+    val sampleData : Map<String, String>
     fun validateUrl(url: String) : HttpUrl?
     fun isValidAlias(name: String) : Boolean
 }
 
 object UrlaliasModule: UrlaliasComponent {
+
+    override val rootUrl: HttpUrl =
+            HttpUrl.parse("http://urlalias.bertrou.eu")!!
+
+    override val pageNotFoundUrl: HttpUrl =
+        HttpUrl.parse("http://wearespry.com/404notfound")!!
 
     override val repository: UrlaliasRepository = InmemoryRepository
 
@@ -19,26 +27,30 @@ object UrlaliasModule: UrlaliasComponent {
             HttpUrl.parse(url)
 
     override fun isValidAlias(name: String) : Boolean {
-        if (name.length <= 2) return false
-        val characters = name
-        return characters.all { it in authorizedChars }
+        val validChars = name.all(this::isValidCharacter)
+        val reserved = name.startsWith("api") || name.startsWith("app")
+        return validChars && !reserved && name.length >= 2
     }
 
-    val authorizedChars = listOf('-', '_', ':') + ('a'..'z') + ('A'..'Z') + ('0'..'9')
+    private fun isValidCharacter(c: Char): Boolean = when(c) {
+        in 'a'..'z' -> true
+        in 'A'..'Z' -> true
+        in '0'..'9' -> true
+        in authorizedChars -> true
+        else -> false
+    }
+
+    val authorizedChars = listOf('-', '_', ':')
 
 
-    val URL_ALIAS_SAMPLEDATA = mapOf(
+    override val sampleData = mapOf(
             "code" to "https://github.com/jmfayard/okAndroid",
+            "di" to "https://medium.com/@jm_fayard/dependency-injection-the-pattern-without-the-framework-33cfa9d5f312",
+            "cool-urls" to "https://www.w3.org/Provider/Style/URI",
             "kotlin" to "https://kotlinlang.org",
             "ktor" to "https://ktor.io",
             "android" to "https://developer.android.com/index.html"
     )
-
-    override val sampleData: List<UrlAlias> = URL_ALIAS_SAMPLEDATA.entries.mapIndexed alias@ {
-        index, (key, value) ->
-        val url = requireNotNull(validateUrl(value)) { "Invalid url $value"}
-        return@alias UrlAlias(index.toLong(), url, 0, listOf(key))
-    }
 
 
 

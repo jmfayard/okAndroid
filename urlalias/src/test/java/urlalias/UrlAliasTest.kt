@@ -4,6 +4,8 @@ import io.kotlintest.forAll
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.matchers.shouldNotBe
 import io.kotlintest.specs.FreeSpec
+import okhttp3.HttpUrl
+import urlalias.InmemoryRepository.data
 
 class Tests : FreeSpec() { init {
 
@@ -25,7 +27,7 @@ class Tests : FreeSpec() { init {
 
     "alias validation" {
         val aliasOK = listOf("hello", "HellO", "666", "c-o_ol:")
-        val aliasKO = listOf("h i", "été", "wh?t", "", "a", "ab")
+        val aliasKO = listOf("h i", "été", "wh?t", "", "a", "api", "apidd", "app")
 
         forAll(aliasOK) { input ->
             component.isValidAlias(input) shouldBe true
@@ -38,20 +40,22 @@ class Tests : FreeSpec() { init {
 
     "repository" {
         val repository = component.repository
-        val list: List<UrlAlias> = component.sampleData
-        for (data in list) {
-            val name = data.aliases.first()
+        for ((name, url) in component.sampleData) {
 
-            val alias = repository.addUrlAlias(data.url)
+            val alias = repository.addUrlAlias(HttpUrl.parse(url)!!)
             repository.findByIdOrNull(alias.id) shouldBe alias
             repository.findByUrlOrNull(alias.url) shouldBe alias
             repository.addAliasName(alias.id, name)
             repository.addAliasName(alias.id, name)
             repository.findByIdOrNull(alias.id)?.aliases shouldBe  listOf(name)
         }
-        val allAliases = repository.allUrlAliases()
-        allAliases.size shouldBe component.sampleData.size
-        allAliases.flatMap { url -> url.aliases }.sorted() shouldBe list.flatMap { it.aliases }.sorted()
+
+        val all: List<UrlAlias> = repository.allUrlAliases()
+        val aliasesFound = all.flatMap(UrlAlias::aliases).sorted()
+        val urlsFound = all.map { a -> a.url.toString() }.sorted()
+
+        aliasesFound shouldBe component.sampleData.keys.sorted()
+        urlsFound shouldBe component.sampleData.values.sorted()
     }
 
 }}

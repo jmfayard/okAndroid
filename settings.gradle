@@ -1,1 +1,2 @@
-include ':ok', ':common', ':androidcommon', ':room', ':urlalias', ':urlalias-server'
+//include ':ok', ':common', ':androidcommon', ':room', ':urlalias'
+include ':urlalias', ':urlalias-server'

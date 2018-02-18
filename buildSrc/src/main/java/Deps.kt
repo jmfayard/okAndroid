@@ -93,6 +93,8 @@ object Deps {
             "ktor-network", "ktor-server-host-common", "ktor-http", "ktor-client-core",
             "ktor-server-core")
 
+    val Logback = "ch.qos.logback:logback-classic:1.2.1"
+
 
     /** **/
     @JvmStatic
