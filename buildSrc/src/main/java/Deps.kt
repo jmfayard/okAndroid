@@ -68,6 +68,47 @@ object Deps {
 
     const val RetrofitRxjava2 = "com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0"
 
+
+
+
+    /*** KTOR: Framework for quickly creating connected applications in Kotlin with minimal effort
+     * [Github](https://github.com/ktorio/ktor) [Documentations](http://ktor.io/)
+     * ***/
+    @JvmStatic
+    fun Ktor(vararg module: String): List<String> =
+            module.requireIn(modulesKtor)
+                    .map { m -> "io.ktor:$m:${Versions.ktor}" }
+
+    const val MAVEN_KOTLIN_KTOR = "http://dl.bintray.com/kotlin/ktor"
+    const val MAVEN_KOTLIN_KOTLINX ="https://dl.bintray.com/kotlin/kotlinx"
+
+    val modulesKtor = listOf("ktor-auth-jwt", "ktor-client-json", "ktor-gson",
+            "ktor-auth-ldap", " ktor-client-cio", " ktor-freemarker", "ktor-locations",
+            " ktor-websockets", " ktor-server", "ktor-client-auth-basic",
+            "ktor-jackson", "ktor-features", " ktor-server-cio", "ktor-velocity",
+            "ktor-server-sessions", "ktor-server-netty", "ktor-client-features",
+            "ktor-metrics", "ktor-server-tomcat", "ktor-client-tests", "ktor-client-jetty",
+            "ktor-server-jetty", "ktor-server-test-host", "ktor-server-servlet", "ktor-client-apache",
+            "ktor-utils", "tor-http-cio", "ktor-client-jvm", "ktor-auth", " ktor-client",
+            "ktor-network", "ktor-server-host-common", "ktor-http", "ktor-client-core",
+            "ktor-server-core")
+
+
+    /** **/
+    @JvmStatic
+    fun Coroutines(vararg module: String) : List<String> =
+            module.requireIn(modulesCoroutines)
+                    .map { m -> "org.jetbrains.kotlinx:$m:${versions.coroutineVersion}" }
+
+    val modulesCoroutines = listOf("kotlinx-coroutines-core", "kotlinx-coroutines-jdk8",
+            "kotlinx-coroutines-reactive", "kotlinx-coroutines-rx2", "kotlinx-coroutines-reactor", "kotlinx-coroutines-android", "kotlinx-coroutines-nio")
+
+
+    /**    https://github.com/gildor/kotlin-coroutines-retrofit **/
+    const val RetrofitCoroutines = "ru.gildor.coroutines:kotlin-coroutines-retrofit:" + versions.retrofitCoroutines
+
+
+
     private fun Array<out String>.requireIn(modules: List<String>): List<String> {
         require(this.isNotEmpty()) { "No module given. Allowed modules: $modules" }
         val invalids = this.filter { it !in modules }
