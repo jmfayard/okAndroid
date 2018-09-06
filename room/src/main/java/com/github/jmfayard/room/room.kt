@@ -1,6 +1,6 @@
 package com.github.jmfayard.room
 
-import android.arch.persistence.room.*
+import androidx.room.*
 import io.reactivex.Flowable
 
 val DB: MyDatabase  by lazy {

@@ -1,7 +1,7 @@
 package com.github.jmfayard.room
 
-import android.arch.persistence.room.*
 import android.content.Context
+import androidx.room.*
 import com.github.jmfayard.room.Chinook.ALBUMS
 import com.github.jmfayard.room.Chinook.ARTISTS
 import com.github.jmfayard.room.Chinook.CUSTOMERS
@@ -69,7 +69,8 @@ abstract class ChinookDatabase : RoomDatabase() {
 }
 
 
-@Dao interface QueriesDao {
+@Dao
+interface QueriesDao {
 
 
     @Query("""

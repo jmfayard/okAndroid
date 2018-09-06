@@ -7,22 +7,21 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.0'
+        classpath 'com.android.tools.build:gradle:3.3.0-alpha08'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:" + Versions.kotlin
     }
 }
 plugins {
-    id 'com.gradle.build-scan' version '1.11'
-    id 'com.github.ben-manes.versions' version '0.17.0'
+    id 'com.gradle.build-scan' version '1.16'
+    id 'com.github.ben-manes.versions' version '0.20.0'
 }
 
 
 allprojects {
 
   repositories {
-      google()
       jcenter()
-      maven { url 'https://maven.google.com' }
+      google()
       maven { url 'https://jitpack.io' }
       maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
   }
@@ -32,13 +31,6 @@ allprojects {
       resolutionStrategy {
           force "io.reactivex.rxjava2:rxandroid:" + Versions.rxandroid
           eachDependency { details ->
-              // Force all of the primary support libraries to use the same version.
-              // https://github.com/JakeWharton/u2020/blob/68a5f3109ee585df276b3f541fdef31360331433/build.gradle#L105-L113
-              if (details.requested.group == 'com.android.support'
-                      && details.requested.name != 'multidex'
-                      && details.requested.name != 'multidex-instrumentation') {
-                  details.useVersion Versions.support
-              }
               if (details.requested.group == "org.jetbrains.kotlin") {
                   details.useVersion Versions.kotlin
               }
@@ -93,11 +85,10 @@ task t() {
 }
 
 buildScan {
-  // Uncomment the lines below to agree to the Terms of Service.
-  licenseAgreementUrl = 'https://gradle.com/terms-of-service'
-  licenseAgree = 'yes'
-    tag 'SAMPLE'
-    link 'GitHub', 'https://github.com/gradle/gradle-build-scan-quickstart'
+//    setTermsOfServiceUrl("https://gradle.com/terms-of-service")
+//    setLicenseAgree("yes")
+    termsOfServiceUrl = 'https://gradle.com/terms-of-service'; termsOfServiceAgree = 'yes'
+    publishAlways()
 }
 
 

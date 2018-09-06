@@ -15,7 +15,7 @@ dependencies { /* :common */
     api Deps.Moshi
     api Deps.Okio
     api Deps.JavaMoney
-    api Deps.Fakeit
+//    api Deps.Fakeit
 
     testCompile Deps.KotlinTest
     testCompile Deps.JUnit

@@ -1,7 +1,7 @@
 package com.github.jmfayard.screens
 
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.github.jmfayard.okandroid.R
 import com.github.jmfayard.screens.HomeId.*
 import com.github.jmfayard.utils.See

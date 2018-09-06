@@ -1,9 +1,6 @@
 package com.github.jmfayard.screens;
 
 import android.content.Context;
-import android.support.annotation.IdRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.StringRes;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +8,9 @@ import android.view.ViewGroup;
 import com.wealthfront.magellan.Screen;
 import com.wealthfront.magellan.ScreenView;
 
+import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -56,7 +56,8 @@ where
 
      * **/
     @Override
-    protected abstract @NonNull V createView(@NonNull Context context);
+    protected abstract @NonNull
+    V createView(@NonNull Context context);
 
     /** Replace onShow() in a reactive screen.
      * this is where you setup <code>render(present(userInput))</code> **/

@@ -40,10 +40,13 @@ PackageManager.hasSystemFeature(FEATURE_BLUETOOTH_LE) -->
     <application
         android:name=".App"
         android:icon="@drawable/ic_okandroid"
-        android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:replace="android:label">
+        tools:replace="android:label"
+        android:label="@string/app_name"
+        tools:remove="android:appComponentFactory"
+        >
+
 
         <!--- checkvist module -->
         <service android:name="com.github.jmfayard.checkvist.ChatHeadService"  android:enabled="true"  android:exported="false"/>
@@ -90,7 +93,7 @@ PackageManager.hasSystemFeature(FEATURE_BLUETOOTH_LE) -->
         </activity>
 
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="com.github.jmfayard.okandroid"
             android:exported="false"
             android:grantUriPermissions="true">

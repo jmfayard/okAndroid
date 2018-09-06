@@ -16,7 +16,7 @@ android {
         versionCode 1
         versionName "1.0.0"
         applicationId "com.github.jmfayard.okandroid"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
 
@@ -34,62 +34,67 @@ android {
 
 dependencies {
     /*** other projects **/
-    compile(project(path: ':common'))
-    compile(project(path: ':androidcommon'))
-    compile(project(path: ':room'))
+    api(project(path: ':common'))
+    api(project(path: ':androidcommon'))
+    api(project(path: ':room'))
 
     /****** TESTING ****/
-    testCompile Deps.Kotlin("kotlin-reflect", "kotlin-reflect")
-    testCompile Deps.KotlinTest
-    testCompile Deps.JUnit
-    testCompile Deps.MockitoKotlin
-    testCompile Deps.OkhttpMockserver
-    testCompile Deps.RoomTesting
+    testImplementation  Deps.Kotlin("kotlin-reflect", "kotlin-reflect")
+    testImplementation  Deps.KotlinTest
+    testImplementation  Deps.JUnit
+    testImplementation  Deps.MockitoKotlin
+    testImplementation  Deps.OkhttpMockserver
+    testImplementation  Deps.RoomTesting
 
-    androidTestCompile Deps.KotlinTest
-    androidTestCompile Deps.EspressoCore
-    androidTestCompile Deps.EspressoContrib
+    androidTestImplementation Deps.KotlinTest
+    androidTestImplementation Deps.EspressoCore
+    androidTestImplementation Deps.EspressoContrib
 
     // Kotlin
-    compile Deps.Kotlin("kotlin-stdlib")
+    api Deps.Kotlin("kotlin-stdlib")
 
     // Support & google libraries
-    compile Deps.AndroidSupport(
-            "support-v4", "appcompat-v7", "preference-v7",
-            "design", "percent", "cardview-v7", "customtabs")
-    compile Deps.Multidex
-    compile Deps.AndroidxCore
-    compile Deps.ConstraintLayout
+    api Androidx.LegacySupportV4
+    api Androidx.AppCompat
+    api Androidx.Preference
+    api Androidx.Material
+    api Androidx.Percent
+    api Androidx.CardView
+    api Androidx.Browser
+    api Androidx.Multidex
+    api Androidx.AndroidxCore
+    api Androidx.ConstraintLayout
+    api Androidx.Mediarouter
 
-    compile Deps.Timber
-    compile Deps.Fakeit
-    compile Deps.AndroidJob
+    api Deps.Timber
+//    api Deps.Fakeit
+    api Deps.AndroidJob
 
     compileOnly Deps.Jsr305
     testCompileOnly Deps.Jsr305
 
-    compile Deps.RxJava2
-    compile Deps.RxKotlin
-    compile Deps.RxBindingKotlin
-    compile Deps.RxBindingV4Kotlin
+    api Deps.RxJava2
+    api Deps.RxKotlin
+    api Deps.RxBindingKotlin
+    api Deps.RxBindingV4Kotlin
 
-    compile Deps.Okhttp
-    compile Deps.OkhttpLogging
-    compile Deps.Moshi
-    compile Deps.Okio
-    compile Deps.Retrofit("retrofit", "converter-moshi", "retrofit-mock")
-    compile Deps.RetrofitRxjava2
-    compile Deps.RxPermissions
+    api Deps.Okhttp
+    api Deps.OkhttpLogging
+    api Deps.Moshi
+    api Deps.Okio
+    api Deps.Retrofit("retrofit", "converter-moshi", "retrofit-mock")
+    api Deps.RetrofitRxjava2
+    api Deps.RxPermissions
 
 
     /** UX **/
-    compile Deps.MaterialDialogs
-    compile Deps.Calligraphy
-    compile Deps.Magellan
-    compile Deps.MagellanSupport
-    compile Deps.MagellanRx
-    compile Deps.SlimAdapter
-    compile Deps.KotlinAndroidViewBindings
+    api Deps.MaterialDialogs
+    api Deps.Calligraphy
+    api Deps.Magellan
+    api Deps.MagellanSupport
+    api Deps.MagellanRx
+    api Deps.SlimAdapter
+    api Deps.KotlinAndroidViewBindings
 
 
 

@@ -1,14 +1,13 @@
 package com.github.jmfayard.screens
 
 import android.content.Context
-import com.github.jmfayard.okandroid.R
 import com.github.jmfayard.jobs.Jobs
+import com.github.jmfayard.okandroid.R
 import com.github.jmfayard.okandroid.toast
-import com.github.jmfayard.utils.PatternEditableBuilder
-import com.github.jmfayard.utils.See
 import com.github.jmfayard.room.DbConnector
 import com.github.jmfayard.room.Person
-import com.mooveit.library.Fakeit
+import com.github.jmfayard.utils.PatternEditableBuilder
+import com.github.jmfayard.utils.See
 import com.wealthfront.magellan.Screen
 import io.reactivex.rxkotlin.subscribeBy
 import timber.log.Timber
@@ -40,8 +39,11 @@ Actions: #insert and #clear
         }
     }
 
+    var fakeit = 1
+
     fun insert() {
-        val person = Person(0, Fakeit.name().firstName(), Fakeit.name().lastName())
+//        val person = Person(0, Fakeit.name().firstName(), Fakeit.name().lastName())
+        val person = Person(0, "First name ${fakeit++}", "Last name ${fakeit++}")
         connector.insert(person)
                 .subscribeBy(
                         onSuccess = { Jobs.launchSyncNow() },

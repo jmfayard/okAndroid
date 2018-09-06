@@ -3,13 +3,13 @@ package com.github.jmfayard.screens
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
-import android.support.annotation.IdRes
-import android.support.annotation.LayoutRes
-import android.support.annotation.VisibleForTesting
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import androidx.content.systemService
+import androidx.annotation.IdRes
+import androidx.annotation.LayoutRes
+import androidx.annotation.VisibleForTesting
+import androidx.core.content.getSystemService
 import com.wealthfront.magellan.BaseScreenView
 import com.wealthfront.magellan.Navigator
 import com.wealthfront.magellan.Screen
@@ -100,12 +100,13 @@ val NOOP: ViewCallback = {}
 
 fun Context.hideSoftKeyboard(view: View?) {
     if (view != null && view.requestFocus()) {
-        systemService<InputMethodManager>().hideSoftInputFromWindow(view.rootView.windowToken, 0) // InputMethodManager.SHOW_IMPLICIT
+        getSystemService<InputMethodManager>()!!.hideSoftInputFromWindow(view.rootView.windowToken, 0) // InputMethodManager.SHOW_IMPLICIT
     }
 }
 
 fun Context.showSoftKeyboard(view: View?) {
+
     if (view != null && view.requestFocus()) {
-        systemService<InputMethodManager>().showSoftInput(view, 0) //InputMethodManager.SHOW_IMPLICIT)
+        getSystemService<InputMethodManager>()!!.showSoftInput(view, 0) //InputMethodManager.SHOW_IMPLICIT)
     }
 }

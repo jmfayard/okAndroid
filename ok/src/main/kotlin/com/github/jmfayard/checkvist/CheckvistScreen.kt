@@ -7,10 +7,8 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.support.customtabs.CustomTabsIntent
+import androidx.browser.customtabs.CustomTabsIntent
 import com.afollestad.materialdialogs.MaterialDialog
-import com.evernote.android.job.v14.PlatformAlarmServiceExact.createIntent
-import com.github.jmfayard.checkvist.CheckvistAction.*
 import com.github.jmfayard.checkvist.CheckvistAction.Companion.clickedOn
 import com.github.jmfayard.okandroid.R
 import com.github.jmfayard.okandroid.pendingIntent

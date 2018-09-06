@@ -9,8 +9,8 @@ import android.content.Intent.*
 import android.net.Uri
 import android.provider.MediaStore
 import android.text.Html
-import androidx.net.toUri
-import androidx.os.bundleOf
+import androidx.core.net.toUri
+import androidx.core.os.bundleOf
 import okhttp3.HttpUrl
 
 // See https://github.com/jmfayard/codepath/blob/master/Common-Implicit-Intents.md

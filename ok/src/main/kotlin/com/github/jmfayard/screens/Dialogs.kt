@@ -4,10 +4,10 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.DialogInterface
-import android.support.annotation.IdRes
-import android.support.annotation.LayoutRes
 import android.view.LayoutInflater
 import android.widget.TextView
+import androidx.annotation.IdRes
+import androidx.annotation.LayoutRes
 import com.github.jmfayard.okandroid.R
 import com.github.jmfayard.okandroid.ok
 import kotlin.properties.ReadWriteProperty

@@ -1,10 +1,10 @@
 package kotterknife
 
 import android.app.Activity
-import android.support.annotation.IdRes
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Spinner
+import androidx.annotation.IdRes
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 

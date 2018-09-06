@@ -1,6 +1,6 @@
 package com.github.jmfayard.screens
 
-import android.support.annotation.LayoutRes
+import androidx.annotation.LayoutRes
 import com.github.jmfayard.okandroid.R
 import com.marcinmoskala.kotlinandroidviewbindings.bindToText
 
@@ -10,7 +10,8 @@ interface TagsDisplay : IDisplay {
     var history: String
 
     companion object {
-        @LayoutRes const val LAYOUT = R.layout.tags_screen
+        @LayoutRes
+        const val LAYOUT = R.layout.tags_screen
     }
 }
 

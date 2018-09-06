@@ -1,14 +1,13 @@
 package com.github.jmfayard.screens
 
 import android.content.Context
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.view.View
 import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.github.jmfayard.okandroid.R
 import com.github.jmfayard.okandroid.inflateViewFrom
-import com.github.jmfayard.utils.PatternEditableBuilder
 import com.github.jmfayard.room.Person
+import com.github.jmfayard.utils.PatternEditableBuilder
 import com.marcinmoskala.kotlinandroidviewbindings.bindToText
 import com.wealthfront.magellan.BaseScreenView
 import net.idik.lib.slimadapter.SlimAdapter
@@ -23,7 +22,7 @@ class RoomView(context: Context) : BaseScreenView<RoomScreen>(context) {
     var htmlContent by bindToText(R.id.rom_content)
 
     fun init() {
-        val recycler = findViewById<RecyclerView>(R.id.room_recycler)
+        val recycler: RecyclerView = findViewById<RecyclerView>(R.id.room_recycler)
         val content = findViewById<TextView>(R.id.rom_content)
         htmlContent = screen.text
         setupTags(content)
@@ -35,7 +34,7 @@ class RoomView(context: Context) : BaseScreenView<RoomScreen>(context) {
 
     }
 
-    val slimAdapter by lazy {
+    val slimAdapter: SlimAdapter by lazy {
         SlimAdapter.create()
                 .register<Person>(R.layout.room_item) { data: Person, injector ->
                     injector.text(R.id.room_item_description, data.uid.toString())

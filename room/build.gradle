@@ -12,7 +12,7 @@ android {
         versionCode 1
         versionName "1.0"
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
     }
 
@@ -26,8 +26,8 @@ android {
 }
 
 dependencies {
-    compile(project(path: ':common'))
-    compile(project(path: ':androidcommon'))
+    api(project(path: ':common'))
+    api(project(path: ':androidcommon'))
 
 
     api Deps.RoomRuntime

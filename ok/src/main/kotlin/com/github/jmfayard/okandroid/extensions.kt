@@ -10,26 +10,22 @@ import android.nfc.NdefMessage
 import android.nfc.NdefRecord
 import android.nfc.NfcAdapter
 import android.os.Bundle
-import android.support.annotation.LayoutRes
-import android.support.v4.app.NotificationCompat
-import android.support.v4.content.FileProvider.getUriForFile
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
-import com.github.jmfayard.screens.MagellanScreen
-import com.github.jmfayard.screens.MagellanView
+import androidx.annotation.LayoutRes
+import androidx.core.app.NotificationCompat
+import androidx.core.content.FileProvider.getUriForFile
 import com.github.jmfayard.screens.SomeScreen
 import com.github.jmfayard.screens.SomeView
 import com.wealthfront.magellan.BaseScreenView
-import com.wealthfront.magellan.Screen
 import io.reactivex.Scheduler
 import io.reactivex.SingleTransformer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.schedulers.TestScheduler
 import java.io.File
-
 
 
 val SomeScreen.ioThread : Scheduler

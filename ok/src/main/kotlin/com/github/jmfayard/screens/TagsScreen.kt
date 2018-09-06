@@ -3,10 +3,11 @@ package com.github.jmfayard.screens
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
-import android.support.v4.content.ContextCompat.startActivity
+import android.provider.ContactsContract.CommonDataKinds
+import androidx.core.content.ContextCompat.startActivity
 import com.afollestad.materialdialogs.MaterialDialog
-import com.github.jmfayard.okandroid.*
 import com.github.jmfayard.jobs.Jobs
+import com.github.jmfayard.okandroid.*
 import com.github.jmfayard.screens.TagAction.*
 import com.github.jmfayard.screens.TagAction.Companion.clickedOn
 import com.github.jmfayard.utils.Intents
@@ -20,13 +21,13 @@ import java.util.regex.Pattern
 enum class TagAction {
     url, email, playtore, photo, anotherActivity,
     choose, clear, notification, dialogs,
-    share, requestbin, requestnow, sync;
+    share, requestbin, requestnow, sync, chooseContat;
 
     companion object {
         val text = """
             HELLLO
 
-With Intents, we can open an $url or send an $email or open the $playtore or $share content, take a $photo and are also used inside a $notification or open $anotherActivity
+With Intents, we can open an $url or send an $email or open the $playtore or $share content, take a $photo and are also used inside a $notification or open $anotherActivity or $chooseContat
 
 Widgets: $dialogs $choose
 
@@ -50,6 +51,7 @@ Jobs: $requestbin $requestnow $sync $clear
                 requestbin -> Jobs.postSoonToHttpbin()
                 requestnow -> Jobs.postNowToHttpbin()
                 sync -> Jobs.launchSyncNow()
+                chooseContat -> chooseContact()
             }
         }
 
@@ -170,10 +172,18 @@ class TagsScreen : MagellanScreen<TagsDisplay>() {
                     context.pendingIntent(createIntent(email)))
             addAction(R.drawable.ic_share_black_24dp, "share",
                     context.pendingIntent(createIntent(share)))
-
-
         }
     }
+
+
+    fun chooseContact() {
+        val intent = Intent(Intent.ACTION_PICK).apply { type = CommonDataKinds.Phone.CONTENT_TYPE }
+        if (intent.resolveActivity(activity.packageManager) != null) {
+            activity.startActivityForResult(intent, 42)
+        }
+    }
+
+
 }
 
 

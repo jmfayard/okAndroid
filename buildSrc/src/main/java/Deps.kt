@@ -14,18 +14,18 @@ object Deps {
             "gradle-api", "kotlin-allopen", "kotlin-jdk-annotations", "kotlin-android-extensions")
 
 
-    /**
-     * [https://developer.android.com/topic/libraries/support-library/packages.html#recommendation](https://developer.android.com/topic/libraries/support-library/packages.html#recommendation)   */
-    @JvmStatic
-    fun AndroidSupport(vararg module: String): List<String> =
-            module.requireIn(modulesAndroidSupport)
-                    .map { "com.android.support:$it:${versions.support}" }
-
-    val modulesAndroidSupport = listOf("support-v4", "appcompat-v7", "preference-v7", "design", "percent", "cardview-v7", "customtabs", "gridlayout-v7", "support-annotations",
-            "mediarouter-v7", "palette-v7", "recyclerview-v7", "preference-v7"
-            , "preference-v14", "preference-leanback-v17", "leanback-v17", "support-vector-drawable", "animated-vector-drawable", "percent", "exifinterface",
-            "recommendation", "wear", "support-compat", "support-core-utils",
-            "support-core-ui", "support-media-compat", "support-fragment")
+//    /**
+//     * [https://developer.android.com/topic/libraries/support-library/packages.html#recommendation](https://developer.android.com/topic/libraries/support-library/packages.html#recommendation)   */
+//    @JvmStatic
+//    fun AndroidSupport(vararg module: String): List<String> =
+//            module.requireIn(modulesAndroidSupport)
+//                    .map { "com.android.support:$it:${versions.support}" }
+//
+//    val modulesAndroidSupport = listOf("support-v4", "appcompat-v7", "preference-v7", "design", "percent", "cardview-v7", "customtabs", "gridlayout-v7", "support-annotations",
+//            "mediarouter-v7", "palette-v7", "recyclerview-v7", "preference-v7"
+//            , "preference-v14", "preference-leanback-v17", "leanback-v17", "support-vector-drawable", "animated-vector-drawable", "percent", "exifinterface",
+//            "recommendation", "wear", "support-compat", "support-core-utils",
+//            "support-core-ui", "support-media-compat", "support-fragment")
 
     /**
      * [https://developers.google.com/android/guides/overview](https://developers.google.com/android/guides/overview)
@@ -99,24 +99,20 @@ object Deps {
 
     /** Use Espresso to write concise, beautiful, and reliable Android UI tests.     */
     /** [https://developer.android.com/training/testing/espresso/index.html](https://developer.android.com/training/testing/espresso/index.html)     */
-    const val EspressoCore = "com.android.support.test.espresso:espresso-core:" + versions.espresso
-    const val EspressoContrib = "com.android.support.test.espresso:espresso-contrib:" + versions.espresso
-    const val EspressoTestRunner = "com.android.support.test:runner:1.0.1"
+    const val EspressoCore = "androidx.test.espresso:espresso-core:" + versions.espresso
+    const val EspressoContrib = "androidx.test.espresso:espresso-contrib:" + versions.espresso
+    const val EspressoTestRunner = "androidx.test:runner:1.1.0-alpha1"
 
     /** [http://javamoney.github.io/](http://javamoney.github.io/)     */
-    const val JavaMoney = "org.javamoney:moneta-bp:1.1"
+    const val JavaMoney = "org.javamoney:moneta-bp:" + versions.javamoney
 
 
-    /** Apps over 64k methods
-     * [https://developer.android.com/studio/build/multidex.html](https://developer.android.com/studio/build/multidex.html)     */
-    const val Multidex = "com.android.support:multidex:" + versions.multidex
+
+
 
     /** JSR-305 nullability annotations: **/
     const val Jsr305 = "com.google.code.findbugs:jsr305:3.0.2"
     const val JavaxInject = "javax.inject:javax.inject:1"
-
-    /** [https://developer.android.com/training/constraint-layout/index.html](https://developer.android.com/training/constraint-layout/index.html)     */
-    const val ConstraintLayout = "com.android.support.constraint:constraint-layout:" + versions.constraint
 
     /**
     [http://rxmarbles.com/](http://rxmarbles.com/)
@@ -165,11 +161,12 @@ object Deps {
 
 
     /** [https://developer.android.com/topic/libraries/architecture/adding-components.html](https://developer.android.com/topic/libraries/architecture/adding-components.html)     */
-    const val RoomRuntime = "android.arch.persistence.room:runtime:" + versions.architecture
-    const val RoomCommon = "android.arch.persistence.room:common:" + versions.architecture
-    const val RoomRxjava2 = "android.arch.persistence.room:rxjava2:" + versions.architecture
-    const val RoomCompiler = "android.arch.persistence.room:compiler:" + versions.architecture
-    const val RoomTesting = "android.arch.persistence.room:testing:" + versions.architecture
+    const val room = "2.0.0-beta01"
+    const val RoomRuntime = "androidx.room:room-runtime:$room"
+    const val RoomCommon = "androidx.room:room-common:$room"
+    const val RoomRxjava2 = "androidx.room:room-rxjava2:$room"
+    const val RoomCompiler = "androidx.room:room-compiler:$room"
+    const val RoomTesting = "androidx.room:room-testing:$room"
 
     /** [https://github.com/moove-it/fakeit](https://github.com/moove-it/fakeit)     */
     const val Fakeit = "com.github.moove-it:fakeit:" + versions.fakeit
@@ -180,9 +177,6 @@ object Deps {
 
     /** [https://github.com/evernote/android-job](https://github.com/evernote/android-job)     */
     const val AndroidJob = "com.evernote:android-job:" + versions.androidjob
-
-    /** [https://github.com/android/android-ktx](https://github.com/android/android-ktx)     */
-    const val AndroidxCore = "androidx.core:core-ktx:" + versions.ktx
 
     /****** TESTING ****/
 
@@ -220,10 +214,6 @@ object Deps {
     /** An Espresso IdlingResource for OkHttp.     */
     /** [https://github.com/JakeWharton/okhttp-idling-resource  ](https://github.com/JakeWharton/okhttp-idling-resource  )   */
     const val OkhttpIdlingResource = "com.jakewharton.espresso:okhttp3-idling-resource:1.0.0"
-
-    /** UI Automator is a UI testing framework suitable for cross-app functional UI testing across system and installed apps.     */
-    /** [https://developer.android.com/training/testing/ui-automator.html  ](https://developer.android.com/training/testing/ui-automator.html  )   */
-    const val AndroidUiAutomator = "com.android.support.test.uiautomator:uiautomator-v18:2.1.3"
 
     /**  [http://try.crashlytics.com/sdk-android/  ](http://try.crashlytics.com/sdk-android/  )   */
     const val Crashlytics = "com.crashlytics.sdk.android:crashlytics:2.6.8@aar"

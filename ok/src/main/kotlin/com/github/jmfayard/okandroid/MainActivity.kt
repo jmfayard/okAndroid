@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.github.jmfayard.screens.HomeScreen
 import com.github.jmfayard.screens.TagsScreen
 import com.github.jmfayard.utils.See
@@ -26,7 +27,7 @@ class MainActivity : SingleActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.all_activity)
+        (this as AppCompatActivity).setContentView(R.layout.all_activity)
         handleShortcutIntents()
     }
 
