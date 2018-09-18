@@ -69,8 +69,6 @@ object Deps {
     const val RetrofitRxjava2 = "com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0"
 
 
-
-
     /*** KTOR: Framework for quickly creating connected applications in Kotlin with minimal effort
      * [Github](https://github.com/ktorio/ktor) [Documentations](http://ktor.io/)
      * ***/
@@ -80,7 +78,7 @@ object Deps {
                     .map { m -> "io.ktor:$m:${Versions.ktor}" }
 
     const val MAVEN_KOTLIN_KTOR = "http://dl.bintray.com/kotlin/ktor"
-    const val MAVEN_KOTLIN_KOTLINX ="https://dl.bintray.com/kotlin/kotlinx"
+    const val MAVEN_KOTLIN_KOTLINX = "https://dl.bintray.com/kotlin/kotlinx"
 
     val modulesKtor = listOf("ktor-auth-jwt", "ktor-client-json", "ktor-gson",
             "ktor-auth-ldap", " ktor-client-cio", " ktor-freemarker", "ktor-locations",
@@ -96,7 +94,7 @@ object Deps {
 
     /** **/
     @JvmStatic
-    fun Coroutines(vararg module: String) : List<String> =
+    fun Coroutines(vararg module: String): List<String> =
             module.requireIn(modulesCoroutines)
                     .map { m -> "org.jetbrains.kotlinx:$m:${versions.coroutineVersion}" }
 

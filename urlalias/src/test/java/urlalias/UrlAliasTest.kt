@@ -47,11 +47,12 @@ class Tests : FreeSpec() { init {
             repository.findByUrlOrNull(alias.url) shouldBe alias
             repository.addAliasName(alias.id, name)
             repository.addAliasName(alias.id, name)
-            repository.findByIdOrNull(alias.id)?.aliases shouldBe  listOf(name)
+            repository.findByIdOrNull(alias.id)?.aliases shouldBe listOf(name)
         }
         val allAliases = repository.allUrlAliases()
         allAliases.size shouldBe component.sampleData.size
         allAliases.flatMap { url -> url.aliases }.sorted() shouldBe list.flatMap { it.aliases }.sorted()
     }
 
-}}
+}
+}

@@ -18,7 +18,7 @@ interface UrlaliasRepository {
     fun allUrlAliases(): List<UrlAlias>
 
     // Add an alias for the url. Null if does not exist. Idempotent if it already exists
-    fun addAliasName(urlId: Long, aliasName: String) : UrlAlias?
+    fun addAliasName(urlId: Long, aliasName: String): UrlAlias?
 
 }
 
@@ -53,7 +53,6 @@ internal object InmemoryRepository : UrlaliasRepository {
             return existing
         }
     }
-
 
 
 }

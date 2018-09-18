@@ -10,16 +10,16 @@ import retrofit2.http.Path
 interface UrlaliasApi {
 
     @POST("api/url")
-    fun postUrl(@Body url: PostUrl) : Call<UrlAlias>
+    fun postUrl(@Body url: PostUrl): Call<UrlAlias>
 
     @POST("api/url/alias")
-    fun addAlias(@Body alias: PostAlias) : Call<UrlAlias>
+    fun addAlias(@Body alias: PostAlias): Call<UrlAlias>
 
     @GET("api/url/{urlId}")
-    fun getUrl(@Path("urlId") urlId: Long) : Call<UrlAlias>
+    fun getUrl(@Path("urlId") urlId: Long): Call<UrlAlias>
 
     @GET("api/url")
-    fun getAllUrls() : Call<List<UrlAlias>>
+    fun getAllUrls(): Call<List<UrlAlias>>
 
 }
 
