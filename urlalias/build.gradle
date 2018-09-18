@@ -1,0 +1,27 @@
+apply plugin: 'java-library'
+apply plugin: 'kotlin'
+
+dependencies {
+    testCompile Deps.KotlinTest
+    testCompile Deps.JUnit
+
+    api Deps.Retrofit("retrofit", "converter-moshi")
+    api Deps.Okhttp
+    api Deps.OkhttpLogging
+    api Deps.Moshi
+    api Deps.Coroutines("kotlinx-coroutines-core")
+    api Deps.RetrofitCoroutines
+
+}
+
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
+
+
+
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    kotlinOptions {
+        freeCompilerArgs = ["-Xjsr305=strict"]
+    }
+}

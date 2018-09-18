@@ -37,6 +37,7 @@ dependencies {
     api(project(path: ':common'))
     api(project(path: ':androidcommon'))
     api(project(path: ':room'))
+    compile(project(path: ':urlalias'))
 
     /****** TESTING ****/
     testImplementation  Deps.Kotlin("kotlin-reflect", "kotlin-reflect")

@@ -1,5 +1,6 @@
 object Versions {
     const val kotlin = "1.2.61"
+    const val ktor = "0.9.1"
 
     const val androidjob = "1.2.1"
     const val architecture = "2.0.0-rc01"
@@ -26,6 +27,7 @@ object Versions {
     const val okio = "2.0.0"
     const val play = "11.6.2"
     const val retrofit = "2.4.0"
+    const val retrofitCoroutines = "0.9.0"
     const val rxandroid = "2.0.1"
     const val rxbinding = "2.1.1"
     const val rxjava2 = "2.2.2"
@@ -35,5 +37,6 @@ object Versions {
     //    const val support = "26.1.0"
     const val timber = "4.7.1"
     const val javamoney = "1.3"
+    const val coroutineVersion = "0.21.1"
 
 }
