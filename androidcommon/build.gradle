@@ -26,15 +26,16 @@ android {
 dependencies {
     api(project(path: ":common"))
 
-    api Deps.JavaMoney
-    api Deps.JavaxInject
-    api Deps.Magellan
-    api Deps.MagellanSupport
-    api Deps.RxAndroid
-    implementation Deps.Timber
+    api Libs.moneta_bp
+    api Libs.javax_inject
+    api Libs.magellan
+    api Libs.magellan_support
+    api Libs.rxandroid
+    implementation Libs.timber
 
-    androidTestImplementation Deps.EspressoCore
-    testImplementation Deps.JUnit
+    androidTestImplementation Libs.espresso_core
+    testImplementation Libs.junit
+
 
 
 }

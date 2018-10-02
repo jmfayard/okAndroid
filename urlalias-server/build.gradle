@@ -13,11 +13,14 @@ sourceCompatibility = 1.8
 dependencies { /* :common */
     compile(project(path: ":urlalias"))
 
-    testCompile Deps.KotlinTest
-    testCompile Deps.JUnit
+    testImplementation Libs.kotlintest
+    testImplementation Libs.junit
 
-    compile Deps.Kotlin("kotlin-stdlib-jdk8")
-    compile Deps.Ktor("ktor-server-netty", "ktor-server-core", "ktor-features")
+    implementation Libs.kotlin_stdlib_jdk8
+    implementation Libs.ktor_server_netty
+    implementation Libs.ktor_server_core
+    implementation Libs.ktor_features
+
 
 }
 
@@ -38,7 +41,7 @@ kotlin {
 }
 
 repositories {
-    maven { url Deps.MAVEN_KOTLIN_KOTLINX }
-    maven { url Deps.MAVEN_KOTLIN_KTOR }
+    maven { url "https://dl.bintray.com/kotlin/kotlinx" }
+    maven { url "http://dl.bintray.com/kotlin/ktor" }
 }
 

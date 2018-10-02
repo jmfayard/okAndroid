@@ -1,5 +1,3 @@
-import kotlin.String
-
 object Libs {
     /**
      * [aapt2 website](https://developer.android.com/studio) */
@@ -116,11 +114,6 @@ object Libs {
     /**
      * [kotlintest website](http://www.github.com/kotlintest/kotlintest) */
     const val kotlintest: String = "io.kotlintest:kotlintest:" + Versions.kotlintest
-
-    /**
-     * [kotlinx-coroutines-core website](https://github.com/Kotlin/kotlinx.coroutines) */
-    const val kotlinx_coroutines_core: String =
-            "org.jetbrains.kotlinx:kotlinx-coroutines-core:" + Versions.kotlinx_coroutines_core
 
     const val ktor_features: String = "io.ktor:ktor-features:" + Versions.ktor_features
 
@@ -328,8 +321,6 @@ object Libs {
 
         const val kotlintest: String = "2.0.7" // up-to-date
 
-        const val kotlinx_coroutines_core: String = "0.21.1" // available: milestone=0.30.1
-
         const val ktor_features: String = "0.9.1" // available: milestone=0.9.6-alpha-1-rc13
 
         const val ktor_server_core: String = "0.9.1" // available: milestone=0.9.6-alpha-1-rc13
@@ -376,13 +367,13 @@ object Libs {
 
         const val retrofit_mock: String = "2.4.0" // up-to-date
 
-        const val room_compiler: String = "2.0.0-beta01" // available: milestone=2.0.0
+        const val room_compiler: String = "2.0.0" // up-to-date
 
-        const val room_runtime: String = "2.0.0-beta01" // available: milestone=2.0.0
+        const val room_runtime: String = "2.0.0" // up-to-date
 
-        const val room_rxjava2: String = "2.0.0-beta01" // available: milestone=2.0.0
+        const val room_rxjava2: String = "2.0.0" // up-to-date
 
-        const val room_testing: String = "2.0.0-beta01" // available: milestone=2.0.0
+        const val room_testing: String = "2.0.0" // up-to-date
 
         const val runner: String = "1.1.0-alpha1" // available: milestone=1.1.0-alpha4
 
@@ -404,7 +395,7 @@ object Libs {
     }
 
     object Gradle {
-        const val runningVersion: String = "4.10"
+        const val runningVersion: String = "4.10.2"
 
         const val currentVersion: String = "4.10.2"
 

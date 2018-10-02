@@ -29,18 +29,17 @@ dependencies {
     api(project(path: ':common'))
     api(project(path: ':androidcommon'))
 
+    api Libs.room_runtime
+    implementation Libs.room_rxjava2
+    kapt Libs.room_compiler
 
-    api Deps.RoomRuntime
-    implementation Deps.RoomRxjava2
-    kapt Deps.RoomCompiler
+    testImplementation Libs.junit
+    testImplementation Libs.kotlintest
+    testImplementation Libs.kotlin_reflect
 
-    testImplementation Deps.JUnit
-    testImplementation Deps.KotlinTest
-    testImplementation Deps.Kotlin("kotlin-reflect")
-
-    androidTestImplementation Deps.EspressoTestRunner
-    androidTestImplementation Deps.EspressoCore
-    androidTestImplementation Deps.RoomTesting
+    androidTestImplementation Libs.runner
+    androidTestImplementation Libs.espresso_core
+    androidTestImplementation Libs.room_testing
 
 
 

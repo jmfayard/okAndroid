@@ -3,23 +3,21 @@ apply plugin: 'kotlin'
 
 
 dependencies { /* :common */
-    /** JSR-305 nullability annotations: **/
-    compileOnly Deps.Jsr305
-    testCompileOnly Deps.Jsr305
-    api Deps.RxJava2
-    api Deps.RxKotlin
-    api Deps.Retrofit("retrofit", "converter-moshi")
-    api Deps.Okhttp
-    api Deps.Okhttp
-    api Deps.OkhttpLogging
-    api Deps.Moshi
-    api Deps.Okio
-    api Deps.JavaMoney
-//    api Deps.Fakeit
+    testCompile Libs.kotlintest
+    testCompile Libs.junit
 
-    testCompile Deps.KotlinTest
-    testCompile Deps.JUnit
+    compileOnly Libs.jsr305
+    compileOnly Libs.jsr305
 
+    api Libs.rxjava
+    api Libs.rxkotlin
+    api Libs.retrofit
+    api Libs.converter_moshi
+    api Libs.okhttp
+    api Libs.logging_interceptor
+    api Libs.moshi
+    api Libs.okio
+    api Libs.moneta_bp
 
 }
 

@@ -1,5 +1,3 @@
-import Deps.versions
-
 /**
  * https://developer.android.com/topic/libraries/support-library/refactor
  */
@@ -28,6 +26,6 @@ object Androidx {
 
 
     /** [https://github.com/android/android-ktx](https://github.com/android/android-ktx)     */
-    const val AndroidxCore = "androidx.core:core-ktx:" + versions.ktx
+    const val AndroidxCore = "androidx.core:core-ktx:" + "1.0.0-rc02"
 
 }

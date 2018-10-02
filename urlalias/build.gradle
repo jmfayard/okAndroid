@@ -2,15 +2,17 @@ apply plugin: 'java-library'
 apply plugin: 'kotlin'
 
 dependencies {
-    testCompile Deps.KotlinTest
-    testCompile Deps.JUnit
 
-    api Deps.Retrofit("retrofit", "converter-moshi")
-    api Deps.Okhttp
-    api Deps.OkhttpLogging
-    api Deps.Moshi
-    api Deps.Coroutines("kotlinx-coroutines-core")
-    api Deps.RetrofitCoroutines
+    testImplementation Libs.kotlintest
+    testImplementation Libs.junit
+
+    api Libs.retrofit
+    api Libs.converter_moshi
+    api Libs.okhttp
+    api Libs.logging_interceptor
+    api Libs.moshi
+    api Libs.kotlin_coroutines_retrofit
+    api Libs.kotlin_coroutines_retrofit
 
 }
 
