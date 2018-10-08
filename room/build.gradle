@@ -37,7 +37,7 @@ dependencies {
     testImplementation Libs.kotlintest
     testImplementation Libs.kotlin_reflect
 
-    androidTestImplementation Libs.runner
+    androidTestImplementation Libs.androidx_test_runner
     androidTestImplementation Libs.espresso_core
     androidTestImplementation Libs.room_testing
 

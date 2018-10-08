@@ -27,7 +27,6 @@ dependencies {
     api(project(path: ":common"))
 
     api Libs.moneta_bp
-    api Libs.javax_inject
     api Libs.magellan
     api Libs.magellan_support
     api Libs.rxandroid

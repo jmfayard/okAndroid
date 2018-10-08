@@ -8,14 +8,12 @@ buildscript {
 
     dependencies {
         classpath 'com.android.tools.build:gradle:3.2.0'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:" + Versions.kotlin
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.2.71"
     }
 }
 plugins {
     id 'com.gradle.build-scan' version '1.16'
-    id "jmfayard.github.io.gradle-kotlin-dsl-libs" version "0.2.0"
-
-//    id 'com.github.ben-manes.versions' version '0.20.0'
+    id "jmfayard.github.io.gradle-kotlin-dsl-libs" version "0.2.2"
 }
 
 
@@ -34,7 +32,7 @@ allprojects {
           force "io.reactivex.rxjava2:rxandroid:" + Versions.rxandroid
           eachDependency { details ->
               if (details.requested.group == "org.jetbrains.kotlin") {
-                  details.useVersion Versions.kotlin
+                  details.useVersion Android.kotlin
               }
           }
       }

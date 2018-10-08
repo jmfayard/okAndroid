@@ -1,5 +1,5 @@
 object Android {
-    const val kotlin = Versions.kotlin
+    const val kotlin = "1.2.71"
     const val minSdkVersion = 21
     const val targetSdkVersion = 27
     const val compileSdkVersion = 28

@@ -89,7 +89,7 @@ dependencies {
 
 
     /** UX **/
-    api Libs.core // material-dialogs:core
+    api Libs.com_afollestad_material_dialogs_core
     api Libs.calligraphy
     api Libs.magellan
     api Libs.magellan_support
