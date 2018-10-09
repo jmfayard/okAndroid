@@ -42,7 +42,7 @@ allprojects {
 }
 
 tasks.register("i", Exec::class) {
-    dependsOn(":t", ":app:installDebug")
+    dependsOn(":t", ":ok:installDebug")
     description = "Install the app"
     commandLine = "adb shell am start -n ${Config.PACKAGE}/${Config.ACTIVITY} -a android.intent.action.MAIN -c android.intent.category.LAUNCHER".split(" ")
     doLast {
@@ -62,7 +62,7 @@ tasks.register("monkey", Exec::class) {
 
 
 tasks.register("t", DefaultTask::class) {
-    dependsOn(":app:testDebugUnitTest")
+    dependsOn(":ok:testDebugUnitTest")
     description = "Run the unit tests"
 }
 

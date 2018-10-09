@@ -16,14 +16,14 @@ android {
         testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled = true
         proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
-        signingConfigs {
-            named("debug").configure {
-                storeFile = file("debug.keystore")
-            }
-            register("release") {
-                storeFile = file("debug.keystore")
-            }
-        }
+//        signingConfigs {
+//            named("debug").configure {
+//                storeFile = file("debug.keystore")
+//            }
+//            register("release") {
+//                storeFile = file("debug.keystore")
+//            }
+//        }
 
 
         buildTypes {
@@ -49,10 +49,10 @@ android {
 
 dependencies {
     /*** other projects **/
-    implementation(project(":common"))
-    implementation(project(":androidcommon"))
-    implementation(project(":room"))
-    implementation(project(":urlalias"))
+    add("compile", project(":common"))
+    add("compile", project(":androidcommon"))
+    add("compile", project(":room"))
+    add("compile", project(":urlalias"))
 
     compileOnly(Libs.jsr305)
     testCompileOnly(Libs.jsr305)
@@ -103,6 +103,7 @@ dependencies {
     implementation(Libs.magellan_support)
     implementation(Libs.slimadapter)
     implementation(Libs.kotlinandroidviewbindings)
+    implementation(Libs.magellan_rx2)
 
 
 }
