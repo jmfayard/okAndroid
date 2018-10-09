@@ -1,6 +1,9 @@
-apply plugin: 'java-library'
-apply plugin: 'kotlin'
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+plugins {
+    `java-library`
+    kotlin("jvm")
+}
 
 dependencies { /* :common */
     testImplementation(Libs.kotlintest)
@@ -19,21 +22,8 @@ dependencies { /* :common */
 
 }
 
-
-
-
-sourceCompatibility = "1.7"
-targetCompatibility = "1.7"
-
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
-    kotlinOptions {
-        freeCompilerArgs = ["-Xjsr305=strict"]
-    }
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_7
+    targetCompatibility = JavaVersion.VERSION_1_7
 }
 
-test {
-    //Turns on logging of standard output and error streams
-    testLogging {
-        showStandardStreams = true
-    }
-}

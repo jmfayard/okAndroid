@@ -1,42 +1,58 @@
 
-apply plugin: "com.android.application"
-apply plugin: "kotlin-android"
-apply plugin: "kotlin-android-extensions"
-//apply plugin: "kotlin-kapt"
-
+plugins {
+    id("com.android.application")
+    id("kotlin-android")
+    id("kotlin-android-extensions")
+}
 
 android {
-
-    compileSdkVersion Android.compileSdkVersion
+    compileSdkVersion(Config.SdkVersions.compile)
 
     defaultConfig {
-        minSdkVersion Android.minSdkVersion
-        targetSdkVersion Android.targetSdkVersion
-        versionCode 1
-        versionName "1.0.0"
-        applicationId "com.github.jmfayard.okandroid"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        multiDexEnabled true
-    }
+        minSdkVersion(Config.SdkVersions.min)
+        targetSdkVersion(Config.SdkVersions.target)
+        versionCode = Config.SdkVersions.versionCode
+        versionName = "1." + Config.SdkVersions.versionCode
+        testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled = true
+        proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+        signingConfigs {
+            named("debug").configure {
+                storeFile = file("debug.keystore")
+            }
+            register("release") {
+                storeFile = file("debug.keystore")
+            }
+        }
 
-    sourceSets {
-        main.java.srcDirs += "src/main/kotlin"
-        test.java.srcDirs += "src/test/kotlin"
-    }
 
-    packagingOptions {
-        exclude "LICENSE.txt"
-        exclude "META-INF/rxjava.properties"
-    }
+        buildTypes {
+            named("debug").configure {
+//                applicationIdSuffix = ".debug"
+//                isMinifyEnabled = false
+            }
 
+            named("release").configure {
+//                isMinifyEnabled = true
+//                signingConfig = if (true)
+//                    signingConfigs.getByName("release") else
+//                    signingConfigs.getByName("debug")
+            }
+        }
+
+        lintOptions {
+            isAbortOnError = false
+        }
+    }
 }
+
 
 dependencies {
     /*** other projects **/
-    implementation(project(path: ":common"))
-    implementation(project(path: ":androidcommon"))
-    implementation(project(path: ":room"))
-    compile(project(path: ":urlalias"))
+    implementation(project(":common"))
+    implementation(project(":androidcommon"))
+    implementation(project(":room"))
+    implementation(project(":urlalias"))
 
     compileOnly(Libs.jsr305)
     testCompileOnly(Libs.jsr305)
@@ -91,8 +107,3 @@ dependencies {
 
 }
 
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
-    kotlinOptions {
-        freeCompilerArgs = ["-Xjsr305=strict"]
-    }
-}

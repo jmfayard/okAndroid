@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 buildscript {
     repositories {
         google()
@@ -29,6 +31,12 @@ allprojects {
         resolutionStrategy {
             force(Libs.rxjava)
             force(Libs.kotlin_stdlib_jdk8, Libs.kotlin_stdlib, Libs.kotlin_reflect, Libs.kotlin_android_extensions)
+        }
+    }
+
+    tasks.withType(KotlinCompile::class) {
+        kotlinOptions {
+            freeCompilerArgs = listOf("-Xjsr305=strict")
         }
     }
 }
