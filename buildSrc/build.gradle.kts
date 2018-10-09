@@ -1,7 +1,13 @@
-repositories {
-  jcenter()
-}
+
 plugins {
-  kotlin("jvm") version "1.2.60"
   `kotlin-dsl`
 }
+repositories {
+  mavenCentral()
+  jcenter()
+  google()
+}
+dependencies {
+  implementation("com.android.tools.build:gradle:3.2.0")
+}
+        

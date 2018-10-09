@@ -26,15 +26,8 @@ object Libs {
     const val browser: String = "androidx.browser:browser:" + Versions.browser
 
     /**
-     * [calligraphy website](https://github.com/chrisjenx/Calligraphy) */
-    const val calligraphy: String = "uk.co.chrisjenx:calligraphy:" + Versions.calligraphy
-
-    /**
      * [cardview website](http://developer.android.com/tools/extras/support-library.html) */
     const val cardview: String = "androidx.cardview:cardview:" + Versions.cardview
-
-    const val com_afollestad_material_dialogs_core: String =
-            "com.afollestad.material-dialogs:core:" + Versions.com_afollestad_material_dialogs_core
 
     const val com_gradle_build_scan_gradle_plugin: String =
             "com.gradle.build-scan:com.gradle.build-scan.gradle.plugin:" + Versions.com_gradle_build_scan_gradle_plugin
@@ -108,8 +101,6 @@ object Libs {
     const val kotlin_scripting_compiler_embeddable: String =
             "org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:" + Versions.kotlin_scripting_compiler_embeddable
 
-    /**
-     * [kotlin-stdlib website](https://kotlinlang.org/) */
     const val kotlin_stdlib: String = "org.jetbrains.kotlin:kotlin-stdlib:" + Versions.kotlin_stdlib
 
     /**
@@ -149,10 +140,6 @@ object Libs {
     const val magellan: String = "com.wealthfront:magellan:" + Versions.magellan
 
     /**
-     * [magellan-rx website](https://github.com/wealthfront/magellan/) */
-    const val magellan_rx: String = "com.wealthfront:magellan-rx:" + Versions.magellan_rx
-
-    /**
      * [magellan-support website](https://github.com/wealthfront/magellan/) */
     const val magellan_support: String =
             "com.wealthfront:magellan-support:" + Versions.magellan_support
@@ -161,6 +148,10 @@ object Libs {
      * [material website](http://developer.android.com/tools/extras/support-library.html) */
     const val material: String = "com.google.android.material:material:" + Versions.material
 
+    const val com_afollestad_material_dialogs_core: String =
+            "com.afollestad.material-dialogs:core:" + Versions.com_afollestad_material_dialogs_core
+
+
     /**
      * [mediarouter website](http://developer.android.com/tools/extras/support-library.html) */
     const val mediarouter: String = "androidx.mediarouter:mediarouter:" + Versions.mediarouter
@@ -168,10 +159,6 @@ object Libs {
     /**
      * [mockito-kotlin website](https://github.com/nhaarman/mockito-kotlin) */
     const val mockito_kotlin: String = "com.nhaarman:mockito-kotlin:" + Versions.mockito_kotlin
-
-    /**
-     * [mockwebserver website](https://github.com/square/okhttp) */
-    const val mockwebserver: String = "com.squareup.okhttp3:mockwebserver:" + Versions.mockwebserver
 
     /**
      * [moneta-bp website](http://java.net/projects/javamoney) */
@@ -204,13 +191,13 @@ object Libs {
      * [retrofit website](https://github.com/square/retrofit/) */
     const val retrofit: String = "com.squareup.retrofit2:retrofit:" + Versions.retrofit
 
-    const val retrofit2_rxjava2_adapter: String =
-            "com.jakewharton.retrofit:retrofit2-rxjava2-adapter:" + Versions.retrofit2_rxjava2_adapter
-
     /**
      * [retrofit-mock website](https://github.com/square/retrofit/) */
     const val retrofit_mock: String =
             "com.squareup.retrofit2:retrofit-mock:" + Versions.retrofit_mock
+
+    const val retrofit2_rxjava2_adapter: String =
+            "com.jakewharton.retrofit:retrofit2-rxjava2-adapter:" + Versions.retrofit2_rxjava2_adapter
 
     /**
      * [room-compiler website](https://developer.android.com/topic/libraries/architecture/index.html) */
@@ -223,10 +210,6 @@ object Libs {
     /**
      * [room-rxjava2 website](https://developer.android.com/topic/libraries/architecture/index.html) */
     const val room_rxjava2: String = "androidx.room:room-rxjava2:" + Versions.room_rxjava2
-
-    /**
-     * [room-testing website](https://developer.android.com/topic/libraries/architecture/index.html) */
-    const val room_testing: String = "androidx.room:room-testing:" + Versions.room_testing
 
     /**
      * [rxandroid website](https://github.com/ReactiveX/RxAndroid) */

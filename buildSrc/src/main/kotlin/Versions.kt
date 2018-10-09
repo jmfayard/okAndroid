@@ -5,6 +5,10 @@
  *   `$ ./gradlew syncLibs`
  * to update this file */
 object Versions {
+    const val room_testing: String = "2.0.0" // up-to-date
+
+
+
     const val aapt2: String = "3.2.0-4818971" // available: milestone=3.3.0-alpha13-5013011
 
     const val android_job: String = "1.2.1" // available: milestone=1.3.0-alpha07
@@ -37,37 +41,37 @@ object Versions {
     const val gradle: String = "3.2.0" // available: milestone=3.3.0-alpha13
 
     const val jmfayard_github_io_gradle_kotlin_dsl_libs_gradle_plugin: String =
-            "0.2.2" // exceed the version found: 0.2.1
+            "0.2.3" // up-to-date
 
     const val jsr305: String = "3.0.2" // up-to-date
 
     const val junit: String = "4.12" // up-to-date
 
-    const val kotlin_android_extensions: String = "1.2.61" // up-to-date
+    const val kotlin_android_extensions: String = "1.2.71" // up-to-date
 
-    const val kotlin_annotation_processing_gradle: String = "1.2.61" // up-to-date
+    const val kotlin_annotation_processing_gradle: String = "1.2.71" // up-to-date
 
     const val kotlin_coroutines_retrofit: String = "0.9.0" // available: milestone=0.12.0
 
-    const val kotlin_gradle_plugin: String = "1.2.61" // available: milestone=1.2.71
+    const val kotlin_gradle_plugin: String = "1.2.71" // up-to-date
 
-    const val kotlin_reflect: String = "1.2.61" // up-to-date
+    const val kotlin_reflect: String = "1.2.71" // up-to-date
 
-    const val kotlin_scripting_compiler_embeddable: String = "1.2.61" // up-to-date
+    const val kotlin_scripting_compiler_embeddable: String = "1.2.71" // up-to-date
 
-    const val kotlin_stdlib: String = "1.2.61" // up-to-date
+    const val kotlin_stdlib: String = "1.2.71" // up-to-date
 
-    const val kotlin_stdlib_jdk8: String = "1.2.61" // up-to-date
+    const val kotlin_stdlib_jdk8: String = "1.2.71" // up-to-date
 
     const val kotlinandroidviewbindings: String = "0.12" // up-to-date
 
     const val kotlintest: String = "2.0.7" // up-to-date
 
-    const val ktor_features: String = "0.9.1" // available: milestone=0.9.6-alpha-1-rc13
+    const val ktor_features: String = "0.9.1" // available: milestone=1.0.0-alpha-1
 
-    const val ktor_server_core: String = "0.9.1" // available: milestone=0.9.6-alpha-1-rc13
+    const val ktor_server_core: String = "0.9.1" // available: milestone=1.0.0-alpha-1
 
-    const val ktor_server_netty: String = "0.9.1" // available: milestone=0.9.6-alpha-1-rc13
+    const val ktor_server_netty: String = "0.9.1" // available: milestone=1.0.0-alpha-1
 
     const val legacy_support_v4: String = "1.0.0-rc01" // available: milestone=1.0.0
 
@@ -109,13 +113,11 @@ object Versions {
 
     const val retrofit_mock: String = "2.4.0" // up-to-date
 
-    const val room_compiler: String = "2.0.0" // up-to-date
+    const val room_compiler: String = "2.0.0" // available: milestone=2.1.0-alpha01
 
-    const val room_runtime: String = "2.0.0" // up-to-date
+    const val room_runtime: String = "2.0.0" // available: milestone=2.1.0-alpha01
 
-    const val room_rxjava2: String = "2.0.0" // up-to-date
-
-    const val room_testing: String = "2.0.0" // up-to-date
+    const val room_rxjava2: String = "2.0.0" // available: milestone=2.1.0-alpha01
 
     const val rxandroid: String = "2.0.1" // up-to-date
 
@@ -138,7 +140,7 @@ object Versions {
 
         const val currentVersion: String = "4.10.2"
 
-        const val nightlyVersion: String = "5.0-20181007235844+0000"
+        const val nightlyVersion: String = "5.0-20181008235842+0000"
 
         const val releaseCandidate: String = ""
     }

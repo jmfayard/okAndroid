@@ -1,8 +1,8 @@
 
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-//apply plugin: 'kotlin-kapt'
+apply plugin: "com.android.application"
+apply plugin: "kotlin-android"
+apply plugin: "kotlin-android-extensions"
+//apply plugin: "kotlin-kapt"
 
 
 android {
@@ -20,85 +20,73 @@ android {
     }
 
     sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
-        test.java.srcDirs += 'src/test/kotlin'
+        main.java.srcDirs += "src/main/kotlin"
+        test.java.srcDirs += "src/test/kotlin"
     }
 
     packagingOptions {
-        exclude 'LICENSE.txt'
-        exclude 'META-INF/rxjava.properties'
+        exclude "LICENSE.txt"
+        exclude "META-INF/rxjava.properties"
     }
 
 }
 
 dependencies {
     /*** other projects **/
-    api(project(path: ':common'))
-    api(project(path: ':androidcommon'))
-    api(project(path: ':room'))
-    compile(project(path: ':urlalias'))
+    implementation(project(path: ":common"))
+    implementation(project(path: ":androidcommon"))
+    implementation(project(path: ":room"))
+    compile(project(path: ":urlalias"))
+
+    compileOnly(Libs.jsr305)
+    testCompileOnly(Libs.jsr305)
 
     /****** TESTING ****/
-    testImplementation  Libs.kotlin_reflect
-    testImplementation  Libs.kotlintest
-    testImplementation  Libs.junit
-    testImplementation  Libs.mockito_kotlin
-    testImplementation  Libs.mockwebserver
-    testImplementation  Libs.room_testing
+//    testImplementation  Libs.room_testing
+ //    api "uk.co.chrisjenx:calligraphy:2.3.0"
 
-    androidTestImplementation Libs.kotlintest
-    androidTestImplementation Libs.espresso_core
-    androidTestImplementation Libs.espresso_contrib
-
-    // Kotlin
-    api Libs.kotlin_stdlib
-
-    // Support & google libraries
-    api Androidx.LegacySupportV4
-    api Androidx.AppCompat
-    api Androidx.Preference
-    api Androidx.Material
-    api Androidx.Percent
-    api Androidx.CardView
-    api Androidx.Browser
-    api Androidx.Multidex
-    api Androidx.AndroidxCore
-    api Androidx.ConstraintLayout
-    api Androidx.Mediarouter
-
-    api Libs.timber
-    api Libs.android_job
-
-    compileOnly Libs.jsr305
-    testCompileOnly Libs.jsr305
-
-    api Libs.rxjava
-    api Libs.rxkotlin
-    api Libs.rxbinding_kotlin
-    api Libs.rxbinding_support_v4_kotlin
-
-    api Libs.okhttp
-    api Libs.logging_interceptor
-    api Libs.moshi
-    api Libs.okio
-    api Libs.rxpermissions
-    api Libs.retrofit
-    api Libs.converter_moshi
-    api Libs.retrofit_mock
-    api Libs.retrofit2_rxjava2_adapter
-
-
-    /** UX **/
-    api Libs.com_afollestad_material_dialogs_core
-    api Libs.calligraphy
-    api Libs.magellan
-    api Libs.magellan_support
-    api Libs.magellan_rx
-    api Libs.slimadapter
-    api Libs.kotlinandroidviewbindings
-
-
-
+    testImplementation(Libs.kotlin_reflect)
+    testImplementation(Libs.kotlintest)
+    testImplementation(Libs.junit)
+    testImplementation(Libs.mockito_kotlin)
+    testImplementation(Libs.retrofit_mock)
+    androidTestImplementation(Libs.kotlintest)
+    androidTestImplementation(Libs.espresso_core)
+    androidTestImplementation(Libs.espresso_contrib)
+    
+    
+    implementation(Libs.kotlin_stdlib)
+    implementation(Androidx.LegacySupportV4)
+    implementation(Androidx.AppCompat)
+    implementation(Androidx.Preference)
+    implementation(Androidx.Material)
+    implementation(Androidx.Percent)
+    implementation(Androidx.CardView)
+    implementation(Androidx.Browser)
+    implementation(Androidx.Multidex)
+    implementation(Androidx.AndroidxCore)
+    implementation(Androidx.ConstraintLayout)
+    implementation(Androidx.Mediarouter)
+    implementation(Libs.timber)
+    implementation(Libs.android_job)
+    implementation(Libs.rxjava)
+    implementation(Libs.rxkotlin)
+    implementation(Libs.rxbinding_kotlin)
+    implementation(Libs.rxbinding_support_v4_kotlin)
+    implementation(Libs.okhttp)
+    implementation(Libs.logging_interceptor)
+    implementation(Libs.moshi)
+    implementation(Libs.okio)
+    implementation(Libs.rxpermissions)
+    implementation(Libs.retrofit)
+    implementation(Libs.converter_moshi)
+    implementation(Libs.retrofit_mock)
+    implementation(Libs.retrofit2_rxjava2_adapter)
+    implementation(Libs.com_afollestad_material_dialogs_core)
+    implementation(Libs.magellan)
+    implementation(Libs.magellan_support)
+    implementation(Libs.slimadapter)
+    implementation(Libs.kotlinandroidviewbindings)
 
 
 }

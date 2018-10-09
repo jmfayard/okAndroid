@@ -7,13 +7,13 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.0'
+        classpath "com.android.tools.build:gradle:3.2.0"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.2.71"
     }
 }
 plugins {
-    id 'com.gradle.build-scan' version '1.16'
-    id "jmfayard.github.io.gradle-kotlin-dsl-libs" version "0.2.2"
+    id "com.gradle.build-scan" version "1.16"
+    id "jmfayard.github.io.gradle-kotlin-dsl-libs" version "0.2.3"
 }
 
 
@@ -22,7 +22,7 @@ allprojects {
   repositories {
       jcenter()
       google()
-      maven { url 'https://jitpack.io' }
+      maven { url "https://jitpack.io" }
       maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
   }
 
@@ -51,13 +51,13 @@ allprojects {
 task i(type: Exec) {
     def PACKAGE=Android.Package
     dependsOn Android.GradleInstallTask
-    description 'Install the app'
+    description "Install the app"
     commandLine "adb shell am start -n ${PACKAGE}/${PACKAGE}.MainActivity -a android.intent.action.MAIN -c android.intent.category.LAUNCHER".split(" ")
     doLast {
         println("App ${PACKAGE} has been installed ")
         println("")
         println("You can watch the logcat with")
-        println('$ pidcat ' + PACKAGE)
+        println("  \$ pidcat " + PACKAGE)
     }
 }
 
@@ -66,7 +66,7 @@ task i(type: Exec) {
  ****/
 task monkey(type: Exec) {
     dependsOn ":i"
-    description 'launch the monkey'
+    description "launch the monkey"
     commandLine "bash -x gradle/monkey.sh ${Android.Package}".split(" ")
 }
 
@@ -75,7 +75,7 @@ task monkey(type: Exec) {
  **/
 task t() {
     dependsOn Android.GradleTestTask
-    description 'Run the unit tests'
+    description "Run the unit tests"
     doLast {
         def path = new File("ok/build/reports/tests/testDebugUnitTest/index.html").absolutePath
         println("All unit tests have run")
@@ -93,12 +93,12 @@ buildScan {
 
 
 task printProperties {
-    group = 'help'
+    group = "help"
     doLast {
-        def properties = ['org.gradle.java.home', 'org.gradle.jvmargs']
-        def systemProperties = ['file.encoding', 'user.country', 'user.language', 'java.io.tmpdir', 'user.variant']
+        def properties = ["org.gradle.java.home", "org.gradle.jvmargs"]
+        def systemProperties = ["file.encoding", "user.country", "user.language", "java.io.tmpdir", "user.variant"]
         println("Detecting what could cause incompatible gradle daemons")
-        println("Run './gradlew printProperties' from the command-line and the same task Android studio")
+        println("Run ./gradlew printProperties from the command-line and the same task Android studio")
         println("See https://docs.gradle.org/4.1/userguide/build_environment.html")
         println("See https://docs.gradle.org/4.1/userguide/gradle_daemon.html#daemon_faq")
         println()

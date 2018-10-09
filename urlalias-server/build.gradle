@@ -1,11 +1,11 @@
-apply plugin: 'java'
-apply plugin: 'kotlin'
-apply plugin: 'idea'
-apply plugin: 'application'
+apply plugin: "java"
+apply plugin: "kotlin"
+apply plugin: "idea"
+apply plugin: "application"
 
 jar {
-    baseName = 'alias-server'
-    version = '1.0'
+    baseName = "alias-server"
+    version = "1.0"
 }
 
 sourceCompatibility = 1.8
@@ -13,13 +13,12 @@ sourceCompatibility = 1.8
 dependencies { /* :common */
     compile(project(path: ":urlalias"))
 
-    testImplementation Libs.kotlintest
-    testImplementation Libs.junit
-
-    implementation Libs.kotlin_stdlib_jdk8
-    implementation Libs.ktor_server_netty
-    implementation Libs.ktor_server_core
-    implementation Libs.ktor_features
+testImplementation(Libs.kotlintest)
+testImplementation(Libs.junit)
+    implementation(Libs.kotlin_stdlib_jdk8)
+    implementation(Libs.ktor_server_netty)
+    implementation(Libs.ktor_server_core)
+    implementation(Libs.ktor_features)
 
 
 }
