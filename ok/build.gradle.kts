@@ -1,8 +1,16 @@
+import Android.compileSdkVersion
+import Android.minSdkVersion
+import Android.targetSdkVersion
+import Config.Plugins.android
+import Config.SdkVersions.versionCode
+import com.android.build.gradle.ProguardFiles.getDefaultProguardFile
+import org.gradle.internal.impldep.com.amazonaws.PredefinedClientConfigurations.defaultConfig
 
 plugins {
     id("com.android.application")
     id("kotlin-android")
     id("kotlin-android-extensions")
+    id("com.getkeepsafe.dexcount") version "0.8.4"
 }
 
 android {
