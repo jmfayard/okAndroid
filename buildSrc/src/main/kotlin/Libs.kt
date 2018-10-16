@@ -34,6 +34,11 @@ object Libs {
     const val com_afollestad_material_dialogs_core: String =
             "com.afollestad.material-dialogs:core:" + Versions.com_afollestad_material_dialogs_core
 
+    /**
+     * [gradle website](https://developer.android.com/studio) */
+    const val com_android_tools_build_gradle: String =
+            "com.android.tools.build:gradle:" + Versions.com_android_tools_build_gradle
+
     const val com_gradle_build_scan_gradle_plugin: String =
             "com.gradle.build-scan:com.gradle.build-scan.gradle.plugin:" + Versions.com_gradle_build_scan_gradle_plugin
 
@@ -60,10 +65,6 @@ object Libs {
      * [espresso-core website](https://developer.android.com/testing) */
     const val espresso_core: String =
             "androidx.test.espresso:espresso-core:" + Versions.espresso_core
-
-    /**
-     * [gradle website](https://developer.android.com/studio) */
-    const val gradle: String = "com.android.tools.build:gradle:" + Versions.gradle
 
     const val jmfayard_github_io_gradle_kotlin_dsl_libs_gradle_plugin: String =
             "jmfayard.github.io.gradle-kotlin-dsl-libs:jmfayard.github.io.gradle-kotlin-dsl-libs.gradle.plugin:" + Versions.jmfayard_github_io_gradle_kotlin_dsl_libs_gradle_plugin
